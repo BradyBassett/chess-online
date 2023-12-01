@@ -31,7 +31,7 @@ export default function Board(): React.ReactElement {
                 key={colIndex} 
                 className={`${styles.square} ${(rowIndex + colIndex) % 2 === 0 ? styles.light : styles.dark}`}>
                   {/* todo - insert pieces into position */}
-                  <Bishop size={squareSize} color="dark"/>
+                  <Queen size={squareSize} color="light"/>
               </div>
             ))}
           </div>

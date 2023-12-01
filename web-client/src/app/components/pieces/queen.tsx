@@ -1,5 +1,5 @@
 import React from "react";
-import Piece from "./Piece";
+import Piece from "./piece";
 
 
 interface QueenProps {

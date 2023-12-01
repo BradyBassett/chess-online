@@ -18,11 +18,10 @@ export default function Piece({ size, color, type }: PieceProps): React.ReactEle
   return (
     <Image 
       className={styles.piece}
-      /** TODO - Fix cursor not chaning to grab when hovering over piece */
       src={getIconSource()} 
       width={size}
       height={size}
-      alt={type.charAt(0).toUpperCase() + type.slice(1)}
+      alt={color.charAt(0).toUpperCase() + color.slice(1) + type.charAt(0).toUpperCase() + type.slice(1)}
     />
   );
 };
