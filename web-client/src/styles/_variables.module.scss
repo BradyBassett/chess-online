@@ -1,0 +1,6 @@
+$boardSize: 700px;
+$squareSize: $boardSize / 8;
+
+:export {
+  squareSize: $squareSize;
+}
