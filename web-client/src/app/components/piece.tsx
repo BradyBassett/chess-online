@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import styles from "../../styles/piece.module.scss";
 import PieceProps from "@/interfaces/PieceProps";
 
 
@@ -13,7 +12,6 @@ export default function Piece({ size, color, type }: PieceProps): React.ReactEle
 
   return (
     <Image 
-      className={styles.piece}
       src={getIconSource()} 
       width={size}
       height={size}
