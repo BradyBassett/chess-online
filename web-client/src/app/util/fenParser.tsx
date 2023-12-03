@@ -25,19 +25,26 @@ export function parseFenPosition(fenPosition: string): Pieces {
     P: ["pawn", "light"]
   }
 
+  let numSquaresPerRow = 0;
+
   for (const char of fenPosition.split("")) {
     let color: string;
     let type: string;
 
     if (char == "/"){
-      continue;
+      if (numSquaresPerRow !== 8) {
+        throw new Error("Invalid Fen Code");
+      }
+      numSquaresPerRow = 0;
     }
     else if (isDigitFrom1To8(char)){
+      numSquaresPerRow += parseInt(char);
       for (let i = 0; i < parseInt(char); i++) {
         pieces.push(null);
       }
     } 
     else {      // All remaining possible characters represent pieces
+      numSquaresPerRow += 1;
       const [type, color] = pieceMappings[char];
       pieces.push(<Piece size={squareSize} type={type} color={color}/>)
     }
