@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import styles from "../../../styles/piece.module.scss";
+import styles from "../../styles/piece.module.scss";
+
 
 interface PieceProps {
   size: number;
@@ -21,7 +22,7 @@ export default function Piece({ size, color, type }: PieceProps): React.ReactEle
       src={getIconSource()} 
       width={size}
       height={size}
-      alt={color.charAt(0).toUpperCase() + color.slice(1) + type.charAt(0).toUpperCase() + type.slice(1)}
+      alt={color.charAt(0).toUpperCase() + color.slice(1) + type.charAt(0).toUpperCase() + type.slice(1)} // takes first char in color and type and converts to uppercase
     />
   );
 };
