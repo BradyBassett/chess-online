@@ -1,13 +1,8 @@
 import React from "react";
 import Image from "next/image";
 import styles from "../../styles/piece.module.scss";
+import PieceProps from "@/interfaces/PieceProps";
 
-
-interface PieceProps {
-  size: number;
-  color: "dark" | "light";
-  type: "bishop" | "king" | "knight" | "pawn" | "queen" | "rook";
-}
 
 export default function Piece({ size, color, type }: PieceProps): React.ReactElement {
   const getIconSource = () => {
