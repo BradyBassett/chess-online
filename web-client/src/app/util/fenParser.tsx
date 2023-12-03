@@ -2,7 +2,7 @@ import Piece from "../components/piece";
 import variables from "../../styles/_variables.module.scss";
 
 
-type Pieces = (React.ReactElement | 0)[]
+type Pieces = (React.ReactElement | null)[]
 type PieceMapping = {
   [key: string]: ["rook" | "knight" | "bishop" | "queen" | "king" | "pawn", "dark" | "light"];
 };
@@ -34,7 +34,7 @@ export function parseFenPosition(fenPosition: string): Pieces {
     }
     else if (isDigitFrom1To8(char)){
       for (let i = 0; i < parseInt(char); i++) {
-        pieces.push(0);
+        pieces.push(null);
       }
     } 
     else {      // All remaining possible characters represent pieces
