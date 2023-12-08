@@ -22,6 +22,35 @@ export default function Board(): React.ReactElement {
     return boardArray;
   });
 
+  const [selectedSquare, setSelectedSquare] = useState<number[]>([]);
+  const [destinationSquare, setDestinationSquare] = useState<number[]>([]);
+
+  function handleSquareClick(rowIndex: number, colIndex: number) {
+    // if selectedSquare has not been set, set selected square
+    if (selectedSquare.length === 0) {
+      setSelectedSquare([rowIndex, colIndex]);
+    } 
+    // If selectedSquare has been set, set new square as destination square
+    else {
+      setDestinationSquare([rowIndex, colIndex])
+
+      updateSquare(rowIndex, colIndex, board[selectedSquare[0]][selectedSquare[1]])
+
+      setSelectedSquare([]);
+      setDestinationSquare([]);
+    }
+  }
+
+  function updateSquare(rowIndex: number, colIndex: number, newPiece: PossiblePiece) {
+    setBoard(prevBoard => {
+      const newBoard = [...prevBoard];
+      newBoard[rowIndex] = [...prevBoard[rowIndex]];
+      newBoard[rowIndex][colIndex] = newPiece;
+
+      return newBoard;
+    })
+  }
+
   return (
     <div className={styles.boardContainer}>
       <div className={styles.board}>
@@ -31,6 +60,7 @@ export default function Board(): React.ReactElement {
               <Square 
                 key={colIndex} 
                 color={(rowIndex + colIndex) % 2 === 0 ? "light" : "dark"}
+                onClick={() => handleSquareClick(rowIndex, colIndex)}
               >
                 {piece}
               </Square>

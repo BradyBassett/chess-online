@@ -2,6 +2,7 @@
 
 $darkSquares: #0a7538;
 $lightSquares: #e8e8d0;
+$activeSquare: #e37b7b;
 
 .square {
   width: $squareSize;
@@ -17,4 +18,8 @@ $lightSquares: #e8e8d0;
 
 .light {
   background-color: $lightSquares;
+}
+
+.activeSquare {
+  background-color: $activeSquare;
 }
