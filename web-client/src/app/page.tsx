@@ -1,5 +1,7 @@
-import styles from '../styles/page.module.scss';
-import Board from './components/board';
+import Board from "./components/Board";
+
+import styles from "../styles/home.module.scss";
+
 
 export default function Home(): React.ReactElement {
   return (

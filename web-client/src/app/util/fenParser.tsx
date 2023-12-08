@@ -1,4 +1,4 @@
-import Piece from "../components/piece";
+import Piece from "../components/Piece";
 import variables from "../../styles/_variables.module.scss";
 
 
@@ -31,7 +31,7 @@ export function parseFenPosition(fenPosition: string): Pieces {
     let color: string;
     let type: string;
 
-    if (char == "/"){
+    if (char === "/"){
       if (numSquaresPerRow !== 8) {
         throw new Error("Invalid Fen Code");
       }

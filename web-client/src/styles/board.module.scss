@@ -1,8 +1,5 @@
 @import "_variables.module";
 
-$darkSquares: #0a7538;
-$lightSquares: #e8e8d0;
-
 .boardContainer {
   display: flex;
   justify-content: center;
@@ -18,20 +15,4 @@ $lightSquares: #e8e8d0;
 
 .boardRow {
   display: flex;
-}
-
-.square {
-  width: $squareSize;
-  height: $squareSize;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.dark {
-  background-color: $darkSquares;
-}
-
-.light {
-  background-color: $lightSquares;
 }
