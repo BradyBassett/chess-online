@@ -17,29 +17,32 @@ export default function Board(): React.ReactElement {
   const [selectedSquare, setSelectedSquare] = useState<number[]>([]);
   const [destinationSquare, setDestinationSquare] = useState<number[]>([]);
 
-  function resetBoard() {
-    setBoard(setStartingPositions());
-  }
-
-  function setStartingPositions(fenCode: string = STARTING_POSITION_FEN_CODE) {
+  
+  function setStartingPositions(fenCode: string = STARTING_POSITION_FEN_CODE): PossiblePiece[][] {
     const startingPositions = parseFenPosition(fenCode);
-
+    
     const boardArray: PossiblePiece[][] = [];
     for (let i = 0; i < startingPositions.length; i += 8) {
       boardArray.push(startingPositions.slice(i, i + 8));
     }
-
+    
     return boardArray;
   }
 
-  function handleSquareClick(rowIndex: number, colIndex: number) {
+  function resetBoard() {
+    setBoard(setStartingPositions());
+    setSelectedSquare([]);
+    setDestinationSquare([]);
+  }
+  
+  function handleSquareClick(rowIndex: number, colIndex: number): void {
     // if selectedSquare has not been set, set selected square
     if (selectedSquare.length === 0) {
       setSelectedSquare([rowIndex, colIndex]);
     } 
     // If selectedSquare has been set, set new square as destination square
     else {
-      setDestinationSquare([rowIndex, colIndex])
+      setDestinationSquare([rowIndex, colIndex]);
       const selectedPiece = board[selectedSquare[0]][selectedSquare[1]];
 
       // only update the square if selectedSquare is not null
@@ -48,12 +51,13 @@ export default function Board(): React.ReactElement {
         updateSquare(rowIndex, colIndex, selectedPiece);
       }
 
+      // clear selected and destination square
       setSelectedSquare([]);
       setDestinationSquare([]);
     }
   }
 
-  function updateSquare(rowIndex: number, colIndex: number, piece: PossiblePiece) {
+  function updateSquare(rowIndex: number, colIndex: number, piece: PossiblePiece): void {
     setBoard(prevBoard => {
       const newBoard = [...prevBoard];
       newBoard[rowIndex] = [...prevBoard[rowIndex]];
@@ -61,6 +65,11 @@ export default function Board(): React.ReactElement {
 
       return newBoard;
     });
+  }
+
+  function getSquareCoordinate(rowIndex: number, colIndex: number): string {
+    
+    return "";
   }
 
   return (

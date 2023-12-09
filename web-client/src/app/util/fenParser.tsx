@@ -28,22 +28,22 @@ export function parseFenPosition(fenPosition: string): Pieces {
   let numSquaresPerRow = 0;
 
   for (const char of fenPosition.split("")) {
-    let color: string;
-    let type: string;
-
+    // if character is a / start next row so long as numsquares per row is equal to 8
     if (char === "/"){
       if (numSquaresPerRow !== 8) {
         throw new Error("Invalid Fen Code");
       }
       numSquaresPerRow = 0;
     }
+    // if the character is any digit from 1-8 add empty squares to pieces (represented as null)
     else if (isDigitFrom1To8(char)){
       numSquaresPerRow += parseInt(char);
       for (let i = 0; i < parseInt(char); i++) {
         pieces.push(null);
       }
     } 
-    else {      // All remaining possible characters represent pieces
+    // All remaining possible characters represent pieces
+    else {      
       numSquaresPerRow += 1;
       const [type, color] = pieceMappings[char];
       pieces.push(<Piece size={squareSize} type={type} color={color}/>)
