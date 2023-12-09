@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { PossiblePiece } from "../components/Board";
 
 import styles from '../../styles/square.module.scss';
