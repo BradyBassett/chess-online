@@ -1,8 +1,9 @@
 "use client"
 
 import React, { useState } from "react";
-import { parseFenPosition } from "../util/fenParser";
 import Square from "./Square";
+import { parseFenPosition } from "../util/fenParser";
+import { STARTING_POSITION_FEN_CODE } from "../util/constants";
 import { PieceProps } from "../components/Piece";
 
 import styles from '../../styles/board.module.scss';
@@ -20,8 +21,7 @@ export default function Board(): React.ReactElement {
     setBoard(setStartingPositions());
   }
 
-  function setStartingPositions() {
-    const fenCode = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR" // w KQkq - 0 1
+  function setStartingPositions(fenCode: string = STARTING_POSITION_FEN_CODE) {
     const startingPositions = parseFenPosition(fenCode);
 
     const boardArray: PossiblePiece[][] = [];
@@ -60,12 +60,12 @@ export default function Board(): React.ReactElement {
       newBoard[rowIndex][colIndex] = piece;
 
       return newBoard;
-    })
+    });
   }
 
   return (
     <>
-      <button onClick={() => resetBoard()}>Reset Board</button>
+      <button onClick={() => resetBoard()}>Reset Board</button> {/* TODO - Remove this once no longer needed */}
       <div className={styles.boardContainer}>
         <div className={styles.board}>
           {board.map((row, rowIndex) => (
