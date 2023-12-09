@@ -68,8 +68,10 @@ export default function Board(): React.ReactElement {
   }
 
   function getSquareCoordinate(rowIndex: number, colIndex: number): string {
-    
-    return "";
+    let columnNames = ["a", "b", "c", "d", "e", "f", "g", "h"];
+    let standardRowIndex = 8 - rowIndex
+
+    return `${columnNames[colIndex]}${standardRowIndex}`;
   }
 
   return (
@@ -81,7 +83,7 @@ export default function Board(): React.ReactElement {
             <div key={rowIndex} className={styles.boardRow}>
               {row.map((piece: PossiblePiece, colIndex: number) => (
                 <Square 
-                  key={colIndex} 
+                  key={getSquareCoordinate(rowIndex, colIndex)}
                   color={(rowIndex + colIndex) % 2 === 0 ? "light" : "dark"}
                   isActive={
                     selectedSquare[0] === rowIndex &&
