@@ -1,5 +1,5 @@
 import React from "react";
-import { PossiblePiece } from "../components/Board";
+import { PossiblePiece } from "./Board";
 
 import styles from '../../styles/square.module.scss';
 

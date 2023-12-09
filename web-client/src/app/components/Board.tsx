@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import Square from "./Square";
-import { parseFenPosition } from "../util/fenParser";
-import { STARTING_POSITION_FEN_CODE } from "../util/constants";
-import { PieceProps } from "../components/Piece";
+import { parseFenPosition } from "../utilities/fenParser";
+import { STARTING_POSITION_FEN_CODE } from "../utilities/constants";
+import { PieceProps } from "./Piece";
 
 import styles from '../../styles/board.module.scss';
 
