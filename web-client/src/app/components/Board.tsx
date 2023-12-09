@@ -1,6 +1,6 @@
 "use client"
 
-import React, { Children, useState } from "react";
+import React, { useState } from "react";
 import { parseFenPosition } from "../util/fenParser";
 import Square from "./Square";
 import { PieceProps } from "../components/Piece";
