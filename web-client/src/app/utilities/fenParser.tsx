@@ -1,6 +1,6 @@
 import React from "react";
 import Piece from "../components/Piece";
-import variables from "../../styles/_variables.module.scss";
+import { SQUARE_SIZE } from "./constants";
 
 
 type Pieces = (React.ReactElement | null)[]
@@ -10,7 +10,6 @@ type PieceMapping = {
 
 export function parseFenPosition(fenPosition: string): Pieces {
   const pieces: Pieces = [];
-  const squareSize = parseFloat(variables.squareSize);
   const pieceMappings: PieceMapping = {
     r: ["rook", "dark"],
     n: ["knight", "dark"],
@@ -51,7 +50,7 @@ export function parseFenPosition(fenPosition: string): Pieces {
     else {      
       numSquaresPerRow += 1;
       const [type, color] = pieceMappings[char];
-      pieces.push(<Piece size={squareSize} type={type} color={color}/>)
+      pieces.push(<Piece size={SQUARE_SIZE} type={type} color={color}/>)
     }
   }
   return pieces;
