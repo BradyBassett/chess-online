@@ -11,7 +11,7 @@ export interface PieceProps {
 }
 
 export default function Piece({ size, color, type }: PieceProps): React.ReactElement {
-  const getIconSource = () => {
+  function getIconSource() {
     const imagePrefix = color === "dark" ? "dark-" : "light-";
     const imageSrc = `/images/Pieces/${imagePrefix}${type}.svg`;
     return imageSrc;
