@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 
-import styles from '../../styles/piece.module.scss';
+import styles from "../../styles/piece.module.scss";
 
 
 export interface PieceProps {

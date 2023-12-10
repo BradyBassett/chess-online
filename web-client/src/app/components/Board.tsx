@@ -6,7 +6,7 @@ import { parseFenPosition } from "../utilities/fenParser";
 import { STARTING_POSITION_FEN_CODE } from "../utilities/constants";
 import { PieceProps } from "./Piece";
 
-import styles from '../../styles/board.module.scss';
+import styles from "../../styles/board.module.scss";
 
 
 export type PossiblePiece = React.ReactElement<PieceProps> | null;

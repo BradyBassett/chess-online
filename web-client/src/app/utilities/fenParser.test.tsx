@@ -103,7 +103,7 @@ describe("parseFenPosition function", () => {
   });
 
   it("throws an error for a fen position with incorrect seperator", () => {
-    const invalidFenPosition = 'rnbqkbnr|pppppppp|8/8|8|8|PPPPPPPP|RNBQKBNR';
+    const invalidFenPosition = "rnbqkbnr|pppppppp|8/8|8|8|PPPPPPPP|RNBQKBNR";
     expect(() => parseFenPosition(invalidFenPosition)).toThrow("Invalid Fen Position");
   })
 });

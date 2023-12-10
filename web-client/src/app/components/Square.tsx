@@ -1,10 +1,10 @@
 import React from "react";
 import { PossiblePiece } from "./Board";
 
-import styles from '../../styles/square.module.scss';
+import styles from "../../styles/square.module.scss";
 
 
-interface SquareProps {
+export interface SquareProps {
   color: "light" | "dark";
   children: PossiblePiece;
   isActive: boolean;
