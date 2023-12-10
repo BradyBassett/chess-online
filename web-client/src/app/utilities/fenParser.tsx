@@ -28,10 +28,10 @@ export function parseFenPosition(fenPosition: string): Pieces {
   let numSquaresPerRow = 0;
 
   for (const char of fenPosition.split("")) {
-    // if character is a / start next row so long as numsquares per row is equal to 8
+    // If character is a /, start the next row, ensuring numSquaresPerRow is equal to 8
     if (char === "/"){
       if (numSquaresPerRow !== 8) {
-        throw new Error("Invalid Fen Code");
+        throw new Error("Invalid Fen Position");
       }
       numSquaresPerRow = 0;
     }
@@ -42,6 +42,10 @@ export function parseFenPosition(fenPosition: string): Pieces {
         pieces.push(null);
       }
     } 
+    // If the character is not "/", a digit from 1-8, or a key in pieceMappings throw an error
+    else if (!(char in pieceMappings)) {
+      throw new Error("Invalid Fen Position");
+    }
     // All remaining possible characters represent pieces
     else {      
       numSquaresPerRow += 1;
@@ -52,6 +56,6 @@ export function parseFenPosition(fenPosition: string): Pieces {
   return pieces;
 }
 
-function isDigitFrom1To8(char: string): boolean {
+export function isDigitFrom1To8(char: string): boolean {
   return /^[1-8]$/.test(char);
 }
