@@ -14,6 +14,7 @@ export interface SquareProps {
 export default function Square({color, children, isActive, onClick}: SquareProps): React.ReactElement {
   return (
     <div 
+      data-testid="square"
       className={`${styles.square} ${color === "light" ? styles.light : styles.dark} ${isActive ? styles.activeSquare : ""}`}
       onClick={onClick}
     >
