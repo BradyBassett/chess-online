@@ -1,3 +1,4 @@
+import React from "react";
 import Piece from "../components/Piece";
 import variables from "../../styles/_variables.module.scss";
 
