@@ -1,5 +1,5 @@
 import { parseFenPosition, isDigitFrom1To8 } from "./fenParser";
-import Piece from "../components/Piece";
+
 
 describe("parseFenPosition function", () => {
   it("should return an array of React elements representing chess pieces in the starting position", () => {
