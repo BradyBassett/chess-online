@@ -78,12 +78,16 @@ export default function Board(): React.ReactElement {
     <>
       <button onClick={() => resetBoard()}>Reset Board</button> {/* TODO - Remove this once no longer needed */}
       <div className={styles.boardContainer}>
-        <div className={styles.board}>
+        <div 
+          className={styles.board}
+          data-testid="board"
+        >
           {board.map((row, rowIndex) => (
             <div key={rowIndex} className={styles.boardRow}>
               {row.map((piece: PossiblePiece, colIndex: number) => (
                 <Square 
                   key={getSquareCoordinate(rowIndex, colIndex)}
+                  testid={`square-${getSquareCoordinate(rowIndex, colIndex)}`}
                   color={(rowIndex + colIndex) % 2 === 0 ? "light" : "dark"}
                   isActive={
                     selectedSquare[0] === rowIndex &&

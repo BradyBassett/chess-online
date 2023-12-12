@@ -17,6 +17,10 @@ export default function Piece({ size, color, type }: PieceProps): React.ReactEle
     return imageSrc;
   };
 
+  if (Number.isNaN(size) || size === undefined || size === null || size === 0) {
+    size = 45;
+  }
+
   return (
     <Image 
       data-testid="piece"
