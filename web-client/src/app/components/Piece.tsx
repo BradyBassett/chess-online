@@ -23,6 +23,7 @@ export default function Piece({ size, color, type }: PieceProps): React.ReactEle
 
   return (
     <Image 
+      className={styles.piece}
       data-testid="piece"
       src={getIconSource()}
       width={size}
