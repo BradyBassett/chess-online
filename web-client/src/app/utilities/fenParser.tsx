@@ -59,3 +59,5 @@ export function parseFenPosition(fenPosition: string): Pieces {
 export function isDigitFrom1To8(char: string): boolean {
   return /^[1-8]$/.test(char);
 }
+
+// TODO - EVENTUALLY REMOVE THIS FILE - JUST FOR TESTING
