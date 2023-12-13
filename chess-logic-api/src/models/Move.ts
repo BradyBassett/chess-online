@@ -1,3 +1,3 @@
-class Move {
+export default class Move {
   
 }

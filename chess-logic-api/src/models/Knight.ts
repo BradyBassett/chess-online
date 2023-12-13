@@ -1,7 +1,10 @@
-class Knight extends Piece {
+import Piece from "./Piece";
+
+
+export default class Knight extends Piece {
   private pieceType = "knight";
 
-  constructor(x: number, y: number, color: string) {
-    super(x, y, color);
+  constructor(color: string) {
+    super(color);
   }
 }

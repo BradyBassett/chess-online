@@ -1,3 +1,6 @@
-class ComputerPlayer extends Player {
+import Player from "./Player";
+
+
+export default class ComputerPlayer extends Player {
 
 }
