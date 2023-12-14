@@ -1,7 +1,7 @@
 import { parseFenPosition } from "../Utilities/fenParser";
 import Square from './Square';
 
-export class Board {
+export default class Board {
   public squares: Square[][] = [];
   constructor(fenPosition: string) {
     const parsedSquares = parseFenPosition(fenPosition);

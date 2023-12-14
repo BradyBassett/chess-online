@@ -1,11 +1,9 @@
-enum GameStatus { 
-  "Active", 
-  "LightWon", 
-  "DarkWon", 
-  "Draw"
-}
+import Board from "./Board";
+import Player from "./Player";
+import { GameStatus } from "../Utilities/enums";
+
 
 class Game {
-    // const [fenPosition, fenActiveColor, fenCastling, fenEnPassant, fenHalfMoveClock, fenFullMoveNumber] = fenCode.split(" ");
-    // TODO - implement fenCode unsure where to put it, maybe in the constructor? be sure to pass fenPosition to the board
+  // const [fenPosition, fenActiveColor, fenCastling, fenEnPassant, fenHalfMoveClock, fenFullMoveNumber] = fenCode.split(" ");
+  // TODO - implement fenCode unsure where to put it, maybe in the constructor? be sure to pass fenPosition to the board
 }

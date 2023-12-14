@@ -1,10 +1,11 @@
+import { PieceColor } from "../Utilities/enums";
+
+
 export default class Piece {
   protected hasMoved: boolean = false;
   protected isCaptured: boolean = false;
 
-  constructor(
-    public color: string,
-  ) {
+  constructor(public color: PieceColor) {
     this.color = color;
   }
 
