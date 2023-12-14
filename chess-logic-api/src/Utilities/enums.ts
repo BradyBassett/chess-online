@@ -30,16 +30,16 @@ export enum PieceColor {
 }
 
 export enum MoveType {
-  Normal, // A normal move
-  Capture, // A capture move
-  Castle, // A castle move
-  EnPassant, // An en passant move
-  Promotion // A move that results in a pawn promotion
+  Normal,
+  Capture,
+  Castle,
+  EnPassant,
+  Promotion
 }
 
 export enum CastleType {
-  KingSide, // Castle on the KingSide
-  QueenSide // Castle on the QueenSide
+  KingSide,
+  QueenSide
 }
 
 export enum PromotionType {
