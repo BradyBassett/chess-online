@@ -22,7 +22,7 @@ export default class Rook extends Piece {
       return false;
     }
 
-    // if there are pieces between the current square and the target square, return false
+    // if there are pieces between the valid path between the current square and the target square, return false
     if (this.currentSquare.rowIndex === targetSquare.rowIndex) { // horizontal move
       const rowStart = Math.min(this.currentSquare.colIndex, targetSquare.colIndex);
       const rowEnd = Math.max(this.currentSquare.colIndex, targetSquare.colIndex);
