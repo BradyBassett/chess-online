@@ -82,22 +82,22 @@ describe("parseFenPosition function", () => {
     expect(() => parseFenPosition(invalidFenPosition)).toThrow("Invalid Fen Position");
   });
 
-  it("throws an error for a fen position exceeding 8 files", () => {
+  it("throws an error for a fen position exceeding 8 cols", () => {
     const invalidFenPosition = "rnbqkbnr/pppppppp/9/9/9/9/PPPPPPPP/RNBQKBNX";
     expect(() => parseFenPosition(invalidFenPosition)).toThrow("Invalid Fen Position");
   });
 
-  it("throws an error for a fen position subceeding 8 files", () => {
+  it("throws an error for a fen position subceeding 8 cols", () => {
     const invalidFenPosition = "rnbqkbnr/pppppppp/7/7/7/7/PPPPPPPP/RNBQKBNX";
     expect(() => parseFenPosition(invalidFenPosition)).toThrow("Invalid Fen Position");
   });
 
-  it("throws an error for a fen position exceeding 8 ranks", () => {
+  it("throws an error for a fen position exceeding 8 rows", () => {
     const invalidFenPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNX/8";
     expect(() => parseFenPosition(invalidFenPosition)).toThrow("Invalid Fen Position");
   });
 
-  it("throws an error for a fen position subceeding 8 ranks", () => {
+  it("throws an error for a fen position subceeding 8 rows", () => {
     const invalidFenPosition = "rnbqkbnr/pppppppp/7/7/7/7/PPPPPPPP/";
     expect(() => parseFenPosition(invalidFenPosition)).toThrow("Invalid Fen Position");
   });
