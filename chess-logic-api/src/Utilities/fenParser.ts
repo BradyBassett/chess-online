@@ -1,60 +1,49 @@
 import Square from "../models/Square";
+import Piece from "../models/Piece";
 import Rook from "../models/Rook";
 import Knight from "../models/Knight";
 import Bishop from "../models/Bishop";
 import Queen from "../models/Queen";
 import King from "../models/King";
 import Pawn from "../models/Pawn";
+import { PieceColor } from "./enums";
 
 
-type PieceType = {
-  r: Rook;
-  n: Knight;
-  b: Bishop;
-  q: Queen;
-  k: King;
-  p: Pawn;
-  R: Rook;
-  N: Knight;
-  B: Bishop;
-  Q: Queen;
-  K: King;
-  P: Pawn;
-  [key: string]: Rook | Knight | Bishop | Queen | King | Pawn;
-};
-
-const pieceTypes: PieceType = {
-  "r": new Rook("dark"),
-  "n": new Knight("dark"),
-  "b": new Bishop("dark"),
-  "q": new Queen("dark"),
-  "k": new King("dark"),
-  "p": new Pawn("dark"),
-  "R": new Rook("light"),
-  "N": new Knight("light"),
-  "B": new Bishop("light"),
-  "Q": new Queen("light"),
-  "K": new King("light"),
-  "P": new Pawn("light")
+const pieceTypes: { [key: string]: (square: Square) => Piece } = {
+  "r": square => new Rook(PieceColor.Dark, square),
+  "n": square => new Knight(PieceColor.Dark, square),
+  "b": square => new Bishop(PieceColor.Dark, square),
+  "q": square => new Queen(PieceColor.Dark, square),
+  "k": square => new King(PieceColor.Dark, square),
+  "p": square => new Pawn(PieceColor.Dark, square),
+  "R": square => new Rook(PieceColor.Light, square),
+  "N": square => new Knight(PieceColor.Light, square),
+  "B": square => new Bishop(PieceColor.Light, square),
+  "Q": square => new Queen(PieceColor.Light, square),
+  "K": square => new King(PieceColor.Light, square),
+  "P": square => new Pawn(PieceColor.Light, square)
 };
 
 export function parseFenPosition(fenPosition: string) {
   const squares: Square[] = [];
 
-  let numSquares = 0;
+  let rowIndex = 0;
+  let colIndex = 0;
+
   for (const char of fenPosition.split("")) {
     // If character is a /, start the next row, ensuring numSquaresPerRow is equal to 8
     if (char === "/"){
-      if (numSquares !== 8) {
+      if (rowIndex !== 8 || colIndex >= 7) {
         throw new Error("Invalid Fen Position");
       }
-      numSquares = 0;
+      rowIndex = 0;
+      colIndex += 1;
     }
     // if the character is any digit from 1-8 add empty squares to pieces (represented as null)
     else if (isDigitFrom1To8(char)){
-      numSquares += parseInt(char);
       for (let i = 0; i < parseInt(char); i++) {
-        squares.push(new Square(null));
+        squares.push(new Square(rowIndex, colIndex, null));
+        rowIndex += 1;
       }
     } 
     // If the character is not "/", a digit from 1-8, or a key in pieceMappings throw an error
@@ -62,9 +51,12 @@ export function parseFenPosition(fenPosition: string) {
       throw new Error("Invalid Fen Position");
     }
     // All remaining possible characters represent pieces
-    else {      
-      numSquares += 1;
-      squares.push(new Square(pieceTypes[char]));
+    else {
+      const square = new Square(rowIndex, colIndex);
+      const piece = pieceTypes[char](square);
+      square.piece = piece;
+      squares.push(square);
+      rowIndex += 1;
     }
   }
   return squares;
