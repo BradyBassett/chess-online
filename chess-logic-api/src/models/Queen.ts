@@ -17,14 +17,16 @@ export default class Queen extends Piece {
       return false;
     }
 
-    if (super.targetSquareIsDiagonal(targetSquare)) {
+    if (super.targetSquareIsDiagonal(targetSquare)) { // checks if target square is diagonal from current square
+      // if there are pieces between the valid path between the current square and the target square, return false
       return super.isValidDiagonalMove(targetSquare, board)
 
     }
-    else if (super.targetSquareIsStraight(targetSquare)) {
+    else if (super.targetSquareIsStraight(targetSquare)) { // checks if target square is in the same row or col as current square
+      // if there are pieces between the valid path between the current square and the target square, return false
       return super.isValidStraightMove(targetSquare, board)
     }
-    else {
+    else { // if target square is not diagonal or straight from current square, return false
       return false;
     }
   }
