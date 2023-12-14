@@ -1,6 +1,5 @@
 import { PieceColor } from "../Utilities/enums";
 import Board from "./Board";
-
 import Square from "./Square";
 
 
