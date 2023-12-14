@@ -27,7 +27,7 @@ export default class Rook extends Piece {
       const rowStart = Math.min(this.currentSquare.colIndex, targetSquare.colIndex);
       const rowEnd = Math.max(this.currentSquare.colIndex, targetSquare.colIndex);
 
-      for (let i = rowStart; i < rowEnd; i++) {
+      for (let i = rowStart + 1; i < rowEnd - 1; i++) {
         if (board.getSquare(this.currentSquare.rowIndex, i).piece) {
           return false;
         }
@@ -37,7 +37,7 @@ export default class Rook extends Piece {
       const colStart = Math.min(this.currentSquare.rowIndex, targetSquare.rowIndex);
       const colEnd = Math.max(this.currentSquare.rowIndex, targetSquare.rowIndex);
 
-      for (let i = colStart; i < colEnd; i++) {
+      for (let i = colStart + 1; i < colEnd - 1; i++) {
         if (board.getSquare(i, this.currentSquare.colIndex).piece) {
           return false;
         }
