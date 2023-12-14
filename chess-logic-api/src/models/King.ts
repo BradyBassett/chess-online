@@ -16,7 +16,40 @@ export default class King extends Piece {
     if (!super.isValidMove(targetSquare, board)) {
       return false;
     }
-    
-    return true;
+
+    // moving ↑ 1
+    if (targetSquare.rowIndex === this.currentSquare.rowIndex + 1 && targetSquare.colIndex === this.currentSquare.colIndex) {
+      return true;
+    }
+    // moving ↗ 1
+    else if (targetSquare.rowIndex === this.currentSquare.rowIndex + 1 && targetSquare.colIndex === this.currentSquare.colIndex + 1) {
+      return true;
+    }
+    // moving → 1
+    else if (targetSquare.rowIndex === this.currentSquare.rowIndex && targetSquare.colIndex === this.currentSquare.colIndex + 1) {
+      return true;
+    }
+    // moving ↘ 1
+    else if (targetSquare.rowIndex === this.currentSquare.rowIndex - 1 && targetSquare.colIndex === this.currentSquare.colIndex + 1) {
+      return true;
+    }
+    // moving ↓ 1
+    else if (targetSquare.rowIndex === this.currentSquare.rowIndex - 1 && targetSquare.colIndex === this.currentSquare.colIndex) {
+      return true;
+    }
+    // moving ↙ 1
+    else if (targetSquare.rowIndex === this.currentSquare.rowIndex - 1 && targetSquare.colIndex === this.currentSquare.colIndex - 1) {
+      return true;
+    }
+    // moving ← 1
+    else if (targetSquare.rowIndex === this.currentSquare.rowIndex && targetSquare.colIndex === this.currentSquare.colIndex - 1) {
+      return true;
+    }
+    // moving ↖ 1
+    else if (targetSquare.rowIndex === this.currentSquare.rowIndex + 1 && targetSquare.colIndex === this.currentSquare.colIndex - 1) {
+      return true;
+    }
+
+    return false;
   }
 }
