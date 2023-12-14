@@ -1,19 +1,16 @@
 import { PieceColor } from "../Utilities/enums";
+import Board from "./Board";
+import Square from "./Square";
 
 
-export default class Piece {
+export default abstract class Piece {
   protected hasMoved: boolean = false;
   protected isCaptured: boolean = false;
 
-  constructor(public color: PieceColor) {
+  constructor(public color: PieceColor, public currentSquare: Square) {
     this.color = color;
+    this.currentSquare = currentSquare;
   }
 
-  public move() {
-    if (!this.hasMoved) this.hasMoved = true;
-  }
-
-  public capture() {
-    this.isCaptured = true;
-  }
+  public abstract getValidMoves(board: Board): Square[];
 }

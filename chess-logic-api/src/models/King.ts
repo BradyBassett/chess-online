@@ -1,10 +1,19 @@
+import { PieceColor, PieceType } from "../Utilities/enums";
+import Board from "./Board";
+import Square from "./Square";
 import Piece from "./Piece";
 
 
 export default class King extends Piece {
-  private pieceType = "king";
+  private pieceType = PieceType.King;
 
-  constructor(color: string) {
-    super(color);
+  constructor(color: PieceColor, currentSquare: Square) {
+    super(color, currentSquare);
+  }
+
+  public getValidMoves(board: Board): Square[] {
+    const validMoves: Square[] = [];
+    
+    return validMoves;
   }
 }
