@@ -15,7 +15,7 @@ export default abstract class Piece {
 
   protected isValidMove(targetSquare: Square, board: Board): boolean {
     // if target square is the same as current square, return false
-    if (this.currentSquare === targetSquare) {
+    if (targetSquare === this.currentSquare) {
       return false;
     }
 
@@ -54,9 +54,9 @@ export default abstract class Piece {
 
   // only call these methods if in Rook or Queen
   protected isValidStraightMove(targetSquare: Square, board: Board): boolean {
-    if (this.currentSquare.rowIndex === targetSquare.rowIndex) { // horizontal move
-      const rowStart = Math.min(this.currentSquare.colIndex, targetSquare.colIndex);
-      const rowEnd = Math.max(this.currentSquare.colIndex, targetSquare.colIndex);
+    if (targetSquare.rowIndex === this.currentSquare.rowIndex) { // horizontal move
+      const rowStart = Math.min(targetSquare.colIndex, this.currentSquare.colIndex);
+      const rowEnd = Math.max(targetSquare.colIndex, this.currentSquare.colIndex);
 
       for (let i = rowStart + 1; i < rowEnd - 1; i++) {
         if (board.getSquare(this.currentSquare.rowIndex, i).piece) {
@@ -64,9 +64,9 @@ export default abstract class Piece {
         }
       }
     }
-    else if (this.currentSquare.colIndex === targetSquare.colIndex) { // vertical move
-      const colStart = Math.min(this.currentSquare.rowIndex, targetSquare.rowIndex);
-      const colEnd = Math.max(this.currentSquare.rowIndex, targetSquare.rowIndex);
+    else if (targetSquare.colIndex === this.currentSquare.colIndex) { // vertical move
+      const colStart = Math.min(targetSquare.rowIndex, this.currentSquare.rowIndex);
+      const colEnd = Math.max(targetSquare.rowIndex, this.currentSquare.rowIndex);
 
       for (let i = colStart + 1; i < colEnd - 1; i++) {
         if (board.getSquare(i, this.currentSquare.colIndex).piece) {
@@ -79,6 +79,6 @@ export default abstract class Piece {
   }
 
   protected targetSquareIsStraight(targetSquare: Square): boolean {
-    return this.currentSquare.rowIndex === targetSquare.rowIndex || this.currentSquare.colIndex === targetSquare.colIndex;
+    return targetSquare.rowIndex === this.currentSquare.rowIndex || targetSquare.colIndex === this.currentSquare.colIndex;
   }
 }
