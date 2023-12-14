@@ -17,37 +17,23 @@ export default class King extends Piece {
       return false;
     }
 
-    // moving ↑ 1
-    if (targetSquare.rowIndex === this.currentSquare.rowIndex + 1 && targetSquare.colIndex === this.currentSquare.colIndex) {
-      return true;
-    }
-    // moving ↗ 1
-    else if (targetSquare.rowIndex === this.currentSquare.rowIndex + 1 && targetSquare.colIndex === this.currentSquare.colIndex + 1) {
-      return true;
-    }
-    // moving → 1
-    else if (targetSquare.rowIndex === this.currentSquare.rowIndex && targetSquare.colIndex === this.currentSquare.colIndex + 1) {
-      return true;
-    }
-    // moving ↘ 1
-    else if (targetSquare.rowIndex === this.currentSquare.rowIndex - 1 && targetSquare.colIndex === this.currentSquare.colIndex + 1) {
-      return true;
-    }
-    // moving ↓ 1
-    else if (targetSquare.rowIndex === this.currentSquare.rowIndex - 1 && targetSquare.colIndex === this.currentSquare.colIndex) {
-      return true;
-    }
-    // moving ↙ 1
-    else if (targetSquare.rowIndex === this.currentSquare.rowIndex - 1 && targetSquare.colIndex === this.currentSquare.colIndex - 1) {
-      return true;
-    }
-    // moving ← 1
-    else if (targetSquare.rowIndex === this.currentSquare.rowIndex && targetSquare.colIndex === this.currentSquare.colIndex - 1) {
-      return true;
-    }
-    // moving ↖ 1
-    else if (targetSquare.rowIndex === this.currentSquare.rowIndex + 1 && targetSquare.colIndex === this.currentSquare.colIndex - 1) {
-      return true;
+    const moves = [
+      { row: 1, col: 0 },   // Up
+      { row: 1, col: 1 },   // Up-Right
+      { row: 0, col: 1 },   // Right
+      { row: -1, col: 1 },  // Down-Right
+      { row: -1, col: 0 },  // Down
+      { row: -1, col: -1 }, // Down-Left
+      { row: 0, col: -1 },  // Left
+      { row: 1, col: -1 },  // Up-Left
+    ];
+  
+    // Check if the target square matches any of the possible moves
+    for (const move of moves) {
+      if (targetSquare.rowIndex === this.currentSquare.rowIndex + move.row &&
+          targetSquare.colIndex === this.currentSquare.colIndex + move.col) {
+        return true;
+      }
     }
 
     return false;
