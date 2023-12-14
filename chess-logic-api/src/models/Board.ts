@@ -14,4 +14,8 @@ export default class Board {
       this.squares.push(parsedSquares.slice(i, i + 8));
     }
   }
+
+  public getSquare(rowIndex: number, colIndex: number): Square {
+    return this.squares[rowIndex][colIndex];
+  }
 }

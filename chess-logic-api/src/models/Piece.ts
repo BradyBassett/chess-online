@@ -1,5 +1,6 @@
 import { PieceColor } from "../Utilities/enums";
 import Board from "./Board";
+
 import Square from "./Square";
 
 
@@ -12,5 +13,5 @@ export default abstract class Piece {
     this.currentSquare = currentSquare;
   }
 
-  public abstract getValidMoves(board: Board): Square[];
+  public abstract isValidMove(targetSquare: Square, board: Board): boolean;
 }
