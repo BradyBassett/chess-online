@@ -18,33 +18,12 @@ export default class Rook extends Piece {
     }
 
     // if the target square is not in the same row or column as the current square, return false
-    if (this.currentSquare.rowIndex !== targetSquare.rowIndex && this.currentSquare.colIndex !== targetSquare.colIndex) {
+    if (!super.targetSquareIsStraight(targetSquare)) {
       return false;
     }
 
     // if there are pieces between the valid path between the current square and the target square, return false
-    if (this.currentSquare.rowIndex === targetSquare.rowIndex) { // horizontal move
-      const rowStart = Math.min(this.currentSquare.colIndex, targetSquare.colIndex);
-      const rowEnd = Math.max(this.currentSquare.colIndex, targetSquare.colIndex);
-
-      for (let i = rowStart + 1; i < rowEnd - 1; i++) {
-        if (board.getSquare(this.currentSquare.rowIndex, i).piece) {
-          return false;
-        }
-      }
-    }
-    else if (this.currentSquare.colIndex === targetSquare.colIndex) { // vertical move
-      const colStart = Math.min(this.currentSquare.rowIndex, targetSquare.rowIndex);
-      const colEnd = Math.max(this.currentSquare.rowIndex, targetSquare.rowIndex);
-
-      for (let i = colStart + 1; i < colEnd - 1; i++) {
-        if (board.getSquare(i, this.currentSquare.colIndex).piece) {
-          return false;
-        }
-      }
-    }
-
-    return true;
+    return super.isValidStraightMove(targetSquare, board);
   }
 }
 

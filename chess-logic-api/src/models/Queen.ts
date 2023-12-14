@@ -16,7 +16,16 @@ export default class Queen extends Piece {
     if (!super.isValidMove(targetSquare, board)) {
       return false;
     }
-    
-    return true;
+
+    if (super.targetSquareIsDiagonal(targetSquare)) {
+      return super.isValidDiagonalMove(targetSquare, board)
+
+    }
+    else if (super.targetSquareIsStraight(targetSquare)) {
+      return super.isValidStraightMove(targetSquare, board)
+    }
+    else {
+      return false;
+    }
   }
 }
