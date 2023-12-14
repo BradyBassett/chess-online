@@ -11,9 +11,12 @@ export default class Queen extends Piece {
     super(color, currentSquare);
   }
 
-  public getValidMoves(board: Board): Square[] {
-    const validMoves: Square[] = [];
+  public isValidMove(targetSquare: Square, board: Board): boolean {
+    // common piece move validation logic
+    if (!super.isValidMove(targetSquare, board)) {
+      return false;
+    }
     
-    return validMoves;
+    return true;
   }
 }

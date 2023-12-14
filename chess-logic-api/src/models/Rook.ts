@@ -12,18 +12,13 @@ export default class Rook extends Piece {
   }
 
   public isValidMove(targetSquare: Square, board: Board): boolean {
-    // if target square is the same as current square, return false
-    if (this.currentSquare === targetSquare) {
+    // common piece move validation logic
+    if (!super.isValidMove(targetSquare, board)) {
       return false;
     }
 
     // if the target square is not in the same row or column as the current square, return false
     if (this.currentSquare.rowIndex !== targetSquare.rowIndex && this.currentSquare.colIndex !== targetSquare.colIndex) {
-      return false;
-    }
-
-    // if the target square is occupied by a piece of the same color, return false
-    if (targetSquare.piece && targetSquare.piece.color === this.color) {
       return false;
     }
 

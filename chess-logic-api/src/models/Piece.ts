@@ -13,5 +13,17 @@ export default abstract class Piece {
     this.currentSquare = currentSquare;
   }
 
-  public abstract isValidMove(targetSquare: Square, board: Board): boolean;
+  protected isValidMove(targetSquare: Square, board: Board): boolean {
+    // if target square is the same as current square, return false
+    if (this.currentSquare === targetSquare) {
+      return false;
+    }
+
+    // if the target square is occupied by a piece of the same color, return false
+    if (targetSquare.piece && targetSquare.piece.color === this.color) {
+      return false;
+    }
+    
+    return true;
+  }
 }
