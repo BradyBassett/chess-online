@@ -16,7 +16,34 @@ export default class Pawn extends Piece {
     if (!super.isValidMove(targetSquare, board)) {
       return false;
     }
-    
-    return true;
+
+    // if the pawn has already moved it can only move one square
+    if (this.hasMoved) {
+      return this.moveOneSquare(targetSquare, board);
+    }
+    // if the pawn hasn't moved it can move either one or two squares
+    else {
+      return this.moveOneSquare(targetSquare, board) || this.moveTwoSquares(targetSquare, board);
+    }
+  }
+
+  private moveOneSquare(targetSquare: Square, board: Board): boolean {
+    const moveDirection = this.color === PieceColor.Light ? 1 : -1
+
+    if (targetSquare.rowIndex === this.currentSquare.rowIndex + moveDirection) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private moveTwoSquares(targetSquare: Square, board: Board): boolean {
+    const moveDirection = this.color === PieceColor.Light ? 2 : -2
+
+    if (targetSquare.rowIndex === this.currentSquare.rowIndex + moveDirection) {
+      return true;
+    }
+
+    return false;
   }
 }
