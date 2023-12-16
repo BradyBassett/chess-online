@@ -1,70 +1,82 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Square from "./Square";
-import { parseFenPosition } from "../utilities/fenParser";
-import { STARTING_POSITION_FEN_CODE } from "../utilities/constants";
-import { PieceProps } from "./Piece";
-
+import { SQUARE_SIZE, STARTING_POSITION_FEN_CODE } from "../utilities/constants";
+import Piece, { PieceTypes, PieceColors } from "./Piece";
 import styles from "../../styles/board.module.scss";
 
 
-export type PossiblePiece = React.ReactElement<PieceProps> | null;
+export type PieceInfo = {
+  type?: PieceTypes;
+  color?: PieceColors;
+};
+type squareCoordinate = {row: number, col: number} | null;
 
 export default function Board(): React.ReactElement {
-  const [board, setBoard] = useState(setStartingPositions());
-
-  const [selectedSquare, setSelectedSquare] = useState<number[]>([]);
-  const [destinationSquare, setDestinationSquare] = useState<number[]>([]);
-
+  const [board, setBoard] = useState<(PieceInfo | null)[][]>([]);
+  const [selectedSquare, setSelectedSquare] = useState<squareCoordinate>(null);
+  const [destinationSquare, setDestinationSquare] = useState<squareCoordinate>(null);
   
-  function setStartingPositions(fenCode: string = STARTING_POSITION_FEN_CODE): PossiblePiece[][] {
-    const startingPositions = parseFenPosition(fenCode);
-    
-    const boardArray: PossiblePiece[][] = [];
-    for (let i = 0; i < startingPositions.length; i += 8) {
-      boardArray.push(startingPositions.slice(i, i + 8));
+  useEffect(() => {
+    if (board.length === 0) {
+      setBoardStartingPosition();
     }
-    
-    return boardArray;
+  }, [board]);
+
+  useEffect(() => {
+    if (selectedSquare !== null && destinationSquare !== null) {
+      const selectedPiece = board[selectedSquare.row][selectedSquare.col];
+      if (selectedPiece !== null) {
+        updateBoard(selectedSquare, destinationSquare);
+      }
+
+      setSelectedSquare(null);
+      setDestinationSquare(null);
+    }
+  }, [destinationSquare]);
+
+  function setBoardStartingPosition() {
+    fetch("http://localhost:3001/api/board", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ fenPosition: STARTING_POSITION_FEN_CODE }),
+    })
+      .then(res => res.json())
+      .then(data => setBoard(data))
+      .catch(err => console.error("Error setting board: ", err));
   }
 
   function resetBoard() {
-    setBoard(setStartingPositions());
-    setSelectedSquare([]);
-    setDestinationSquare([]);
+    setBoardStartingPosition();
+    setSelectedSquare(null);
+    setDestinationSquare(null);
   }
   
   function handleSquareClick(rowIndex: number, colIndex: number): void {
     // if selectedSquare has not been set, set selected square
-    if (selectedSquare.length === 0) {
-      setSelectedSquare([rowIndex, colIndex]);
+    if (selectedSquare === null) {
+      setSelectedSquare({ row: rowIndex, col: colIndex});
     } 
     // If selectedSquare has been set, set new square as destination square
     else {
-      setDestinationSquare([rowIndex, colIndex]);
-      const selectedPiece = board[selectedSquare[0]][selectedSquare[1]];
-
-      // only update the square if selectedSquare is not null
-      if (selectedPiece !== null) {
-        updateSquare(selectedSquare[0], selectedSquare[1], null);
-        updateSquare(rowIndex, colIndex, selectedPiece);
-      }
-
-      // clear selected and destination square
-      setSelectedSquare([]);
-      setDestinationSquare([]);
+      setDestinationSquare({ row: rowIndex, col: colIndex});
     }
   }
 
-  function updateSquare(rowIndex: number, colIndex: number, piece: PossiblePiece): void {
-    setBoard(prevBoard => {
-      const newBoard = [...prevBoard];
-      newBoard[rowIndex] = [...prevBoard[rowIndex]];
-      newBoard[rowIndex][colIndex] = piece;
-
-      return newBoard;
-    });
+  function updateBoard(selectedSquare: squareCoordinate, destinationSquare: squareCoordinate): void {
+    fetch("http://localhost:3001/api/board/updateBoard", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ selectedSquare: selectedSquare, destinationSquare: destinationSquare }),
+    })
+      .then(res => res.json())
+      .then(updatedBoardData => setBoard(updatedBoardData))
+      .catch(err => console.error("Error updating board", err));
   }
 
   function getSquareCoordinate(rowIndex: number, colIndex: number): string {
@@ -84,18 +96,19 @@ export default function Board(): React.ReactElement {
         >
           {board.map((row, rowIndex) => (
             <div key={rowIndex} className={styles.boardRow}>
-              {row.map((piece: PossiblePiece, colIndex: number) => (
+              {row.map((piece: PieceInfo | null, colIndex: number) => (
                 <Square 
                   key={getSquareCoordinate(rowIndex, colIndex)}
                   testid={`square-${getSquareCoordinate(rowIndex, colIndex)}`}
                   color={(rowIndex + colIndex) % 2 === 0 ? "light" : "dark"}
                   isActive={
-                    selectedSquare[0] === rowIndex &&
-                    selectedSquare[1] === colIndex
+                    selectedSquare !== null &&
+                    selectedSquare.row === rowIndex &&
+                    selectedSquare.col === colIndex
                   }
                   onClick={() => handleSquareClick(rowIndex, colIndex)}
                 >
-                  {piece}
+                  {piece ? <Piece size={SQUARE_SIZE} type={piece.type!} color={piece.color!} /> : null}
                 </Square>
               ))}
             </div>
