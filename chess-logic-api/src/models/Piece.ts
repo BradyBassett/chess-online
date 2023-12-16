@@ -1,4 +1,4 @@
-import { PieceColor } from "../Utilities/enums";
+import { PieceColor, PieceType } from "../utils/enums";
 import Board from "./Board";
 import Square from "./Square";
 
@@ -6,6 +6,7 @@ import Square from "./Square";
 export default abstract class Piece {
   protected hasMoved: boolean = false;
   protected isCaptured: boolean = false;
+  public abstract pieceType: PieceType;
 
   constructor(public color: PieceColor, public currentSquare: Square) {
     this.color = color;

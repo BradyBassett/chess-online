@@ -1,11 +1,11 @@
-import { PieceColor, PieceType } from "../Utilities/enums";
+import { PieceColor, PieceType } from "../utils/enums";
 import Board from "./Board";
 import Square from "./Square";
 import Piece from "./Piece";
 
 
 export default class Bishop extends Piece {
-  private pieceType = PieceType.Bishop;
+  public pieceType = PieceType.Bishop;
 
   constructor(color: PieceColor, currentSquare: Square) {
     super(color, currentSquare);
