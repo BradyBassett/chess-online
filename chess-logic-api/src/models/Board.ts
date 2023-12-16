@@ -1,5 +1,10 @@
-import { parseFenPosition } from "../Utilities/fenParser";
-import Square from './Square';
+import { parseFenPosition } from "../utils/fenParser";
+import Square from "./Square";
+
+export type PieceInfo = {
+  type?: string;
+  color?: string;
+};
 
 export default class Board {
   public squares: Square[][] = [];
@@ -17,5 +22,16 @@ export default class Board {
 
   public getSquare(rowIndex: number, colIndex: number): Square {
     return this.squares[rowIndex][colIndex];
+  }
+
+  public toJSON(): (PieceInfo | null)[][] {
+    return this.squares.map(row => 
+      row.map(square => 
+        square.piece ? { 
+          type: square.piece.pieceType.toString(), 
+          color: square.piece.color.toString()
+        } : null
+      )
+    );
   }
 }
