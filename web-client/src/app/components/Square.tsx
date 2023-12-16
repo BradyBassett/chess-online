@@ -1,8 +1,9 @@
 import React from "react";
-import { PossiblePiece } from "./Board";
-
+import { PieceProps } from "./Piece";
 import styles from "../../styles/square.module.scss";
 
+
+export type PossiblePiece = React.ReactElement<PieceProps> | null;
 
 export interface SquareProps {
   testid: string;
