@@ -16,17 +16,17 @@ export enum PlayerColor {
 }
 
 export enum PieceType {
-  Pawn,
-  Knight,
-  Bishop,
-  Rook,
-  Queen,
-  King
+  Pawn = "pawn",
+  Knight = "knight",
+  Bishop = "bishop",
+  Rook = "rook",
+  Queen = "queen",
+  King = "king"
 }
 
 export enum PieceColor {
-  Light,
-  Dark
+  Light = "light",
+  Dark = "dark"
 }
 
 export enum MoveType {
