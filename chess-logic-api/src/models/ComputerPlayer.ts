@@ -1,5 +1,5 @@
 import Player from "./Player";
-import { PlayerColor } from "../Utilities/enums";
+import { PlayerColor } from "../utils/enums";
 
 
 export default class ComputerPlayer extends Player {

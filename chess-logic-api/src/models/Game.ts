@@ -1,6 +1,6 @@
 import Board from "./Board";
 import Player from "./Player";
-import { GameStatus } from "../Utilities/enums";
+import { GameStatus } from "../utils/enums";
 
 
 class Game {

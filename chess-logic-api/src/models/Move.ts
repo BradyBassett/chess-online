@@ -1,6 +1,6 @@
 import Player from "./Player";
 import Square from "./Square";
-import { MoveType } from "../Utilities/enums";
+import { MoveType } from "../utils/enums";
 
 export default class Move {
   constructor(public player: Player, public from: Square, public to: Square, public type: MoveType) {

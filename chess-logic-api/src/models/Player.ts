@@ -1,4 +1,4 @@
-import { PlayerColor } from "../Utilities/enums";
+import { PlayerColor } from "../utils/enums";
 
 
 export default abstract class Player {
