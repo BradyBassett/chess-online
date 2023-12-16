@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Image from "next/image";
-
 import styles from "../../styles/piece.module.scss";
 
 
+export type PieceTypes = "bishop" | "king" | "knight" | "pawn" | "queen" | "rook";
+export type PieceColors = "dark" | "light";
+
 export interface PieceProps {
   size: number;
-  color: "dark" | "light";
+  color: PieceColors;
   type: "bishop" | "king" | "knight" | "pawn" | "queen" | "rook";
 }
 
