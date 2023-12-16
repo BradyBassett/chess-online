@@ -1,3 +1,6 @@
+// FIXME - eventually move these tests and refactor to fit in chess-logic-api
+
+
 import { parseFenPosition, isDigitFrom1To8 } from "./fenParser";
 
 
