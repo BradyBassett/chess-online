@@ -1,4 +1,4 @@
-import Piece from './Piece';
+import Piece from "./Piece";
 
 export default class Square {
   constructor(public rowIndex: number, public colIndex: number, public piece: Piece | null = null) {
