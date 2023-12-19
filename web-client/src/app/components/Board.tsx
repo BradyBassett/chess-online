@@ -60,6 +60,10 @@ export default function Board(): React.ReactElement {
     if (selectedSquare === null) {
       setSelectedSquare({ row: rowIndex, col: colIndex});
     } 
+    else if (selectedSquare.row === rowIndex && selectedSquare.col === colIndex) {
+      setSelectedSquare(null);
+      setDestinationSquare(null);
+    }
     // If selectedSquare has been set, set new square as destination square
     else {
       setDestinationSquare({ row: rowIndex, col: colIndex});
