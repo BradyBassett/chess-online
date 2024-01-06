@@ -22,11 +22,17 @@ export async function updateBoard(selectedSquare: {row: number, col: number}, de
   }
 
   const currentSquare = board.getSquare(selectedSquare.row, selectedSquare.col);
+  const targetSquare = board.getSquare(destinationSquare.row, destinationSquare.col)
   const piece = currentSquare.piece;
 
   // TODO - Add piece movement logic here
-  board.getSquare(destinationSquare.row, destinationSquare.col).piece = piece;
-  board.getSquare(selectedSquare.row, selectedSquare.col).piece = null;
+  if (piece && piece.isValidMove(targetSquare, board)) {
+    board.getSquare(destinationSquare.row, destinationSquare.col).piece = piece;
+    board.getSquare(selectedSquare.row, selectedSquare.col).piece = null;
+  }
+  else {
+    throw new Error("Invalid move");
+  }
 
   return board;
 }
