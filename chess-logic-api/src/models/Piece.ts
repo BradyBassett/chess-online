@@ -13,7 +13,7 @@ export default abstract class Piece {
     this.currentSquare = currentSquare;
   }
 
-  protected isValidMove(targetSquare: Square, board: Board): boolean {
+  public isValidMove(targetSquare: Square, board: Board): boolean {
     // if target square is the same as current square, return false
     if (targetSquare === this.currentSquare) {
       return false;
