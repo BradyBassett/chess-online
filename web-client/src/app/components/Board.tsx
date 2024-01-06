@@ -78,7 +78,12 @@ export default function Board(): React.ReactElement {
       },
       body: JSON.stringify({ selectedSquare: selectedSquare, destinationSquare: destinationSquare }),
     })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(res.statusText);
+        }
+        return res.json();
+      })
       .then(updatedBoardData => setBoard(updatedBoardData))
       .catch(err => console.error("Error updating board", err));
   }
