@@ -6,11 +6,13 @@
 
 class Square {
 public:
-  int rowIndex;
-  int colIndex;
-  std::unique_ptr<Piece> piece;
+	uint8_t rowIndex;
+	uint8_t colIndex;
+	std::shared_ptr<Piece> piece;
 
-  Square(int rowIndex, int colIndex, std::unique_ptr<Piece> piece = nullptr);
+	Square(int rowIndex, int colIndex, std::shared_ptr<Piece> piece = nullptr);
+
+	Square(const Square& square);
 };
 
 #endif
