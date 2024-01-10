@@ -24,7 +24,7 @@ const pieceTypes: { [key: string]: (square: Square) => Piece } = {
   "P": square => new Pawn(PieceColor.Light, square)
 };
 
-export function parseFenPosition(fenPosition: string) {
+export function parseFenPosition(fenPosition: string): Square[] {
   const squares: Square[] = [];
 
   let rowIndex = 0;
