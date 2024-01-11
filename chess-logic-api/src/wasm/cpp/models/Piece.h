@@ -15,14 +15,6 @@ protected:
 	PieceType pieceType;
 	Square& currentSquare;
 
-	bool isValidDiagonalMove(Board& board, Square& targetSquare) const;
-
-	bool targetSquareIsDiagonal(Square& targetSquare) const;
-
-	bool isValidStraightMove(Board& board, Square& targetSquare) const;
-
-	bool targetSquareIsStraight(Square& targetSquare) const;
-
 public:
 	Piece(PieceColor pieceColor, Square& currentSquare);
 
