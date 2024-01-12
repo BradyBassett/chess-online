@@ -1,8 +1,5 @@
 #include "fenParser.h"
-#include <map>
-#include <memory>
 #include <regex>
-#include <stdexcept>
 #include "Rook.h"
 #include "Knight.h"
 #include "Bishop.h"
@@ -56,7 +53,7 @@ std::vector<Square> parseFenPosition(std::string& fenPosition) {
       rowIndex++;
     }
   }
-  
+
   return squares;
 }
 
