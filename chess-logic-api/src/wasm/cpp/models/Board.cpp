@@ -8,7 +8,7 @@ Board::Board(std::string fenPosition) {
 void Board::setStartingPosition(std::string fenPosition) {
 	squares.clear();
 
-	std::vector<Square> parsedSquares = parseFenPosition(fenPosition); // TODO: implement parseFenPosition
+	std::vector<Square> parsedSquares = parseFenPosition(fenPosition);
 
 	for (int i = 0; i < parsedSquares.size(); i += 8) {
 		squares.push_back(std::vector<Square>(parsedSquares.begin() + i, parsedSquares.begin() + i + 8));
