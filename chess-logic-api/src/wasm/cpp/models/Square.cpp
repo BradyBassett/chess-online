@@ -19,3 +19,7 @@ u_int8_t Square::getColIndex() const {
 std::shared_ptr<Piece> Square::getPiece() const {
   return piece;
 }
+
+void Square::setPiece(std::shared_ptr<Piece> piece) {
+  this->piece = piece;
+}

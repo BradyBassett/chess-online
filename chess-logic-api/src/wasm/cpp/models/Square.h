@@ -20,6 +20,8 @@ public:
 	uint8_t getColIndex() const;
 
 	std::shared_ptr<Piece> getPiece() const;
+
+	void setPiece(std::shared_ptr<Piece> piece);
 };
 
 #endif
