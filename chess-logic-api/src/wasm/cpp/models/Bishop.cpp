@@ -1,5 +1,5 @@
 #include "Bishop.h"
 
-Bishop::Bishop(PieceColor pieceColor, Square& square) : DiagonalPiece(pieceColor, currentSquare) {
+Bishop::Bishop(PieceColor pieceColor, Square& currentSquare) : Piece(pieceColor, currentSquare), DiagonalPiece(pieceColor, currentSquare) {
   pieceType = PieceType::Bishop;
 }

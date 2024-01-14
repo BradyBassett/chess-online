@@ -8,11 +8,11 @@ Square::Square(const Square& square)
   : rowIndex(square.rowIndex), colIndex(square.colIndex), piece(std::move(square.piece)) {
 }
 
-u_int8_t Square::getRowIndex() const {
+uint8_t Square::getRowIndex() const {
   return rowIndex;
 }
 
-u_int8_t Square::getColIndex() const {
+uint8_t Square::getColIndex() const {
   return colIndex;
 }
 

@@ -3,7 +3,7 @@
 
 #include "StraightPiece.h"
 
-class Rook : virtual public StraightPiece {
+class Rook : public StraightPiece {
 public:
   Rook(PieceColor pieceColor, Square& currentSquare);
 };

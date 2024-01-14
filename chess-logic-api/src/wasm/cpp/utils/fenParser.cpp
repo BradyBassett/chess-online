@@ -1,17 +1,18 @@
 #include "fenParser.h"
 #include <regex>
-#include "Rook.h"
-#include "Knight.h"
-#include "Bishop.h"
-#include "Queen.h"
-#include "King.h"
-#include "Pawn.h"
+#include <map>
+#include "../models/Rook.h"
+#include "../models/Knight.h"
+#include "../models/Bishop.h"
+#include "../models/Queen.h"
+#include "../models/King.h"
+#include "../models/Pawn.h"
 
 std::vector<Square> parseFenPosition(std::string& fenPosition) {
   std::vector<Square> squares;
 
   uint8_t rowIndex = 0;
-  u_int8_t colIndex = 0;
+  uint8_t colIndex = 0;
 
   std::map<char, std::function<std::shared_ptr<Piece>(Square)>> pieceTypes = {
     {'r', [](Square square) {return std::make_shared<Rook>(PieceColor::Dark, square); }},

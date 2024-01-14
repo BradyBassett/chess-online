@@ -1,5 +1,6 @@
 #include <algorithm>
 #include "Piece.h"
+#include "Square.h"
 
 Piece::Piece(PieceColor pieceColor, Square& currentSquare)
   : pieceColor(pieceColor),

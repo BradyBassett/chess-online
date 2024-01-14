@@ -1,4 +1,5 @@
 #include "Knight.h"
+#include "Square.h"
 #include "../utils/structs/Move.h"
 
 Knight::Knight(PieceColor pieceColor, Square& currentSquare) : Piece(pieceColor, currentSquare) {

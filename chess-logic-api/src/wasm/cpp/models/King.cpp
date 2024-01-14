@@ -1,4 +1,5 @@
 #include "King.h"
+#include "Square.h"
 #include "../utils/structs/Move.h"
 
 King::King(PieceColor pieceColor, Square& currentSquare) : Piece(pieceColor, currentSquare) {

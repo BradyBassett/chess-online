@@ -1,5 +1,6 @@
 #include "Queen.h"
 
-Queen::Queen(PieceColor pieceColor, Square& currentSquare) : DiagonalPiece(pieceColor, currentSquare) {
-  Piece::pieceType = PieceType::Queen;
+Queen::Queen(PieceColor pieceColor, Square& currentSquare) 
+    : Piece(pieceColor, currentSquare), DiagonalPiece(pieceColor, currentSquare), StraightPiece(pieceColor, currentSquare) {
+  pieceType = PieceType::Queen;
 }

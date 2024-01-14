@@ -1,13 +1,14 @@
 #include "Pawn.h"
+#include "Square.h"
 
 bool Pawn::moveOneSquare(Board& board, Square& targetSquare) {
-  u_int8_t moveDirection = pieceColor == PieceColor::Light ? 1 : -1;
+  uint8_t moveDirection = pieceColor == PieceColor::Light ? 1 : -1;
 
   return targetSquare.getRowIndex() == currentSquare.getRowIndex() + moveDirection;
 }
 
 bool Pawn::moveTwoSquares(Board& board, Square& targetSquare) {
-  u_int8_t moveDirection = pieceColor == PieceColor::Light ? 2 : -2;
+  uint8_t moveDirection = pieceColor == PieceColor::Light ? 2 : -2;
 
   return targetSquare.getRowIndex() == currentSquare.getRowIndex() + moveDirection;
 }

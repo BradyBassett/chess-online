@@ -1,8 +1,10 @@
 #include "DiagonalPiece.h"
+#include "Square.h"
+#include "Board.h"
 
 bool DiagonalPiece::isValidDiagonalMove(Board& board, Square& targetSquare) const {
-  u_int8_t rowStep = (targetSquare.getRowIndex() - currentSquare.getRowIndex()) > 0 ? 1 : -1;
-  u_int8_t colStep = (targetSquare.getColIndex() - currentSquare.getColIndex()) > 0 ? 1 : -1;
+  uint8_t rowStep = (targetSquare.getRowIndex() - currentSquare.getRowIndex()) > 0 ? 1 : -1;
+  uint8_t colStep = (targetSquare.getColIndex() - currentSquare.getColIndex()) > 0 ? 1 : -1;
 
   uint8_t i = currentSquare.getRowIndex() + rowStep;
   uint8_t j = currentSquare.getColIndex() + colStep;

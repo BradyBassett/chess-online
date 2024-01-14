@@ -5,9 +5,9 @@
 
 class DiagonalPiece : virtual public Piece {
 private:
-  virtual bool isValidDiagonalMove(Board& board, Square& targetSquare) const = 0;
+  virtual bool isValidDiagonalMove(Board& board, Square& targetSquare) const;
 
-	virtual bool targetSquareIsDiagonal(Square& targetSquare) const = 0;
+	virtual bool targetSquareIsDiagonal(Square& targetSquare) const;
 
 public:
   using Piece::Piece;

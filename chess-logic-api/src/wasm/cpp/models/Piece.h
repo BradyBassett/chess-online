@@ -2,10 +2,10 @@
 #define PIECE_H
 
 #include <memory>
-#include "Board.h"
 #include "../utils/enums/PieceType.h"
 #include "../utils/enums/PieceColor.h"
 
+class Board;
 class Square;
 
 class Piece {
@@ -21,13 +21,13 @@ public:
 
 	bool isValidMove(Board& board, Square& targetSquare) const;
 	
-	virtual bool getHasMoved() const = 0;
+	virtual bool getHasMoved() const;
 
-	virtual bool getIsCaptured() const = 0;
+	virtual bool getIsCaptured() const;
 
-	virtual PieceColor getPieceColor() const = 0;
+	virtual PieceColor getPieceColor() const;
 
-	virtual PieceType getPieceType() const = 0;
+	virtual PieceType getPieceType() const;
 };
 
 #endif

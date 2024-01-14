@@ -5,9 +5,9 @@
 
 class StraightPiece : virtual public Piece {
 private:
-  virtual bool isValidStraightMove(Board& board, Square& targetSquare) const = 0;
+  virtual bool isValidStraightMove(Board& board, Square& targetSquare) const;
 
-	virtual bool targetSquareIsStraight(Square& targetSquare) const = 0;
+	virtual bool targetSquareIsStraight(Square& targetSquare) const;
   
 public:
   using Piece::Piece;
