@@ -3,9 +3,10 @@
 
 #include <memory>
 #include "Board.h"
-#include "Square.h"
 #include "PieceType.h"
 #include "PieceColor.h"
+
+class Square;
 
 class Piece {
 protected:

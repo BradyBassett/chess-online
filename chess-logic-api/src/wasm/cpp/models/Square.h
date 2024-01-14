@@ -3,6 +3,8 @@
 
 #include "Piece.h"
 
+class Piece;
+
 class Square {
 private:
 	uint8_t rowIndex;
