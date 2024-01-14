@@ -34,3 +34,7 @@ PieceColor Piece::getPieceColor() const {
 PieceType Piece::getPieceType() const {
   return pieceType;
 }
+
+Square& Piece::getCurrentSquare() const {
+  return currentSquare;
+}

@@ -20,7 +20,7 @@ public:
 	Piece(PieceColor pieceColor, Square& currentSquare);
 
 	bool isValidMove(Board& board, Square& targetSquare) const;
-	
+
 	virtual bool getHasMoved() const;
 
 	virtual bool getIsCaptured() const;
@@ -28,6 +28,8 @@ public:
 	virtual PieceColor getPieceColor() const;
 
 	virtual PieceType getPieceType() const;
+
+	virtual Square& getCurrentSquare() const;
 };
 
 #endif
