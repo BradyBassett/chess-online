@@ -3,8 +3,8 @@
 
 #include <memory>
 #include "Board.h"
-#include "PieceType.h"
-#include "PieceColor.h"
+#include "../utils/enums/PieceType.h"
+#include "../utils/enums/PieceColor.h"
 
 class Square;
 
