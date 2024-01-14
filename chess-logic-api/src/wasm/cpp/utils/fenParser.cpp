@@ -1,6 +1,6 @@
 #include "fenParser.h"
-#include <regex>
 #include <map>
+#include <regex>
 #include "../models/Rook.h"
 #include "../models/Knight.h"
 #include "../models/Bishop.h"
