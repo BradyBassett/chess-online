@@ -14,8 +14,6 @@ private:
 public:
 	Square(int rowIndex, int colIndex, std::shared_ptr<Piece> piece = nullptr);
 
-	Square(const Square& square);
-
 	uint8_t getRowIndex() const;
 
 	uint8_t getColIndex() const;
