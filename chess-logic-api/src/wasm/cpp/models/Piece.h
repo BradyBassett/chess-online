@@ -19,17 +19,17 @@ protected:
 public:
 	Piece(PieceColor pieceColor, Square& currentSquare);
 
-	bool isValidMove(Board& board, Square& targetSquare) const;
+	virtual bool isValidMove(Board& board, Square& targetSquare) const;
 
-	virtual bool getHasMoved() const;
+	bool getHasMoved() const;
 
-	virtual bool getIsCaptured() const;
+	bool getIsCaptured() const;
 
-	virtual PieceColor getPieceColor() const;
+	PieceColor getPieceColor() const;
 
-	virtual PieceType getPieceType() const;
+	PieceType getPieceType() const;
 
-	virtual Square& getCurrentSquare() const;
+	Square& getCurrentSquare() const;
 };
 
 #endif
