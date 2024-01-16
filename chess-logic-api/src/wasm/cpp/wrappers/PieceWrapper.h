@@ -22,6 +22,8 @@ public:
 	PieceType getPieceType() const;
 
 	emscripten::val getCurrentSquare() const;
+
+  Piece getPiece() const;
 };
 
 #endif
