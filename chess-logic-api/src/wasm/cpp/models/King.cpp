@@ -6,7 +6,7 @@ King::King(PieceColor pieceColor, Square& currentSquare) : Piece(pieceColor, cur
   pieceType = PieceType::King;
 }
 
-bool King::isValidMove(Board& board, Square& targetSquare) {
+bool King::isValidMove(Board& board, Square& targetSquare) const {
   if (!Piece::isValidMove(board, targetSquare)) {
     return false;
   }

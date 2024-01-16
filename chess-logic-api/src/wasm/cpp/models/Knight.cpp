@@ -6,7 +6,7 @@ Knight::Knight(PieceColor pieceColor, Square& currentSquare) : Piece(pieceColor,
   pieceType = PieceType::Knight;
 }
 
-bool Knight::isValidMove(Board& board, Square& targetSquare) {
+bool Knight::isValidMove(Board& board, Square& targetSquare) const {
   if (!Piece::isValidMove(board, targetSquare)) {
     return false;
   }
