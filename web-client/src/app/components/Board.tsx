@@ -36,6 +36,13 @@ export default function Board(): React.ReactElement {
     }
   }, [destinationSquare]);
 
+  useEffect(() => {
+    const runWasm = async () => {
+      const wasmModule = await require("wasm/chess-logic.js");
+    };
+    runWasm();
+  }, []);
+
   function setBoardStartingPosition() {
     fetch("http://localhost:3001/api/board", {
       method: "POST",
