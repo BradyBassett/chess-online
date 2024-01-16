@@ -34,10 +34,14 @@ emscripten::val PieceWrapper::getCurrentSquare() const {
   return result;
 }
 
+Piece PieceWrapper::getPiece() const {
+  return piece;
+}
+
 EMSCRIPTEN_BINDINGS(PieceWrapperModule) {
   emscripten::class_<PieceWrapper>("PieceWrapper")
     .constructor<PieceColor, Square*>()
-    .function("isValidMove", &PieceWrapper::isValidMove)
+    .function("isValidMove", &PieceWrapper::isValidMove, emscripten::allow_raw_pointers())
     .function("getHasMoved", &PieceWrapper::getHasMoved)
     .function("getIsCaptured", &PieceWrapper::getIsCaptured)
     .function("getPieceColor", &PieceWrapper::getPieceColor)

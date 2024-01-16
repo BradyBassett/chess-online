@@ -10,6 +10,6 @@ bool KnightWrapper::isValidMove(Board* board, Square* targetSquare) const {
 EMSCRIPTEN_BINDINGS(KnightWrapperModule) {
   emscripten::class_<KnightWrapper>("KnightWrapper")
     .constructor<PieceColor, Square*>()
-    .function("isValidMove", &KnightWrapper::isValidMove)
+    .function("isValidMove", &KnightWrapper::isValidMove, emscripten::allow_raw_pointers())
     ;
 }

@@ -10,6 +10,6 @@ bool BishopWrapper::isValidMove(Board* board, Square* targetSquare) const {
 EMSCRIPTEN_BINDINGS(BishopWrapperModule) {
   emscripten::class_<BishopWrapper>("BishopWrapper")
     .constructor<PieceColor, Square*>()
-    .function("isValidMove", &BishopWrapper::isValidMove)
+    .function("isValidMove", &BishopWrapper::isValidMove, emscripten::allow_raw_pointers())
     ;
 }

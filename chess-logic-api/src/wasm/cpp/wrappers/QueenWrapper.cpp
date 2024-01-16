@@ -10,6 +10,6 @@ bool QueenWrapper::isValidMove(Board* board, Square* targetSquare) const {
 EMSCRIPTEN_BINDINGS(QueenWrapperModule) {
   emscripten::class_<QueenWrapper>("QueenWrapper")
     .constructor<PieceColor, Square*>()
-    .function("isValidMove", &QueenWrapper::isValidMove)
+    .function("isValidMove", &QueenWrapper::isValidMove, emscripten::allow_raw_pointers())
     ;
 }

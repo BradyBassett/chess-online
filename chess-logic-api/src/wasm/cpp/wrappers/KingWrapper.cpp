@@ -10,6 +10,6 @@ bool KingWrapper::isValidMove(Board* board, Square* targetSquare) const {
 EMSCRIPTEN_BINDINGS(KingWrapperModule) {
   emscripten::class_<KingWrapper>("KingWrapper")
     .constructor<PieceColor, Square*>()
-    .function("isValidMove", &KingWrapper::isValidMove)
+    .function("isValidMove", &KingWrapper::isValidMove, emscripten::allow_raw_pointers())
     ;
 }

@@ -10,6 +10,6 @@ bool PawnWrapper::isValidMove(Board* board, Square* targetSquare) const {
 EMSCRIPTEN_BINDINGS(PawnWrapperModule) {
   emscripten::class_<PawnWrapper>("PawnWrapper")
     .constructor<PieceColor, Square*>()
-    .function("isValidMove", &PawnWrapper::isValidMove)
+    .function("isValidMove", &PawnWrapper::isValidMove, emscripten::allow_raw_pointers())
     ;
 }

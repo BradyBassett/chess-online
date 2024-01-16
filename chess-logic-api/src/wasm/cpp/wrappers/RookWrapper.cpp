@@ -10,6 +10,6 @@ bool RookWrapper::isValidMove(Board* board, Square* targetSquare) const {
 EMSCRIPTEN_BINDINGS(RookWrapperModule) {
   emscripten::class_<RookWrapper>("RookWrapper")
     .constructor<PieceColor, Square*>()
-    .function("isValidMove", &RookWrapper::isValidMove)
+    .function("isValidMove", &RookWrapper::isValidMove, emscripten::allow_raw_pointers())
     ;
 }
