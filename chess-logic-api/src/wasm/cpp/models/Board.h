@@ -16,8 +16,6 @@ public:
 
 	Square getSquare(int rowIndex, int colIndex);
 
-	emscripten::val getSquareWrapper(int rowIndex, int colIndex);
-
 	// TODO : figure out how to return an array of squares in json format
 };
 
