@@ -1,4 +1,5 @@
 #include "../models/Square.h"
+#include <vector>
 
 std::vector<Square> parseFenPosition(std::string& fenPosition);
 
