@@ -1,35 +1,29 @@
 "use client"
 
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Square from "./Square";
-import { SQUARE_SIZE, STARTING_POSITION_FEN_CODE } from "../utilities/constants";
-import Piece, { PieceTypes, PieceColors } from "./Piece";
+import { SQUARE_SIZE } from "../utilities/constants";
+import Piece from "./Piece";
 import styles from "../../styles/board.module.scss";
-import { Chess } from "chess.js";
+import { Chess, Square as ChessSquare, PieceSymbol, Color } from "chess.js";
 
 
-export type PieceInfo = {
-  type?: PieceTypes;
-  color?: PieceColors;
-};
+export type BoardSquare = {
+  square: ChessSquare;
+  type: PieceSymbol;
+  color: Color;
+} | null;
 
 type squareCoordinate = {row: number, col: number} | null;
 
 export default function Board(): React.ReactElement {
-  const chess = new Chess();
-  const [board, setBoard] = useState<(PieceInfo | null)[][]>([]);
+  const [game, setGame] = useState(new Chess());
   const [selectedSquare, setSelectedSquare] = useState<squareCoordinate>(null);
   const [destinationSquare, setDestinationSquare] = useState<squareCoordinate>(null);
-  
-  useEffect(() => {
-    if (board.length === 0) {
-      setBoardStartingPosition();
-    }
-  }, [board]);
 
   useEffect(() => {
     if (selectedSquare !== null && destinationSquare !== null) {
-      const selectedPiece = board[selectedSquare.row][selectedSquare.col];
+      const selectedPiece = game.board()[selectedSquare.row][selectedSquare.col];
       if (selectedPiece !== null) {
         updateBoard(selectedSquare, destinationSquare);
       }
@@ -39,21 +33,8 @@ export default function Board(): React.ReactElement {
     }
   }, [destinationSquare]);
 
-  function setBoardStartingPosition() {
-    fetch("http://localhost:3001/api/board", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ fenPosition: STARTING_POSITION_FEN_CODE }),
-    })
-      .then(res => res.json())
-      .then(data => setBoard(data))
-      .catch(err => console.error("Error setting board: ", err));
-  }
-
   function resetBoard() {
-    setBoardStartingPosition();
+    setGame(new Chess());
     setSelectedSquare(null);
     setDestinationSquare(null);
   }
@@ -74,28 +55,26 @@ export default function Board(): React.ReactElement {
   }
 
   function updateBoard(selectedSquare: squareCoordinate, destinationSquare: squareCoordinate): void {
-    fetch("http://localhost:3001/api/board/updateBoard", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ selectedSquare: selectedSquare, destinationSquare: destinationSquare }),
-    })
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(res.statusText);
-        }
-        return res.json();
-      })
-      .then(updatedBoardData => setBoard(updatedBoardData))
-      .catch(err => console.error("Error updating board", err));
+    const selectedSquareCoordinate = getSquareCoordinate(selectedSquare!.row, selectedSquare!.col);
+    const destinationSquareCoordinate = getSquareCoordinate(destinationSquare!.row, destinationSquare!.col);
+
+    try {
+      game.move({
+        from: selectedSquareCoordinate,
+        to: destinationSquareCoordinate
+      });
+    }
+    catch (error) {
+      console.error(error);
+      return;
+    }
   }
 
-  function getSquareCoordinate(rowIndex: number, colIndex: number): string {
-    let columnNames = ["a", "b", "c", "d", "e", "f", "g", "h"];
-    let standardRowIndex = 8 - rowIndex
+  function getSquareCoordinate(rowIndex: number, colIndex: number): ChessSquare {
+    const columnNames = ["a", "b", "c", "d", "e", "f", "g", "h"];
+    const standardRowIndex = 8 - rowIndex
 
-    return `${columnNames[colIndex]}${standardRowIndex}`;
+    return `${columnNames[colIndex]}${standardRowIndex}` as ChessSquare;
   }
 
   return (
@@ -106,9 +85,9 @@ export default function Board(): React.ReactElement {
           className={styles.board}
           data-testid="board"
         >
-          {board.map((row, rowIndex) => (
+          {game.board().map((row, rowIndex) => (
             <div key={rowIndex} className={styles.boardRow}>
-              {row.map((piece: PieceInfo | null, colIndex: number) => (
+              {row.map((square: BoardSquare, colIndex: number) => (
                 <Square 
                   key={getSquareCoordinate(rowIndex, colIndex)}
                   testid={`square-${getSquareCoordinate(rowIndex, colIndex)}`}
@@ -120,7 +99,7 @@ export default function Board(): React.ReactElement {
                   }
                   onClick={() => handleSquareClick(rowIndex, colIndex)}
                 >
-                  {piece ? <Piece size={SQUARE_SIZE} type={piece.type!} color={piece.color!} /> : null}
+                  {square ? <Piece size={SQUARE_SIZE} type={square.type!} color={square.color!} /> : null}
                 </Square>
               ))}
             </div>
