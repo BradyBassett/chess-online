@@ -5,15 +5,18 @@ import Square from "./Square";
 import { SQUARE_SIZE, STARTING_POSITION_FEN_CODE } from "../utilities/constants";
 import Piece, { PieceTypes, PieceColors } from "./Piece";
 import styles from "../../styles/board.module.scss";
+import { Chess } from "chess.js";
 
 
 export type PieceInfo = {
   type?: PieceTypes;
   color?: PieceColors;
 };
+
 type squareCoordinate = {row: number, col: number} | null;
 
 export default function Board(): React.ReactElement {
+  const chess = new Chess();
   const [board, setBoard] = useState<(PieceInfo | null)[][]>([]);
   const [selectedSquare, setSelectedSquare] = useState<squareCoordinate>(null);
   const [destinationSquare, setDestinationSquare] = useState<squareCoordinate>(null);
@@ -35,13 +38,6 @@ export default function Board(): React.ReactElement {
       setDestinationSquare(null);
     }
   }, [destinationSquare]);
-
-  useEffect(() => {
-    const runWasm = async () => {
-      const wasmModule = await require("wasm/chess-logic.js");
-    };
-    runWasm();
-  }, []);
 
   function setBoardStartingPosition() {
     fetch("http://localhost:3001/api/board", {
