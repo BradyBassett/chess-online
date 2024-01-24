@@ -8,7 +8,7 @@ import styles from "../../styles/board.module.scss";
 import { Chess, Square as ChessSquare, PieceSymbol, Color } from "chess.js";
 
 
-export type BoardSquare = {
+type BoardSquare = {
   square: ChessSquare;
   type: PieceSymbol;
   color: Color;
@@ -20,7 +20,9 @@ export default function Board(): React.ReactElement {
   const [game, setGame] = useState(new Chess());
   const [selectedSquare, setSelectedSquare] = useState<squareCoordinate>(null);
   const [destinationSquare, setDestinationSquare] = useState<squareCoordinate>(null);
+  const [possibleSquares, setPossibleSquares] = useState<string[]>([]);
 
+  // Attempts to move piece when destinationSquare is set
   useEffect(() => {
     if (selectedSquare !== null && destinationSquare !== null) {
       const selectedPiece = game.board()[selectedSquare.row][selectedSquare.col];
@@ -28,25 +30,24 @@ export default function Board(): React.ReactElement {
         updateBoard(selectedSquare, destinationSquare);
       }
 
-      setSelectedSquare(null);
-      setDestinationSquare(null);
+      setSelectionSquaresNull()
     }
   }, [destinationSquare]);
 
   function resetBoard() {
     setGame(new Chess());
-    setSelectedSquare(null);
-    setDestinationSquare(null);
+    setSelectionSquaresNull()
   }
   
   function handleSquareClick(rowIndex: number, colIndex: number): void {
     // if selectedSquare has not been set, set selected square
     if (selectedSquare === null) {
       setSelectedSquare({ row: rowIndex, col: colIndex});
+      setPossibleSquares(game.moves({ square: getSquareCoordinate(rowIndex, colIndex) }).map(move => sanitizeMoveNotation(move)));
+      console.log(game.moves({ square: getSquareCoordinate(rowIndex, colIndex) }));
     } 
     else if (selectedSquare.row === rowIndex && selectedSquare.col === colIndex) {
-      setSelectedSquare(null);
-      setDestinationSquare(null);
+      setSelectionSquaresNull()
     }
     // If selectedSquare has been set, set new square as destination square
     else {
@@ -77,6 +78,30 @@ export default function Board(): React.ReactElement {
     return `${columnNames[colIndex]}${standardRowIndex}` as ChessSquare;
   }
 
+  function setSelectionSquaresNull(): void {
+    setSelectedSquare(null);
+    setDestinationSquare(null);
+    setPossibleSquares([]);
+  }
+
+  function sanitizeMoveNotation(move: string): ChessSquare {
+    let destinationSquare: ChessSquare;
+
+    if (move === 'O-O') {
+      destinationSquare = game.turn() === 'w' ? 'g1' : 'g8';
+    } 
+    else if (move === 'O-O-O') {
+      destinationSquare = game.turn() === 'w' ? 'c1' : 'c8';
+    } 
+    else {
+      const sanitizedMove = move.replace(/[\+#x=]/g, '');
+  
+      destinationSquare = sanitizedMove.slice(-2) as ChessSquare;
+    }
+  
+    return destinationSquare;
+  }
+
   return (
     <>
       <button onClick={() => resetBoard()}>Reset Board</button> {/* TODO - Remove this once no longer needed */}
@@ -97,6 +122,8 @@ export default function Board(): React.ReactElement {
                     selectedSquare.row === rowIndex &&
                     selectedSquare.col === colIndex
                   }
+                  isValidMove={possibleSquares.includes(getSquareCoordinate(rowIndex, colIndex))}
+                  isCapture={true} // Todo - Implement this
                   onClick={() => handleSquareClick(rowIndex, colIndex)}
                 >
                   {square ? <Piece size={SQUARE_SIZE} type={square.type!} color={square.color!} /> : null}

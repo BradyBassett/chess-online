@@ -10,17 +10,26 @@ export interface SquareProps {
   color: "light" | "dark";
   children: PossiblePiece;
   isActive: boolean;
+  isValidMove: boolean;
+  isCapture: boolean;
   onClick: () => void;
 }
 
-export default function Square({testid, color, children, isActive, onClick}: SquareProps): React.ReactElement {
+export default function Square({testid, color, children, isActive, isValidMove, isCapture, onClick}: SquareProps): React.ReactElement {
   return (
     <div 
       data-testid={testid}
-      className={`${styles.square} ${color === "light" ? styles.light : styles.dark} ${isActive ? styles.activeSquare : ""}`}
+      className={`
+          ${styles.square} 
+          ${color === "light" ? styles.light : styles.dark} 
+          ${isActive ? styles.activeSquare : ""}
+          ${isValidMove ? styles.validMove : ""}
+        `}
       onClick={onClick}
     >
       {children}
+      {isValidMove ? <div className={styles.validMoveIndicator} /> : null}
+      {isCapture ? <div className={styles.captureIndicator} /> : null}
     </div>
   );
 }

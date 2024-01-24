@@ -23,3 +23,19 @@ $activeSquare: #e37b7b;
 .activeSquare {
   background-color: $activeSquare;
 }
+
+.validMoveIndicator {
+  width: $squareSize / 3;
+  height: $squareSize / 3;
+  background-color: #000;
+  opacity: 0.25;
+  border-radius: 50%;
+}
+
+.captureIndicator {
+  width: 80%;
+  height: 80%;
+  border: 3px solid #000;
+  border-radius: 50%;
+  opacity: 0.25;
+}
