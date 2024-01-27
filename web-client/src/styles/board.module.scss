@@ -1,18 +1,18 @@
 @import "_variables.module";
 
 .boardContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
 }
 
 .board {
-  display: inline-flex;
-  flex-wrap: wrap;
-  width: $boardSize;
+	display: inline-flex;
+	flex-wrap: wrap;
+	width: $boardSize;
 }
 
 .boardRow {
-  display: flex;
+	display: flex;
 }
