@@ -4,18 +4,18 @@ import "../styles/globals.scss";
 
 
 export const metadata: Metadata = {
-  title: "Chess Online",
-  description: "Simple web based chess application",
+	title: "Chess Online",
+	description: "Simple web based chess application",
 }
 
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode
+	children: React.ReactNode
 }): React.ReactElement {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  );
+	return (
+		<html lang="en">
+			<body>{children}</body>
+		</html>
+	);
 }
