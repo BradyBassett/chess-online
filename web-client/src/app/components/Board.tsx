@@ -21,6 +21,7 @@ export default function Board(): React.ReactElement {
   const [selectedSquare, setSelectedSquare] = useState<squareCoordinate>(null);
   const [destinationSquare, setDestinationSquare] = useState<squareCoordinate>(null);
   const [possibleSquares, setPossibleSquares] = useState<string[]>([]);
+  const [capturableSquares, setCapturableSquares] = useState<string[]>([]);
 
   // Attempts to move piece when destinationSquare is set
   useEffect(() => {
@@ -43,8 +44,8 @@ export default function Board(): React.ReactElement {
     // if selectedSquare has not been set, set selected square
     if (selectedSquare === null) {
       setSelectedSquare({ row: rowIndex, col: colIndex});
-      setPossibleSquares(game.moves({ square: getSquareCoordinate(rowIndex, colIndex) }).map(move => sanitizeMoveNotation(move)));
-      console.log(game.moves({ square: getSquareCoordinate(rowIndex, colIndex) }));
+
+      calculatePossibleMoves(getSquareCoordinate(rowIndex, colIndex));
     } 
     else if (selectedSquare.row === rowIndex && selectedSquare.col === colIndex) {
       setSelectionSquaresNull()
@@ -82,6 +83,7 @@ export default function Board(): React.ReactElement {
     setSelectedSquare(null);
     setDestinationSquare(null);
     setPossibleSquares([]);
+    setCapturableSquares([]);
   }
 
   function sanitizeMoveNotation(move: string): ChessSquare {
@@ -100,6 +102,15 @@ export default function Board(): React.ReactElement {
     }
   
     return destinationSquare;
+  }
+
+  function calculatePossibleMoves(square: ChessSquare): void {
+    const moves = game.moves({ square: square, verbose: true });
+    const possibleMoves = moves.filter(move => !move.flags.includes('c')).map(move => move.to);
+    const possibleCaptures = moves.filter(move => move.flags.includes('c')).map(move => move.to);
+
+    setPossibleSquares(possibleMoves);
+    setCapturableSquares(possibleCaptures);
   }
 
   return (
@@ -123,7 +134,7 @@ export default function Board(): React.ReactElement {
                     selectedSquare.col === colIndex
                   }
                   isValidMove={possibleSquares.includes(getSquareCoordinate(rowIndex, colIndex))}
-                  isCapture={true} // Todo - Implement this
+                  isCapture={capturableSquares.includes(getSquareCoordinate(rowIndex, colIndex))}
                   onClick={() => handleSquareClick(rowIndex, colIndex)}
                 >
                   {square ? <Piece size={SQUARE_SIZE} type={square.type!} color={square.color!} /> : null}

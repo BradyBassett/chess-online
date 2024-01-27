@@ -23,13 +23,16 @@ export default function Square({testid, color, children, isActive, isValidMove, 
           ${styles.square} 
           ${color === "light" ? styles.light : styles.dark} 
           ${isActive ? styles.activeSquare : ""}
-          ${isValidMove ? styles.validMove : ""}
         `}
       onClick={onClick}
     >
-      {children}
-      {isValidMove ? <div className={styles.validMoveIndicator} /> : null}
-      {isCapture ? <div className={styles.captureIndicator} /> : null}
+      <div className={styles.indicatorContainer}>
+        {isValidMove && !children ? <div className={styles.validMoveIndicator} /> : null}
+        {isCapture && children ? <div className={styles.captureIndicator} /> : null}
+      </div>
+      <div className={styles.pieceContainer}>
+        {children}
+      </div>
     </div>
   );
 }

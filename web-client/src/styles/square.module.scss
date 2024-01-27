@@ -5,6 +5,7 @@ $lightSquares: #e8e8d0;
 $activeSquare: #e37b7b;
 
 .square {
+  position: relative;
   width: $squareSize;
   height: $squareSize;
   display: flex;
@@ -24,7 +25,19 @@ $activeSquare: #e37b7b;
   background-color: $activeSquare;
 }
 
+.pieceContainer {
+  z-index: 2;
+}
+
+.indicatorContainer {
+  z-index: 1;
+}
+
 .validMoveIndicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: $squareSize / 3;
   height: $squareSize / 3;
   background-color: #000;
@@ -33,9 +46,13 @@ $activeSquare: #e37b7b;
 }
 
 .captureIndicator {
-  width: 80%;
-  height: 80%;
-  border: 3px solid #000;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 85%;
+  height: 85%;
+  border: 5px solid #000;
   border-radius: 50%;
-  opacity: 0.25;
+  opacity: 0.4;
 }
