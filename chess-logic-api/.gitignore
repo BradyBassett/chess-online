@@ -2,10 +2,3 @@
 node_modules/
 .DS_Store
 .env
-.wasm
-*.sln
-*.vcxproj
-*.vcxproj.*
-*.vsidx
-*.VC.db
-.vscode/settings.json
