@@ -5,7 +5,7 @@
 
 class Rook : public StraightPiece {
 public:
-  Rook(PieceColor pieceColor, Square& currentSquare);
+	Rook(PieceColor pieceColor, Square& currentSquare);
 };
 
 #endif

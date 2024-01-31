@@ -5,14 +5,14 @@
 
 class Pawn : virtual public Piece {
 private:
-  bool moveOneSquare(Board& board, Square& targetSquare) const;
+	bool moveOneSquare(Board& board, Square& targetSquare) const;
 
-  bool moveTwoSquares(Board& board, Square& targetSquare) const;
+	bool moveTwoSquares(Board& board, Square& targetSquare) const;
 
 public:
-  Pawn(PieceColor pieceColor, Square& currentSquare);
+	Pawn(PieceColor pieceColor, Square& currentSquare);
 
-  bool isValidMove(Board& board, Square& targetSquare) const;
+	bool isValidMove(Board& board, Square& targetSquare) const;
 };
 
 #endif
