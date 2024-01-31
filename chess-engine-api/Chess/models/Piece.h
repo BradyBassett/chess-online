@@ -2,8 +2,8 @@
 #define PIECE_H
 
 #include <memory>
-#include "../utils/enums/PieceType.h"
-#include "../utils/enums/PieceColor.h"
+#include "../enums/PieceType.h"
+#include "../enums/PieceColor.h"
 
 class Board;
 class Square;
