@@ -3,38 +3,38 @@
 #include "Square.h"
 
 Piece::Piece(PieceColor pieceColor, Square& currentSquare)
-  : pieceColor(pieceColor),
-    currentSquare(currentSquare) {
+	: pieceColor(pieceColor),
+		currentSquare(currentSquare) {
 }
 
 bool Piece::isValidMove(Board& board, Square& targetSquare) const {
-  if (&targetSquare == &currentSquare) {
-    return false;
-  }
+	if (&targetSquare == &currentSquare) {
+		return false;
+	}
 
-  if (targetSquare.getPiece() && targetSquare.getPiece()->getPieceColor() == pieceColor) {
-    return false;
-  }
+	if (targetSquare.getPiece() && targetSquare.getPiece()->getPieceColor() == pieceColor) {
+		return false;
+	}
 
-  return true;
+	return true;
 }
 
 bool Piece::getHasMoved() const {
-  return hasMoved;
+	return hasMoved;
 }
 
 bool Piece::getIsCaptured() const {
-  return isCaptured;
+	return isCaptured;
 }
 
 PieceColor Piece::getPieceColor() const {
-  return pieceColor;
+	return pieceColor;
 }
 
 PieceType Piece::getPieceType() const {
-  return pieceType;
+	return pieceType;
 }
 
 Square& Piece::getCurrentSquare() const {
-  return currentSquare;
+	return currentSquare;
 }
