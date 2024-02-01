@@ -5,22 +5,16 @@
 
 class Move {
 private:
-	int fromRow;
-	int fromCol;
-	int toRow;
-	int toCol;
+	std::string from;
+	std::string to;
 	char promotion;
 
 public:
-	Move(int fromRow, int fromCol, int toRow, int toCol, char promotion = ' ');
+	Move(std::string from, std::string to, char promotion = ' ');
 
-	int getFromRow();
+	int getFrom();
 
-	int getFromCol();
-
-	int getToRow();
-
-	int getToCol();
+	int getTo();
 
 	char getPromotion();
 
