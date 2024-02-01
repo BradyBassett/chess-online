@@ -12,4 +12,4 @@ int main() {
 	return 0;
 }
 
-// find . -name "*.cpp" | xargs g++ -o main
+// find . -name "*.cpp" | xargs g++ -g -o main
