@@ -4,8 +4,9 @@
 #include <memory>
 #include "../enums/PieceType.h"
 #include "../enums/Color.h"
-#include "Square.h"
 #include "Board.h"
+
+class Square;
 
 class Piece {
 protected:
@@ -17,6 +18,8 @@ protected:
 
 public:
 	Piece(Color pieceColor, Square& currentSquare);
+
+	Piece(const Piece& piece) noexcept;
 
 	virtual bool isValidMove(Board& board, Square& targetSquare) const;
 

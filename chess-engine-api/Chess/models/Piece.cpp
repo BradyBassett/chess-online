@@ -1,9 +1,18 @@
 #include <algorithm>
 #include "Piece.h"
+#include "Square.h"
 
 Piece::Piece(Color pieceColor, Square& currentSquare)
 	: pieceColor(pieceColor),
 		currentSquare(currentSquare) {
+}
+
+Piece::Piece(const Piece& piece) noexcept
+	: hasMoved(piece.hasMoved),
+		isCaptured(piece.isCaptured),
+		pieceColor(piece.pieceColor),
+		pieceType(piece.pieceType),
+		currentSquare(piece.currentSquare) {
 }
 
 bool Piece::isValidMove(Board& board, Square& targetSquare) const {
