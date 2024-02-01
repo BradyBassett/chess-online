@@ -2,7 +2,7 @@
 #include "Piece.h"
 #include "Square.h"
 
-Piece::Piece(PieceColor pieceColor, Square& currentSquare)
+Piece::Piece(Color pieceColor, Square& currentSquare)
 	: pieceColor(pieceColor),
 		currentSquare(currentSquare) {
 }
@@ -27,7 +27,7 @@ bool Piece::getIsCaptured() const {
 	return isCaptured;
 }
 
-PieceColor Piece::getPieceColor() const {
+Color Piece::getPieceColor() const {
 	return pieceColor;
 }
 

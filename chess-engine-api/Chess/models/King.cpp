@@ -2,7 +2,7 @@
 #include "Square.h"
 #include "../structs/TargetPos.h"
 
-King::King(PieceColor pieceColor, Square& currentSquare) : Piece(pieceColor, currentSquare) {
+King::King(Color pieceColor, Square& currentSquare) : Piece(pieceColor, currentSquare) {
 	pieceType = PieceType::King;
 }
 

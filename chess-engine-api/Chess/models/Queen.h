@@ -6,7 +6,7 @@
 
 class Queen : virtual public DiagonalPiece, virtual public StraightPiece {
 public:
-	Queen(PieceColor pieceColor, Square& currentSquare);
+	Queen(Color pieceColor, Square& currentSquare);
 
 	bool isValidMove(Board& board, Square& targetSquare) const;
 };

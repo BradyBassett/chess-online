@@ -5,7 +5,7 @@
 
 class King : virtual public Piece {
 public:
-	King(PieceColor pieceColor, Square& currentSquare);
+	King(Color pieceColor, Square& currentSquare);
 
 	bool isValidMove(Board& board, Square& targetSquare) const;
 };

@@ -2,7 +2,7 @@
 #include "Square.h"
 #include "../structs/TargetPos.h"
 
-Knight::Knight(PieceColor pieceColor, Square& currentSquare) : Piece(pieceColor, currentSquare) {
+Knight::Knight(Color pieceColor, Square& currentSquare) : Piece(pieceColor, currentSquare) {
 	pieceType = PieceType::Knight;
 }
 

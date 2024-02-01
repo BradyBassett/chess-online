@@ -5,7 +5,7 @@
 
 class Bishop : public DiagonalPiece {
 public:
-	Bishop(PieceColor pieceColor, Square& currentSquare);
+	Bishop(Color pieceColor, Square& currentSquare);
 };
 
 #endif

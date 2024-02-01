@@ -2,18 +2,18 @@
 #include "Square.h"
 
 bool Pawn::moveOneSquare(Board& board, Square& targetSquare) const {
-	uint8_t moveDirection = pieceColor == PieceColor::White ? 1 : -1;
+	uint8_t moveDirection = pieceColor == Color::White ? 1 : -1;
 
 	return targetSquare.getRowIndex() == currentSquare.getRowIndex() + moveDirection;
 }
 
 bool Pawn::moveTwoSquares(Board& board, Square& targetSquare) const {
-	uint8_t moveDirection = pieceColor == PieceColor::White ? 2 : -2;
+	uint8_t moveDirection = pieceColor == Color::White ? 2 : -2;
 
 	return targetSquare.getRowIndex() == currentSquare.getRowIndex() + moveDirection;
 }
 
-Pawn::Pawn(PieceColor pieceColor, Square& currentSquare) : Piece(pieceColor, currentSquare) {
+Pawn::Pawn(Color pieceColor, Square& currentSquare) : Piece(pieceColor, currentSquare) {
 	pieceType = PieceType::Pawn;
 }
 

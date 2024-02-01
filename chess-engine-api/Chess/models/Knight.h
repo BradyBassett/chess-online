@@ -5,7 +5,7 @@
 
 class Knight : virtual public Piece {
 	public:
-	Knight(PieceColor pieceColor, Square& currentSquare);
+	Knight(Color pieceColor, Square& currentSquare);
 
 	bool isValidMove(Board& board, Square& targetSquare) const;
 };

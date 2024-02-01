@@ -3,7 +3,7 @@
 
 #include <memory>
 #include "../enums/PieceType.h"
-#include "../enums/PieceColor.h"
+#include "../enums/Color.h"
 
 class Board;
 class Square;
@@ -12,12 +12,12 @@ class Piece {
 protected:
 	bool hasMoved = false;
 	bool isCaptured = false;
-	PieceColor pieceColor;
+	Color pieceColor;
 	PieceType pieceType;
 	Square& currentSquare;
 
 public:
-	Piece(PieceColor pieceColor, Square& currentSquare);
+	Piece(Color pieceColor, Square& currentSquare);
 
 	virtual bool isValidMove(Board& board, Square& targetSquare) const;
 
@@ -25,7 +25,7 @@ public:
 
 	bool getIsCaptured() const;
 
-	PieceColor getPieceColor() const;
+	Color getPieceColor() const;
 
 	PieceType getPieceType() const;
 

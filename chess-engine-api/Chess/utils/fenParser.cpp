@@ -15,18 +15,18 @@ std::vector<Square> parseFenPosition(std::string& fenPosition) {
 	uint8_t colIndex = 0;
 
 	std::map<char, std::function<std::shared_ptr<Piece>(Square)>> pieceTypes = {
-		{'r', [](Square square) {return std::make_shared<Rook>(PieceColor::Black, square); }},
-		{'n', [](Square square) {return std::make_shared<Knight>(PieceColor::Black, square); }},
-		{'b', [](Square square) {return std::make_shared<Bishop>(PieceColor::Black, square); }},
-		{'q', [](Square square) {return std::make_shared<Queen>(PieceColor::Black, square); }},
-		{'k', [](Square square) {return std::make_shared<King>(PieceColor::Black, square); }},
-		{'p', [](Square square) {return std::make_shared<Pawn>(PieceColor::Black, square); }},
-		{'R', [](Square square) {return std::make_shared<Rook>(PieceColor::White, square); }},
-		{'K', [](Square square) {return std::make_shared<Knight>(PieceColor::White, square); }},
-		{'B', [](Square square) {return std::make_shared<Bishop>(PieceColor::White, square); }},
-		{'Q', [](Square square) {return std::make_shared<Queen>(PieceColor::White, square); }},
-		{'K', [](Square square) {return std::make_shared<King>(PieceColor::White, square); }},
-		{'P', [](Square square) {return std::make_shared<Pawn>(PieceColor::White, square); }}
+		{'r', [](Square square) {return std::make_shared<Rook>(Color::Black, square); }},
+		{'n', [](Square square) {return std::make_shared<Knight>(Color::Black, square); }},
+		{'b', [](Square square) {return std::make_shared<Bishop>(Color::Black, square); }},
+		{'q', [](Square square) {return std::make_shared<Queen>(Color::Black, square); }},
+		{'k', [](Square square) {return std::make_shared<King>(Color::Black, square); }},
+		{'p', [](Square square) {return std::make_shared<Pawn>(Color::Black, square); }},
+		{'R', [](Square square) {return std::make_shared<Rook>(Color::White, square); }},
+		{'K', [](Square square) {return std::make_shared<Knight>(Color::White, square); }},
+		{'B', [](Square square) {return std::make_shared<Bishop>(Color::White, square); }},
+		{'Q', [](Square square) {return std::make_shared<Queen>(Color::White, square); }},
+		{'K', [](Square square) {return std::make_shared<King>(Color::White, square); }},
+		{'P', [](Square square) {return std::make_shared<Pawn>(Color::White, square); }}
 	};
 
 	for (char c : fenPosition) {

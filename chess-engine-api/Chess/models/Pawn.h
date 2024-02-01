@@ -10,7 +10,7 @@ private:
 	bool moveTwoSquares(Board& board, Square& targetSquare) const;
 
 public:
-	Pawn(PieceColor pieceColor, Square& currentSquare);
+	Pawn(Color pieceColor, Square& currentSquare);
 
 	bool isValidMove(Board& board, Square& targetSquare) const;
 };
