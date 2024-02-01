@@ -5,6 +5,7 @@
 #include "Board.h"
 #include "Move.h"
 #include <string>
+#include "Piece.h"
 
 class Game {
 private:
