@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "../enums/PieceType.h"
 
 Game::Game(std::string fenPosition) : board(fenPosition) {
 	turn = Color::White;
