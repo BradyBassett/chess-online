@@ -6,7 +6,7 @@ Square::Square(int rowIndex, int colIndex, std::shared_ptr<Piece> piece)
 }
 
 Square::Square(const Square& square) noexcept
-	: rowIndex(square.rowIndex), colIndex(square.colIndex), piece(square.piece) {
+	: rowIndex(square.rowIndex), colIndex(square.colIndex), piece(std::make_shared<Piece>(*square.piece)) {
 }
 
 uint8_t Square::getRowIndex() const {
