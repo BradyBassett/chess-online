@@ -12,9 +12,9 @@ private:
 public:
 	Move(std::string from, std::string to, char promotion = ' ');
 
-	int getFrom();
+	std::string getFrom();
 
-	int getTo();
+	std::string getTo();
 
 	char getPromotion();
 
