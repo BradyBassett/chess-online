@@ -4,9 +4,8 @@
 #include <memory>
 #include "../enums/PieceType.h"
 #include "../enums/Color.h"
-
-class Board;
-class Square;
+#include "Square.h"
+#include "Board.h"
 
 class Piece {
 protected:
