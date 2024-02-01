@@ -16,7 +16,7 @@ private:
 	char pieceToAscii(std::shared_ptr<Piece> piece);
 
 public:
-	Game(std::string fenPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+	Game(std::string fenPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"); //w KQkq - 0 1
 
 	Color getTurn();
 
