@@ -10,7 +10,7 @@ private:
 	bool moveTwoSquares(Board& board, Square& targetSquare) const;
 
 public:
-	Pawn(Color pieceColor, Square& currentSquare);
+	Pawn(Color pieceColor, std::shared_ptr<Square> currentSquare);
 
 	bool isValidMove(Board& board, Square& targetSquare) const;
 };

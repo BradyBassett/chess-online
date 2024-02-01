@@ -5,7 +5,7 @@
 
 class King : virtual public Piece {
 public:
-	King(Color pieceColor, Square& currentSquare);
+	King(Color pieceColor, std::shared_ptr<Square> currentSquare);
 
 	bool isValidMove(Board& board, Square& targetSquare) const;
 };

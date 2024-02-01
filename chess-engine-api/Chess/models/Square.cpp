@@ -9,6 +9,10 @@ Square::Square(const Square& square) noexcept
 	: rowIndex(square.rowIndex), colIndex(square.colIndex), piece(std::make_shared<Piece>(*square.piece)) {
 }
 
+bool Square::operator==(const Square& other) const {
+    return rowIndex == other.rowIndex && colIndex == other.colIndex;
+}
+
 uint8_t Square::getRowIndex() const {
 	return rowIndex;
 }

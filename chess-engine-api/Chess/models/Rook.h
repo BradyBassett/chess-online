@@ -5,7 +5,7 @@
 
 class Rook : public StraightPiece {
 public:
-	Rook(Color pieceColor, Square& currentSquare);
+	Rook(Color pieceColor, std::shared_ptr<Square> currentSquare);
 };
 
 #endif

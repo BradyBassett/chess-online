@@ -16,6 +16,8 @@ public:
 
 	Square(const Square& square) noexcept;
 
+	bool operator==(const Square& other) const;
+
 	uint8_t getRowIndex() const;
 
 	uint8_t getColIndex() const;

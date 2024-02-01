@@ -5,7 +5,7 @@
 
 class Knight : virtual public Piece {
 	public:
-	Knight(Color pieceColor, Square& currentSquare);
+	Knight(Color pieceColor, std::shared_ptr<Square> currentSquare);
 
 	bool isValidMove(Board& board, Square& targetSquare) const;
 };

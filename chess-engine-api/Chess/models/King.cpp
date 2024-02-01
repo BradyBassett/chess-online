@@ -2,7 +2,7 @@
 #include "Square.h"
 #include "../structs/TargetPos.h"
 
-King::King(Color pieceColor, Square& currentSquare) : Piece(pieceColor, currentSquare) {
+King::King(Color pieceColor, std::shared_ptr<Square> currentSquare) : Piece(pieceColor, currentSquare) {
 	pieceType = PieceType::King;
 }
 
@@ -23,8 +23,8 @@ bool King::isValidMove(Board& board, Square& targetSquare) const {
 	};
 
 	for (const auto& move : moves) {
-		if (targetSquare.getRowIndex() == currentSquare.getRowIndex() + move.row &&
-				targetSquare.getColIndex() == currentSquare.getColIndex() + move.col) {
+		if (targetSquare.getRowIndex() == currentSquare->getRowIndex() + move.row &&
+				targetSquare.getColIndex() == currentSquare->getColIndex() + move.col) {
 			return true;
 		}
 	}

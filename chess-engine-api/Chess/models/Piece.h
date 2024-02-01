@@ -14,10 +14,10 @@ protected:
 	bool isCaptured = false;
 	Color pieceColor;
 	PieceType pieceType;
-	Square& currentSquare;
+	std::shared_ptr<Square> currentSquare;
 
 public:
-	Piece(Color pieceColor, Square& currentSquare);
+	Piece(Color pieceColor, std::shared_ptr<Square> currentSquare);
 
 	Piece(const Piece& piece) noexcept;
 
@@ -31,7 +31,7 @@ public:
 
 	PieceType getPieceType() const;
 
-	Square& getCurrentSquare() const;
+	std::shared_ptr<Square> getCurrentSquare() const;
 };
 
 #endif

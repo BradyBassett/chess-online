@@ -1,8 +1,9 @@
 #include <algorithm>
+#include <stdexcept>
 #include "Piece.h"
 #include "Square.h"
 
-Piece::Piece(Color pieceColor, Square& currentSquare)
+Piece::Piece(Color pieceColor, std::shared_ptr<Square> currentSquare)
 	: pieceColor(pieceColor),
 		currentSquare(currentSquare) {
 }
@@ -16,7 +17,7 @@ Piece::Piece(const Piece& piece) noexcept
 }
 
 bool Piece::isValidMove(Board& board, Square& targetSquare) const {
-	if (&targetSquare == &currentSquare) {
+	if (*currentSquare == targetSquare) {
 		return false;
 	}
 
@@ -43,6 +44,6 @@ PieceType Piece::getPieceType() const {
 	return pieceType;
 }
 
-Square& Piece::getCurrentSquare() const {
+std::shared_ptr<Square> Piece::getCurrentSquare() const {
 	return currentSquare;
 }
