@@ -1,5 +1,4 @@
 #include "Board.h"
-#include <emscripten/bind.h>
 #include "../utils/fenParser.h"
 
 Board::Board(std::string fenPosition) {
