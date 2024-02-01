@@ -1,3 +1,4 @@
+#include "Piece.h"
 #include "Square.h"
 
 Square::Square(int rowIndex, int colIndex, std::shared_ptr<Piece> piece)
