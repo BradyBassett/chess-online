@@ -1,20 +1,23 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "../enums/PieceColor.h"
+#include "../enums/Color.h"
 #include "Board.h"
 #include "Move.h"
 #include <string>
 
 class Game {
 private:
-	PieceColor turn;
+	Color turn;
+
 	Board board;
+
+	char pieceToAscii(std::shared_ptr<Piece> piece);
 
 public:
 	Game(std::string fenPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
-	PieceColor getTurn();
+	Color getTurn();
 
 	void changeTurn();
 
