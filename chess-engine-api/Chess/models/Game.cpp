@@ -16,9 +16,9 @@ void Game::changeTurn() {
 std::string Game::ascii() {
 	std::string result = "+------------------------+\n";
 
-	for (uint8_t i = 8; i >= 1; i--) {
+	for (int i = 7; i >= 0; i--) {
 		result += std::to_string(i) + " | ";
-		for (uint8_t j = 0; j < 8; j++) {
+		for (int j = 0; j < 8; j++) {
 			result += pieceToAscii(board.getSquare(i, j).getPiece()) + " ";
 		}
 	}
@@ -30,6 +30,10 @@ std::string Game::ascii() {
 }
 
 char Game::pieceToAscii(std::shared_ptr<Piece> piece) {
+	if (!piece) {
+		return ' ';
+	}
+
 	switch (piece->getPieceType()) {
 		case PieceType::Pawn:
 			return (piece->getPieceColor() == Color::White) ? 'P' : 'p';
