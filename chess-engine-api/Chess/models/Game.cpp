@@ -56,6 +56,10 @@ char Game::pieceToAscii(std::shared_ptr<Piece> piece) {
 	}
 }
 
-Move Game::makeMove(std::string from, std::string to) {
-	return Move(from, to);
+Move Game::makeMove(Position from, Position to, std::string promotion) {
+	return Move(from, to, promotion);
+}
+
+Position Game::convertPosition(std::string position) {
+	return Position{position[0] - 'a', 8 - (position[1] - '0')};
 }

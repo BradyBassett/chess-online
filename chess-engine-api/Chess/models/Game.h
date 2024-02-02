@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "../enums/Color.h"
+#include "../structs/Position.h"
 #include "Board.h"
 #include "Move.h"
 #include <string>
@@ -10,7 +11,6 @@
 class Game {
 private:
 	Color turn;
-
 	Board board;
 
 	char pieceToAscii(std::shared_ptr<Piece> piece);
@@ -24,7 +24,9 @@ public:
 
 	std::string ascii();
 
-	Move makeMove(std::string from, std::string to);
+	Move makeMove(Position from, Position to, std::string promotion = "");
+
+	Position convertPosition(std::string position);
 };
 
 #endif
