@@ -14,19 +14,21 @@ void Game::changeTurn() {
 }
 
 std::string Game::ascii() {
-	std::string result = "+------------------------+\n";
+	std::string result;
 
-	for (int i = 7; i >= 0; i--) {
-		result += std::to_string(i) + " | ";
+	for (int i = 0; i < 8; i++) {
+		result += "+---+---+---+---+---+---+---+---+---+\n";
+		result += std::to_string(8 - i) + " | ";
 		for (int j = 0; j < 8; j++) {
-			result += pieceToAscii(board.getSquare(i, j).getPiece()) + " ";
+			Square square = board.getSquare(i, j);
+			std::shared_ptr<Piece> piece = square.getPiece();
+			result += pieceToAscii(piece);
+			result += " | ";
 		}
+		result += "\n";
 	}
 
-	result += "+------------------------+\n";
-	result += "  a  b  c  d  e  f  g  h\n";
-
-	return result;
+	return result += "+---+---+---+---+---+---+---+---+---+\n  | a | b | c | d | e | f | g | h |\n";
 }
 
 char Game::pieceToAscii(std::shared_ptr<Piece> piece) {
@@ -34,19 +36,21 @@ char Game::pieceToAscii(std::shared_ptr<Piece> piece) {
 		return ' ';
 	}
 
+	Color pieceColor = piece->getPieceColor();
+	
 	switch (piece->getPieceType()) {
 		case PieceType::Pawn:
-			return (piece->getPieceColor() == Color::White) ? 'P' : 'p';
+			return (pieceColor == Color::White) ? 'P' : 'p';
 		case PieceType::Knight:
-			return (piece->getPieceColor() == Color::White) ? 'N' : 'n';
+			return (pieceColor == Color::White) ? 'N' : 'n';
 		case PieceType::Bishop:
-			return (piece->getPieceColor() == Color::White) ? 'B' : 'b';
+			return (pieceColor == Color::White) ? 'B' : 'b';
 		case PieceType::Rook:
-			return (piece->getPieceColor() == Color::White) ? 'R' : 'r';
+			return (pieceColor == Color::White) ? 'R' : 'r';
 		case PieceType::Queen:
-			return (piece->getPieceColor() == Color::White) ? 'Q' : 'q';
+			return (pieceColor == Color::White) ? 'Q' : 'q';
 		case PieceType::King:
-			return (piece->getPieceColor() == Color::White) ? 'K' : 'k';
+			return (pieceColor == Color::White) ? 'K' : 'k';
 		default:
 			return ' ';
 	}
