@@ -24,3 +24,7 @@ Square& Board::getSquare(int rowIndex, int colIndex) {
     }
     return squares[rowIndex][colIndex];
 }
+
+std::vector<std::vector<Square>> Board::getSquares() {
+	return squares;
+}

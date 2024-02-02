@@ -16,6 +16,8 @@ public:
 
 	Square& getSquare(int rowIndex, int colIndex);
 
+	std::vector<std::vector<Square>> getSquares();
+
 	// TODO : figure out how to return an array of squares in json format
 };
 
