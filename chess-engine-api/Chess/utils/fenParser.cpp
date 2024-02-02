@@ -16,57 +16,46 @@ std::vector<Square> parseFenPosition(std::string& fenPosition) {
 
 	std::map<char, std::function<std::shared_ptr<Piece>(Square)>> pieceTypes = {
 		{'r', [](Square square) {
-			auto squarePtr = std::make_shared<Square>(square);
-			return std::make_shared<Rook>(Color::Black, squarePtr);
+			return std::make_shared<Rook>(Color::Black, square.getPosition());
 		}},
 
 		{'n', [](Square square) {
-			auto squarePtr = std::make_shared<Square>(square);
-			return std::make_shared<Knight>(Color::Black, squarePtr); 
+			return std::make_shared<Knight>(Color::Black, square.getPosition()); 
 		}},
 		{'b', [](Square square) {
-			auto squarePtr = std::make_shared<Square>(square);
-			return std::make_shared<Bishop>(Color::Black, squarePtr); 
+			return std::make_shared<Bishop>(Color::Black, square.getPosition()); 
 		}},
 		{'q', [](Square square) {
-			auto squarePtr = std::make_shared<Square>(square);
-			return std::make_shared<Queen>(Color::Black, squarePtr); 
+			return std::make_shared<Queen>(Color::Black, square.getPosition()); 
 		}},
 		{'k', [](Square square) {
-			auto squarePtr = std::make_shared<Square>(square);
-			return std::make_shared<King>(Color::Black, squarePtr); 
+			return std::make_shared<King>(Color::Black, square.getPosition()); 
 		}},
 		{'p', [](Square square) {
-			auto squarePtr = std::make_shared<Square>(square);
-			return std::make_shared<Pawn>(Color::Black, squarePtr); 
+			return std::make_shared<Pawn>(Color::Black, square.getPosition()); 
 		}},
 		{'R', [](Square square) {
-			auto squarePtr = std::make_shared<Square>(square);
-			return std::make_shared<Rook>(Color::White, squarePtr); 
+			return std::make_shared<Rook>(Color::White, square.getPosition()); 
 		}},
 		{'N', [](Square square) {
-			auto squarePtr = std::make_shared<Square>(square);
-			return std::make_shared<Knight>(Color::White, squarePtr); 
+			return std::make_shared<Knight>(Color::White, square.getPosition()); 
 		}},
 		{'B', [](Square square) {
-			auto squarePtr = std::make_shared<Square>(square);
-			return std::make_shared<Bishop>(Color::White, squarePtr); 
+			return std::make_shared<Bishop>(Color::White, square.getPosition()); 
 		}},
 		{'Q', [](Square square) {
-			auto squarePtr = std::make_shared<Square>(square);
-			return std::make_shared<Queen>(Color::White, squarePtr); 
+			return std::make_shared<Queen>(Color::White, square.getPosition()); 
 		}},
 		{'K', [](Square square) {
-			auto squarePtr = std::make_shared<Square>(square);
-			return std::make_shared<King>(Color::White, squarePtr); 
+			return std::make_shared<King>(Color::White, square.getPosition()); 
 		}},
 		{'P', [](Square square) {
-			auto squarePtr = std::make_shared<Square>(square);
-			return std::make_shared<Pawn>(Color::White, squarePtr); 
+			return std::make_shared<Pawn>(Color::White, square.getPosition()); 
 		}}
 	};
 
 	for (char c : fenPosition) {
+		Position position = {rowIndex, colIndex};
 		// If character is a /, start the next row, ensuring numSquaresPerRow is equal to 8
 		if (c == '/') {
 			if (rowIndex != 8 || colIndex >= 7) {
@@ -78,7 +67,7 @@ std::vector<Square> parseFenPosition(std::string& fenPosition) {
 		// if the character is any digit from 1-8 add empty squares to pieces (represented as null)
 		else if (isDigitFrom1To8(c)) {
 			for (int i = 0; i < c - '0'; i++) {
-				squares.push_back(Square(rowIndex, colIndex));
+				squares.push_back(Square(position));
 				rowIndex++;
 			}
 		}
@@ -88,7 +77,7 @@ std::vector<Square> parseFenPosition(std::string& fenPosition) {
 		}
 		// All remaining possible characters should represent pieces
 		else {
-			Square square = Square(rowIndex, colIndex);
+			Square square = Square(position);
 			std::shared_ptr<Piece> piece = pieceTypes[c](square);
 			square.setPiece(piece);
 			squares.push_back(square);

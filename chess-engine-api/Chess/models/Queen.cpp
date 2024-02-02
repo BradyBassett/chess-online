@@ -1,16 +1,16 @@
 #include "Queen.h"
 
-Queen::Queen(Color pieceColor, std::shared_ptr<Square> currentSquare) 
-	: Piece(pieceColor, currentSquare), DiagonalPiece(pieceColor, currentSquare), StraightPiece(pieceColor, currentSquare) {
+Queen::Queen(Color pieceColor, Position currentPosition) 
+	: Piece(pieceColor, currentPosition), DiagonalPiece(pieceColor, currentPosition), StraightPiece(pieceColor, currentPosition) {
 	pieceType = PieceType::Queen;
 }
 
-bool Queen::isValidMove(Board& board, Square& targetSquare) const {
-	if (!Piece::isValidMove(board, targetSquare)) {
+bool Queen::isValidMove(Board& board, Position targetPosition) const {
+	if (!Piece::isValidMove(board, targetPosition)) {
 		return false;
 	}
 
-	if (DiagonalPiece::isValidMove(board, targetSquare) || StraightPiece::isValidMove(board, targetSquare)) {
+	if (DiagonalPiece::isValidMove(board, targetPosition) || StraightPiece::isValidMove(board, targetPosition)) {
 		return true;
 	}
 

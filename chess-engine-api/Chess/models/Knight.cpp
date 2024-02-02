@@ -1,17 +1,17 @@
 #include "Knight.h"
 #include "Square.h"
-#include "../structs/TargetPos.h"
+#include "../structs/Position.h"
 
-Knight::Knight(Color pieceColor, std::shared_ptr<Square> currentSquare) : Piece(pieceColor, currentSquare) {
+Knight::Knight(Color pieceColor, Position currentPosition) : Piece(pieceColor, currentPosition) {
 	pieceType = PieceType::Knight;
 }
 
-bool Knight::isValidMove(Board& board, Square& targetSquare) const {
-	if (!Piece::isValidMove(board, targetSquare)) {
+bool Knight::isValidMove(Board& board, Position targetPosition) const {
+	if (!Piece::isValidMove(board, targetPosition)) {
 		return false;
 	}
 
-	TargetPos moves[] = {
+	Position moves[] = {
 		{2, 1}, // up 2 right 1
 		{2, -1}, // up 2 left 1
 		{-2, 1}, // down 2 right 1
@@ -23,8 +23,8 @@ bool Knight::isValidMove(Board& board, Square& targetSquare) const {
 	};
 
 	for (const auto& move : moves) {
-		if (targetSquare.getRowIndex() == currentSquare->getRowIndex() + move.row &&
-				targetSquare.getColIndex() == currentSquare->getColIndex() + move.col) {
+		if (targetPosition.row == currentPosition.row + move.row &&
+				targetPosition.col == currentPosition.col + move.col) {
 			return true;
 		}
 	}

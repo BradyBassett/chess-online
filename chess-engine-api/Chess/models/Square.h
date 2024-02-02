@@ -2,29 +2,25 @@
 #define SQUARE_H
 
 #include <memory>
+#include "../structs/Position.h"
 
 class Piece;
 
 class Square {
 private:
-	uint8_t rowIndex;
-	uint8_t colIndex;
+	Position position;
 	std::shared_ptr<Piece> piece;
 
 public:
-	Square(int rowIndex, int colIndex, std::shared_ptr<Piece> piece = nullptr);
+	Square(Position position, std::shared_ptr<Piece> piece = nullptr);
 
-	Square(const Square& square) noexcept;
-
-	bool operator==(const Square& other) const;
-
-	uint8_t getRowIndex() const;
-
-	uint8_t getColIndex() const;
+	Position getPosition() const;
 
 	std::shared_ptr<Piece> getPiece() const;
 
 	void setPiece(std::shared_ptr<Piece> piece);
 };
+
+#include "Piece.h"
 
 #endif

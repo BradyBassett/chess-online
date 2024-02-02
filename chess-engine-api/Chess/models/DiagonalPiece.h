@@ -5,14 +5,14 @@
 
 class DiagonalPiece : virtual public Piece {
 private:
-	bool isValidDiagonalMove(Board& board, Square& targetSquare) const;
+	bool isValidDiagonalMove(Board& board, Position targetPosition) const;
 
-	bool targetSquareIsDiagonal(Square& targetSquare) const;
+	bool targetSquareIsDiagonal(Position targetPosition) const;
 
 public:
 	using Piece::Piece;
 
-	bool isValidMove(Board& board, Square& targetSquare) const;
+	bool isValidMove(Board& board, Position targetPosition) const;
 };
 
 #endif

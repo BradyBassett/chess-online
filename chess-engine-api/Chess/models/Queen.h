@@ -6,9 +6,9 @@
 
 class Queen : virtual public DiagonalPiece, virtual public StraightPiece {
 public:
-	Queen(Color pieceColor, std::shared_ptr<Square> currentSquare);
+	Queen(Color pieceColor, Position currentPosition);
 
-	bool isValidMove(Board& board, Square& targetSquare) const;
+	bool isValidMove(Board& board, Position targetPosition) const;
 };
 
 #endif

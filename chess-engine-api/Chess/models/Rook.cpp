@@ -1,5 +1,5 @@
 #include "Rook.h"
 
-Rook::Rook(Color pieceColor, std::shared_ptr<Square> currentSquare) : Piece(pieceColor, currentSquare), StraightPiece(pieceColor, currentSquare) {
+Rook::Rook(Color pieceColor, Position currentPosition) : Piece(pieceColor, currentPosition), StraightPiece(pieceColor, currentPosition) {
 	pieceType = PieceType::Rook;
 }

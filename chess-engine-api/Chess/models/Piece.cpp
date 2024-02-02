@@ -3,9 +3,9 @@
 #include "Piece.h"
 #include "Square.h"
 
-Piece::Piece(Color pieceColor, std::shared_ptr<Square> currentSquare)
+Piece::Piece(Color pieceColor, Position currentPosition)
 	: pieceColor(pieceColor),
-		currentSquare(currentSquare) {
+		currentPosition(currentPosition) {
 }
 
 Piece::Piece(const Piece& piece) noexcept
@@ -13,15 +13,18 @@ Piece::Piece(const Piece& piece) noexcept
 		isCaptured(piece.isCaptured),
 		pieceColor(piece.pieceColor),
 		pieceType(piece.pieceType),
-		currentSquare(piece.currentSquare) {
+		currentPosition(piece.currentPosition) {
 }
 
-bool Piece::isValidMove(Board& board, Square& targetSquare) const {
-	if (*currentSquare == targetSquare) {
+bool Piece::isValidMove(Board& board, Position targetPosition) const {
+	// if target square is same as current square return false
+	if (targetPosition.row == currentPosition.row && targetPosition.col == currentPosition.col) {
 		return false;
 	}
 
-	if (targetSquare.getPiece() && targetSquare.getPiece()->getPieceColor() == pieceColor) {
+	// if target square contains a piece of the same color return false
+	Square targetSquare = board.getSquare(targetPosition.row, targetPosition.col);
+	if (targetSquare.getPiece() != nullptr && targetSquare.getPiece()->getPieceColor() == pieceColor) {
 		return false;
 	}
 
@@ -44,6 +47,6 @@ PieceType Piece::getPieceType() const {
 	return pieceType;
 }
 
-std::shared_ptr<Square> Piece::getCurrentSquare() const {
-	return currentSquare;
+Position Piece::getCurrentPosition() const {
+	return currentPosition;
 }

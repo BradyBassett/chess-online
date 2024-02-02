@@ -5,14 +5,14 @@
 
 class Pawn : virtual public Piece {
 private:
-	bool moveOneSquare(Board& board, Square& targetSquare) const;
+	bool moveOneSquare(Board& board, Position targetPosition) const;
 
-	bool moveTwoSquares(Board& board, Square& targetSquare) const;
+	bool moveTwoSquares(Board& board, Position targetPosition) const;
 
 public:
-	Pawn(Color pieceColor, std::shared_ptr<Square> currentSquare);
+	Pawn(Color pieceColor, Position currentPosition);
 
-	bool isValidMove(Board& board, Square& targetSquare) const;
+	bool isValidMove(Board& board, Position targetPosition) const;
 };
 
 #endif

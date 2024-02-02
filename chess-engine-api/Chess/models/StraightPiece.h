@@ -5,14 +5,14 @@
 
 class StraightPiece : virtual public Piece {
 private:
-	bool isValidStraightMove(Board& board, Square& targetSquare) const;
+	bool isValidStraightMove(Board& board, Position targetPosition) const;
 
-	bool targetSquareIsStraight(Square& targetSquare) const;
+	bool targetSquareIsStraight(Position targetPosition) const;
 	
 public:
 	using Piece::Piece;
 
-	bool isValidMove(Board& board, Square& targetSquare) const;
+	bool isValidMove(Board& board, Position targetPosition) const;
 };
 
 #endif

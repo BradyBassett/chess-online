@@ -5,7 +5,7 @@
 
 class Bishop : public DiagonalPiece {
 public:
-	Bishop(Color pieceColor, std::shared_ptr<Square> currentSquare);
+	Bishop(Color pieceColor, Position currentPosition);
 };
 
 #endif

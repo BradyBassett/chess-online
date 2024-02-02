@@ -4,9 +4,9 @@
 #include <memory>
 #include "../enums/PieceType.h"
 #include "../enums/Color.h"
-#include "Board.h"
+#include "../structs/Position.h"
 
-class Square;
+class Board;
 
 class Piece {
 protected:
@@ -14,14 +14,14 @@ protected:
 	bool isCaptured = false;
 	Color pieceColor;
 	PieceType pieceType;
-	std::shared_ptr<Square> currentSquare;
+	Position currentPosition;
 
 public:
-	Piece(Color pieceColor, std::shared_ptr<Square> currentSquare);
+	Piece(Color pieceColor, Position currentPosition);
 
 	Piece(const Piece& piece) noexcept;
 
-	virtual bool isValidMove(Board& board, Square& targetSquare) const;
+	virtual bool isValidMove(Board& board, Position targetPosition) const;
 
 	bool getHasMoved() const;
 
@@ -31,7 +31,9 @@ public:
 
 	PieceType getPieceType() const;
 
-	std::shared_ptr<Square> getCurrentSquare() const;
+	Position getCurrentPosition() const;
 };
+
+#include "Board.h"
 
 #endif
