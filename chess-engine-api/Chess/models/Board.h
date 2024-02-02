@@ -14,7 +14,7 @@ public:
 
 	void setStartingPosition(std::string fenPosition);
 
-	Square getSquare(int rowIndex, int colIndex);
+	Square& getSquare(int rowIndex, int colIndex);
 
 	// TODO : figure out how to return an array of squares in json format
 };
