@@ -7,7 +7,7 @@ bool StraightPiece::isValidStraightMove(Board& board, Square& targetSquare) cons
 		uint8_t rowStart = std::min(targetSquare.getColIndex(), currentSquare->getColIndex());
 		uint8_t rowEnd = std::max(targetSquare.getColIndex(), currentSquare->getColIndex());
 
-		for (uint8_t i = rowStart + 1; i < rowEnd - 1; i++) {
+		for (int i = rowStart + 1; i < rowEnd - 1; i++) {
 			if (board.getSquare(currentSquare->getRowIndex(), i).getPiece()) {
 				return false;
 			}
@@ -17,7 +17,7 @@ bool StraightPiece::isValidStraightMove(Board& board, Square& targetSquare) cons
 		uint8_t colStart = std::min(targetSquare.getRowIndex(), currentSquare->getRowIndex());
 		uint8_t colEnd = std::max(targetSquare.getRowIndex(), currentSquare->getRowIndex());
 
-		for (uint8_t i = colStart + 1; i < colEnd - 1; i++) {
+		for (int i = colStart + 1; i < colEnd - 1; i++) {
 			if (board.getSquare(i, currentSquare->getColIndex()).getPiece()) {
 				return false;
 			}
