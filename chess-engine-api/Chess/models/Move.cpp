@@ -1,21 +1,17 @@
 #include "Move.h"
 
-Move::Move(std::string from, std::string to, char promotion)
-	: from(std::move(from)), to(std::move(to)), promotion(promotion) {
+Move::Move(Position from, Position to, std::string promotion)
+	: from(from), to(to), promotion(promotion) {
 }
 
-std::string Move::getFrom() {
+Position Move::getFrom() {
 	return from;
 }
 
-std::string Move::getTo() {
+Position Move::getTo() {
 	return to;
 }
 
-char Move::getPromotion() {
+std::string Move::getPromotion() {
 	return promotion;
-}
-
-std::string Move::toString() {
-	return from + to + promotion;
 }

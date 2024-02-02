@@ -2,23 +2,22 @@
 #define MOVE_H
 
 #include <string>
+#include "../structs/Position.h"
 
 class Move {
 private:
-	std::string from;
-	std::string to;
-	char promotion;
+	Position from;
+	Position to;
+	std::string promotion;
 
 public:
-	Move(std::string from, std::string to, char promotion = ' ');
+	Move(Position from, Position to, std::string promotion);
 
-	std::string getFrom();
+	Position getFrom();
 
-	std::string getTo();
+	Position getTo();
 
-	char getPromotion();
-
-	std::string toString();
+	std::string getPromotion();
 };
 
 #endif
