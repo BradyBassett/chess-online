@@ -58,17 +58,17 @@ std::vector<Square> parseFenPosition(std::string& fenPosition) {
 		Position position = {rowIndex, colIndex};
 		// If character is a /, start the next row, ensuring numSquaresPerRow is equal to 8
 		if (c == '/') {
-			if (rowIndex != 8 || colIndex >= 7) {
+			if (colIndex != 8 || rowIndex >= 7) {
 				throw std::invalid_argument("Invalid Fen Position");
 			}
-			rowIndex = 0;
-			colIndex++;
+			colIndex = 0;
+			rowIndex++;
 		}
 		// if the character is any digit from 1-8 add empty squares to pieces (represented as null)
 		else if (isDigitFrom1To8(c)) {
 			for (int i = 0; i < c - '0'; i++) {
 				squares.push_back(Square(position));
-				rowIndex++;
+				colIndex++;
 			}
 		}
 		// If the character is not "/", a digit from 1-8, or a key in pieceMappings throw an error
@@ -81,7 +81,7 @@ std::vector<Square> parseFenPosition(std::string& fenPosition) {
 			std::shared_ptr<Piece> piece = pieceTypes[c](square);
 			square.setPiece(piece);
 			squares.push_back(square);
-			rowIndex++;
+			colIndex++;
 		}
 	}
 
