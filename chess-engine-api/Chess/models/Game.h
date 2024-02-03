@@ -3,8 +3,8 @@
 
 #include "../enums/Color.h"
 #include "../structs/Position.h"
+#include "../structs/Move.h"
 #include "Board.h"
-#include "Move.h"
 #include <string>
 #include "Piece.h"
 
@@ -15,6 +15,8 @@ private:
 
 	char pieceToAscii(std::shared_ptr<Piece> piece);
 
+	PieceType charToPieceType(char piece);
+
 public:
 	Game(std::string fenPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"); //w KQkq - 0 1
 
@@ -24,7 +26,7 @@ public:
 
 	std::string ascii();
 
-	Move makeMove(Position from, Position to, std::string promotion = "");
+	Move makeMove(Position from, Position to, char promotion = '\0');
 
 	Position convertPosition(std::string position);
 };

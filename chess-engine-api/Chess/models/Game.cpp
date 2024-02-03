@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "../enums/PieceType.h"
+#include <stdexcept>
 
 Game::Game(std::string fenPosition) : board(fenPosition) {
 	turn = Color::White;
@@ -20,7 +21,7 @@ std::string Game::ascii() {
 		result += "+---+---+---+---+---+---+---+---+---+\n";
 		result += std::to_string(8 - i) + " | ";
 		for (int j = 0; j < 8; j++) {
-			Square square = board.getSquare(i, j);
+			Square& square = board.getSquare(i, j);
 			std::shared_ptr<Piece> piece = square.getPiece();
 			result += pieceToAscii(piece);
 			result += " | ";
@@ -56,8 +57,64 @@ char Game::pieceToAscii(std::shared_ptr<Piece> piece) {
 	}
 }
 
-Move Game::makeMove(Position from, Position to, std::string promotion) {
-	return Move(from, to, promotion);
+PieceType Game::charToPieceType(char piece) {
+	switch (piece) {
+		case 'p':
+			return PieceType::Pawn;
+		case 'n':
+			return PieceType::Knight;
+		case 'b':
+			return PieceType::Bishop;
+		case 'r':
+			return PieceType::Rook;
+		case 'q':
+			return PieceType::Queen;
+		case 'k':
+			return PieceType::King;
+		default:
+			throw std::invalid_argument("Invalid piece type");
+	}
+}
+
+Move Game::makeMove(Position from, Position to, char promotion) {
+	Square& fromSquare = board.getSquare(from.row, from.col);
+	Square& toSquare = board.getSquare(to.row, to.col);
+	
+	if (!fromSquare.getPiece()) {
+		throw std::invalid_argument("No piece at from position");
+	}
+	Piece& fromPiece = *fromSquare.getPiece();
+	
+	if (!toSquare.getPiece()) {
+		throw std::invalid_argument("No piece at to position");
+	}
+	Piece& toPiece = *toSquare.getPiece();
+
+	// check if move is valid
+	if (!fromPiece.isValidMove(board, to)) {
+		throw std::invalid_argument("Invalid move");
+	}
+
+	Move move;
+	move.color = turn;
+	move.from = from;
+	move.to = to;
+	move.piece = fromPiece.getPieceType();
+
+	if (promotion != '\0' && move.piece == PieceType::Pawn) {
+		move.setFlag(MoveFlag::Promotion);
+		move.promotion = charToPieceType(promotion);
+	}
+
+	if (toPiece.getPieceColor() != turn) {
+		move.setFlag(MoveFlag::StandardCapture); // FIXME - This is not necessarily a standard capture add a check for en passant
+		move.capturedPiece = toPiece.getPieceType();
+	}
+
+	// move the piece
+	board.movePiece(fromSquare, toSquare);
+	
+	return move;
 }
 
 Position Game::convertPosition(std::string position) {
