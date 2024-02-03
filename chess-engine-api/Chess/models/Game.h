@@ -7,6 +7,7 @@
 #include "Board.h"
 #include <string>
 #include "Piece.h"
+#include <optional>
 
 class Game {
 private:
@@ -16,6 +17,8 @@ private:
 	char pieceToAscii(std::shared_ptr<Piece> piece);
 
 	PieceType charToPieceType(char piece);
+
+	Move composeMoveStruct(Position from, Position to, char promotion, std::optional<Piece> capturedPiece);
 
 public:
 	Game(std::string fenPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"); //w KQkq - 0 1

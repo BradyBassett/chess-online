@@ -18,7 +18,7 @@ std::string Game::ascii() {
 	std::string result;
 
 	for (int i = 0; i < 8; i++) {
-		result += "+---+---+---+---+---+---+---+---+---+\n";
+		result += "--+---+---+---+---+---+---+---+---+\n";
 		result += std::to_string(8 - i) + " | ";
 		for (int j = 0; j < 8; j++) {
 			Square& square = board.getSquare(i, j);
@@ -29,7 +29,7 @@ std::string Game::ascii() {
 		result += "\n";
 	}
 
-	return result += "+---+---+---+---+---+---+---+---+---+\n  | a | b | c | d | e | f | g | h |\n";
+	return result += "--+---+---+---+---+---+---+---+---+\n  | a | b | c | d | e | f | g | h |\n";
 }
 
 char Game::pieceToAscii(std::shared_ptr<Piece> piece) {
@@ -76,40 +76,45 @@ PieceType Game::charToPieceType(char piece) {
 	}
 }
 
-Move Game::makeMove(Position from, Position to, char promotion) {
-	Square& fromSquare = board.getSquare(from.row, from.col);
-	Square& toSquare = board.getSquare(to.row, to.col);
-	
-	if (!fromSquare.getPiece()) {
-		throw std::invalid_argument("No piece at from position");
-	}
-	Piece& fromPiece = *fromSquare.getPiece();
-	
-	if (!toSquare.getPiece()) {
-		throw std::invalid_argument("No piece at to position");
-	}
-	Piece& toPiece = *toSquare.getPiece();
-
-	// check if move is valid
-	if (!fromPiece.isValidMove(board, to)) {
-		throw std::invalid_argument("Invalid move");
-	}
-
+Move Game::composeMoveStruct(Position from, Position to, char promotion, std::optional<Piece> capturedPiece) {
 	Move move;
 	move.color = turn;
 	move.from = from;
 	move.to = to;
-	move.piece = fromPiece.getPieceType();
+	move.piece = board.getSquare(from.row, from.col).getPiece()->getPieceType();
 
 	if (promotion != '\0' && move.piece == PieceType::Pawn) {
 		move.setFlag(MoveFlag::Promotion);
 		move.promotion = charToPieceType(promotion);
 	}
 
-	if (toPiece.getPieceColor() != turn) {
+	if (capturedPiece && capturedPiece.value().getPieceColor() != turn) {
 		move.setFlag(MoveFlag::StandardCapture); // FIXME - This is not necessarily a standard capture add a check for en passant
-		move.capturedPiece = toPiece.getPieceType();
+		move.capturedPiece = capturedPiece.value().getPieceType();
 	}
+
+	return move;
+}
+
+
+Move Game::makeMove(Position from, Position to, char promotion) {
+	Move move;
+	Square& fromSquare = board.getSquare(from.row, from.col);
+	Square& toSquare = board.getSquare(to.row, to.col);
+	
+	if (!fromSquare.getPiece()) {
+		throw std::invalid_argument("No piece at from position");
+	}
+
+	Piece& fromPiece = *fromSquare.getPiece();
+
+	// check if move is valid
+	if (!fromPiece.isValidMove(board, to)) {
+		throw std::invalid_argument("Invalid move");
+	}
+
+	// compose the move struct
+	move = composeMoveStruct(from, to, promotion, *toSquare.getPiece());
 
 	// move the piece
 	board.movePiece(fromSquare, toSquare);
@@ -118,5 +123,5 @@ Move Game::makeMove(Position from, Position to, char promotion) {
 }
 
 Position Game::convertStringToPosition(std::string position) {
-	return Position{position[0] - 'a', 8 - (position[1] - '0')};
+	return Position{8 - (position[1] - '0'), position[0] - 'a'};
 }
