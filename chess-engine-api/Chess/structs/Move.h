@@ -23,7 +23,6 @@ struct Move {
 	Color color;
 	Position from;
 	Position to;
-	std::string flags;
 	PieceType piece;
 	std::optional<PieceType> capturedPiece;
 	std::optional<PieceType> promotion;
