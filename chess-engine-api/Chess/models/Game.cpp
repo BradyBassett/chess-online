@@ -76,7 +76,7 @@ PieceType Game::charToPieceType(char piece) {
 	}
 }
 
-Move Game::composeMoveStruct(Position from, Position to, char promotion, std::optional<Piece> capturedPiece) {
+Move Game::composeMoveStruct(Position from, Position to, char promotion, std::optional<std::shared_ptr<Piece>> capturedPiece) {
 	Move move;
 	move.color = turn;
 	move.from = from;
@@ -88,9 +88,9 @@ Move Game::composeMoveStruct(Position from, Position to, char promotion, std::op
 		move.promotion = charToPieceType(promotion);
 	}
 
-	if (capturedPiece && capturedPiece.value().getPieceColor() != turn) {
+	if (capturedPiece.value() && capturedPiece.value()->getPieceColor() != turn) {
 		move.setFlag(MoveFlag::StandardCapture); // FIXME - This is not necessarily a standard capture add a check for en passant
-		move.capturedPiece = capturedPiece.value().getPieceType();
+		move.capturedPiece = capturedPiece.value()->getPieceType();
 	}
 
 	return move;
@@ -114,7 +114,7 @@ Move Game::makeMove(Position from, Position to, char promotion) {
 	}
 
 	// compose the move struct
-	move = composeMoveStruct(from, to, promotion, *toSquare.getPiece());
+	move = composeMoveStruct(from, to, promotion, toSquare.getPiece());
 
 	// move the piece
 	board.movePiece(fromSquare, toSquare);
