@@ -117,6 +117,6 @@ Move Game::makeMove(Position from, Position to, char promotion) {
 	return move;
 }
 
-Position Game::convertPosition(std::string position) {
+Position Game::convertStringToPosition(std::string position) {
 	return Position{position[0] - 'a', 8 - (position[1] - '0')};
 }

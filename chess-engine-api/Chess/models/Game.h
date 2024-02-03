@@ -28,7 +28,7 @@ public:
 
 	Move makeMove(Position from, Position to, char promotion = '\0');
 
-	Position convertPosition(std::string position);
+	Position convertStringToPosition(std::string position);
 };
 
 #endif
