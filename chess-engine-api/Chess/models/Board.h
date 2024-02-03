@@ -19,8 +19,6 @@ public:
 	std::vector<std::vector<Square>> getSquares();
 
 	void movePiece(Square& fromSquare, Square& toSquare);
-
-	// TODO : figure out how to return an array of squares in json format
 };
 
 #endif

@@ -19,7 +19,6 @@ void Board::setStartingPosition(std::string fenPosition) {
 Square& Board::getSquare(int rowIndex, int colIndex) {
 	uint8_t boardSize = squares.size();
     if (rowIndex < 0 || rowIndex >= boardSize || colIndex < 0 || colIndex >= boardSize) {
-
         throw std::out_of_range("Square coordinates are out of range");
     }
     return squares[rowIndex][colIndex];
