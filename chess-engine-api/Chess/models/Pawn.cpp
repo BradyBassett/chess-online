@@ -2,15 +2,15 @@
 #include "Square.h"
 
 bool Pawn::moveOneSquare(Board& board, Position targetPosition) const {
-	uint8_t moveDirection = pieceColor == Color::White ? 1 : -1;
+	int moveDirection = pieceColor == Color::White ? 1 : -1;
 
-	return targetPosition.row == currentPosition.row + moveDirection;
+	return currentPosition.row == targetPosition.row + moveDirection;
 }
 
 bool Pawn::moveTwoSquares(Board& board, Position targetPosition) const {
-	uint8_t moveDirection = pieceColor == Color::White ? 2 : -2;
+	int moveDirection = pieceColor == Color::White ? 2 : -2;
 
-	return targetPosition.row == currentPosition.row + moveDirection;
+	return currentPosition.row == targetPosition.row + moveDirection;
 }
 
 Pawn::Pawn(Color pieceColor, Position currentPosition) : Piece(pieceColor, currentPosition) {
@@ -22,7 +22,7 @@ bool Pawn::isValidMove(Board& board, Position targetPosition) const {
 		return false;
 	}
 
-	if (getHasMoved()) {
+	if (hasMoved) {
 		return moveOneSquare(board, targetPosition);
 	}
 	else {
