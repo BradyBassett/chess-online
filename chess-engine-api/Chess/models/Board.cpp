@@ -28,3 +28,8 @@ Square& Board::getSquare(int rowIndex, int colIndex) {
 std::vector<std::vector<Square>> Board::getSquares() {
 	return squares;
 }
+
+void Board::movePiece(Square& fromSquare, Square& toSquare) {
+	toSquare.setPiece(fromSquare.getPiece());
+	fromSquare.setPiece(nullptr);
+}
