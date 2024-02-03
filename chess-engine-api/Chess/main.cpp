@@ -28,7 +28,7 @@ int main() {
 		Position fromPosition = game.convertPosition(from);
 		Position toPosition = game.convertPosition(to);
 
-		game.makeMove(fromPosition, toPosition, promotion);
+		game.makeMove(fromPosition, toPosition, promotion.c_str()[0]);
 	}
 	
 
