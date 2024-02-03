@@ -23,7 +23,7 @@ bool Piece::isValidMove(Board& board, Position targetPosition) const {
 	}
 
 	// if target square contains a piece of the same color return false
-	Square targetSquare = board.getSquare(targetPosition.row, targetPosition.col);
+	Square& targetSquare = board.getSquare(targetPosition.row, targetPosition.col);
 	if (targetSquare.getPiece() != nullptr && targetSquare.getPiece()->getPieceColor() == pieceColor) {
 		return false;
 	}
