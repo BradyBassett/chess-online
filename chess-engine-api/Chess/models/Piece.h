@@ -35,6 +35,8 @@ public:
 
 	Position getCurrentPosition() const;
 
+	void setCurrentPosition(Position newPosition);
+
 	virtual bool canPromote(Position targetPosition) const;
 };
 

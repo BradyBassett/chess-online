@@ -57,6 +57,10 @@ Position Piece::getCurrentPosition() const {
 	return currentPosition;
 }
 
+void Piece::setCurrentPosition(Position newPosition) {
+	currentPosition = newPosition;
+}
+
 bool Piece::canPromote(Position targetPosition) const {
 	return false;
 }
