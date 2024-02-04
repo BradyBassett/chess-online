@@ -6,8 +6,8 @@ Knight::Knight(Color pieceColor, Position currentPosition) : Piece(pieceColor, c
 	pieceType = PieceType::Knight;
 }
 
-bool Knight::isValidMove(Board& board, Position targetPosition) const {
-	if (!Piece::isValidMove(board, targetPosition)) {
+bool Knight::isValidMove(Board& board, Position targetPosition, std::string& errorMessage) const {
+	if (!Piece::isValidMove(board, targetPosition, errorMessage)) {
 		return false;
 	}
 
@@ -29,5 +29,6 @@ bool Knight::isValidMove(Board& board, Position targetPosition) const {
 		}
 	}
 
+	errorMessage = "Invalid move - Knight can only move in an L shape";
 	return false;
 }
