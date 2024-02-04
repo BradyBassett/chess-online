@@ -35,6 +35,10 @@ bool Piece::getHasMoved() const {
 	return hasMoved;
 }
 
+void Piece::setHasMoved() {
+	hasMoved = true;
+}
+
 bool Piece::getIsCaptured() const {
 	return isCaptured;
 }
@@ -49,4 +53,8 @@ PieceType Piece::getPieceType() const {
 
 Position Piece::getCurrentPosition() const {
 	return currentPosition;
+}
+
+bool Piece::canPromote(Position targetPosition) const {
+	return false;
 }

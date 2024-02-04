@@ -31,4 +31,5 @@ std::vector<std::vector<Square>> Board::getSquares() {
 void Board::movePiece(Square& fromSquare, Square& toSquare) {
 	toSquare.setPiece(fromSquare.getPiece());
 	fromSquare.setPiece(nullptr);
+	toSquare.getPiece()->setHasMoved();
 }

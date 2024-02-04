@@ -29,3 +29,7 @@ bool Pawn::isValidMove(Board& board, Position targetPosition) const {
 		return moveOneSquare(board, targetPosition) || moveTwoSquares(board, targetPosition);
 	}
 }
+
+bool Pawn::canPromote(Position targetPosition) const {
+	return (pieceColor == Color::White && targetPosition.row == 0) || (pieceColor == Color::Black && targetPosition.row == 7);
+}

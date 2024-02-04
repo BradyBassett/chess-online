@@ -25,6 +25,8 @@ public:
 
 	bool getHasMoved() const;
 
+	void setHasMoved();
+
 	bool getIsCaptured() const;
 
 	Color getPieceColor() const;
@@ -32,6 +34,8 @@ public:
 	PieceType getPieceType() const;
 
 	Position getCurrentPosition() const;
+
+	virtual bool canPromote(Position targetPosition) const;
 };
 
 #include "Board.h"

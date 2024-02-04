@@ -117,6 +117,13 @@ Move Game::makeMove(Position from, Position to, char promotion) {
 		throw std::invalid_argument("Invalid move");
 	}
 
+	// check if move is a promotion
+	if (fromPiece.getPieceType() == PieceType::Pawn && fromPiece.canPromote(to)) {
+		if (promotion == '\0') {
+			throw std::invalid_argument("Invalid move - Promotion required");
+		}
+	}
+
 	// compose the move struct
 	move = composeMoveStruct(from, to, promotion, toSquare.getPiece());
 
