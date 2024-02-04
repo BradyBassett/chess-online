@@ -98,6 +98,10 @@ Move Game::composeMoveStruct(Position from, Position to, char promotion, std::op
 
 
 Move Game::makeMove(Position from, Position to, char promotion) {
+	if (from.row == to.row && from.col == to.col) {
+		throw std::invalid_argument("Invalid move - Piece must move to a different square");
+	}
+
 	Move move;
 	Square& fromSquare = board.getSquare(from.row, from.col);
 	Square& toSquare = board.getSquare(to.row, to.col);
