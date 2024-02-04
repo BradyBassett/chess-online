@@ -29,7 +29,10 @@ std::vector<std::vector<Square>> Board::getSquares() {
 }
 
 void Board::movePiece(Square& fromSquare, Square& toSquare) {
-	toSquare.setPiece(fromSquare.getPiece());
+	std::shared_ptr<Piece> piece = fromSquare.getPiece();
+
+	toSquare.setPiece(piece);
 	fromSquare.setPiece(nullptr);
-	toSquare.getPiece()->setHasMoved();
+	piece->setHasMoved();
+	piece->setCurrentPosition(toSquare.getPosition());
 }

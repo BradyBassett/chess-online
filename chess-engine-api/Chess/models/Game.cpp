@@ -1,6 +1,10 @@
 #include "Game.h"
 #include "../enums/PieceType.h"
 #include <stdexcept>
+#include "Queen.h"
+#include "Rook.h"
+#include "Bishop.h"
+#include "Knight.h"
 
 Game::Game(std::string fenPosition) : board(fenPosition) {
 	turn = Color::White;
@@ -42,14 +46,19 @@ char Game::pieceToAscii(std::shared_ptr<Piece> piece) {
 	switch (piece->getPieceType()) {
 		case PieceType::Pawn:
 			return (pieceColor == Color::White) ? 'P' : 'p';
+			break;
 		case PieceType::Knight:
 			return (pieceColor == Color::White) ? 'N' : 'n';
+			break;
 		case PieceType::Bishop:
 			return (pieceColor == Color::White) ? 'B' : 'b';
+			break;
 		case PieceType::Rook:
 			return (pieceColor == Color::White) ? 'R' : 'r';
+			break;
 		case PieceType::Queen:
 			return (pieceColor == Color::White) ? 'Q' : 'q';
+			break;
 		case PieceType::King:
 			return (pieceColor == Color::White) ? 'K' : 'k';
 		default:
@@ -61,16 +70,22 @@ PieceType Game::charToPieceType(char piece) {
 	switch (piece) {
 		case 'p':
 			return PieceType::Pawn;
+			break;
 		case 'n':
 			return PieceType::Knight;
+			break;
 		case 'b':
 			return PieceType::Bishop;
+			break;
 		case 'r':
 			return PieceType::Rook;
+			break;
 		case 'q':
 			return PieceType::Queen;
+			break;
 		case 'k':
 			return PieceType::King;
+			break;
 		default:
 			throw std::invalid_argument("Invalid piece type");
 	}
@@ -116,7 +131,21 @@ Move Game::makeMove(Position from, Position to, char promotion) {
 
 	// check if move is a promotion
 	if (fromPiece.getPieceType() == PieceType::Pawn && fromPiece.canPromote(to)) {
-		if (promotion == '\0') {
+		switch (promotion)
+		{
+		case 'q':
+			fromSquare.setPiece(std::make_shared<Queen>(fromPiece.getPieceColor(), from));
+			break;
+		case 'r':
+			fromSquare.setPiece(std::make_shared<Rook>(fromPiece.getPieceColor(), from));
+			break;
+		case 'b':
+			fromSquare.setPiece(std::make_shared<Bishop>(fromPiece.getPieceColor(), from));
+			break;
+		case 'n':
+			fromSquare.setPiece(std::make_shared<Knight>(fromPiece.getPieceColor(), from));
+			break;
+		default:
 			throw std::invalid_argument("Invalid move - Promotion required");
 		}
 	}
