@@ -31,14 +31,20 @@ bool StraightPiece::targetSquareIsStraight(Position targetPosition) const {
 	return targetPosition.row == currentPosition.row || targetPosition.col == currentPosition.col;
 }
 
-bool StraightPiece::isValidMove(Board& board, Position targetPosition) const {
-	if (!Piece::isValidMove(board, targetPosition)) {
+bool StraightPiece::isValidMove(Board& board, Position targetPosition, std::string& errorMessage) const {
+	if (!Piece::isValidMove(board, targetPosition, errorMessage)) {
 		return false;
 	}
 
 	if (!targetSquareIsStraight(targetPosition)) {
+		errorMessage = "Invalid move - Piece must move straight";
 		return false;
 	}
 
-	return isValidStraightMove(board, targetPosition);
+	if (!isValidStraightMove(board, targetPosition)) {
+		errorMessage = "Invalid move - Piece cannot jump over other pieces";
+		return false;
+	}
+
+	return true;
 }

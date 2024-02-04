@@ -17,17 +17,25 @@ Pawn::Pawn(Color pieceColor, Position currentPosition) : Piece(pieceColor, curre
 	pieceType = PieceType::Pawn;
 }
 
-bool Pawn::isValidMove(Board& board, Position targetPosition) const {
-	if (!Piece::isValidMove(board, targetPosition)) {
-		return false;
-	}
+bool Pawn::isValidMove(Board& board, Position targetPosition, std::string& errorMessage) const {
+    if (!Piece::isValidMove(board, targetPosition, errorMessage)) {
+        return false;
+    }
 
-	if (hasMoved) {
-		return moveOneSquare(board, targetPosition);
-	}
-	else {
-		return moveOneSquare(board, targetPosition) || moveTwoSquares(board, targetPosition);
-	}
+    if (hasMoved) {
+        if (!moveOneSquare(board, targetPosition)) {
+            errorMessage = "Invalid move - Pawn can only move one square forward after its first move";
+            return false;
+        }
+    }
+    else {
+        if (!moveOneSquare(board, targetPosition) && !moveTwoSquares(board, targetPosition)) {
+            errorMessage = "Invalid move - Pawn can only move one or two squares forward on its first move";
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool Pawn::canPromote(Position targetPosition) const {

@@ -5,14 +5,15 @@ Queen::Queen(Color pieceColor, Position currentPosition)
 	pieceType = PieceType::Queen;
 }
 
-bool Queen::isValidMove(Board& board, Position targetPosition) const {
-	if (!Piece::isValidMove(board, targetPosition)) {
+bool Queen::isValidMove(Board& board, Position targetPosition, std::string& errorMessage) const {
+	if (!Piece::isValidMove(board, targetPosition, errorMessage)) {
 		return false;
 	}
 
-	if (DiagonalPiece::isValidMove(board, targetPosition) || StraightPiece::isValidMove(board, targetPosition)) {
-		return true;
+	if (!DiagonalPiece::isValidMove(board, targetPosition, errorMessage) && !StraightPiece::isValidMove(board, targetPosition, errorMessage)) {
+		errorMessage = "Invalid move - Queen can only move diagonally or straight";
+		return false;
 	}
 
-	return false;
+	return true;
 }

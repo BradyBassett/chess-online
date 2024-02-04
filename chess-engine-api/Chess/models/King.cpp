@@ -6,8 +6,8 @@ King::King(Color pieceColor, Position currentPosition) : Piece(pieceColor, curre
 	pieceType = PieceType::King;
 }
 
-bool King::isValidMove(Board& board, Position targetPosition) const {
-	if (!Piece::isValidMove(board, targetPosition)) {
+bool King::isValidMove(Board& board, Position targetPosition, std::string& errorMessage) const {
+	if (!Piece::isValidMove(board, targetPosition, errorMessage)) {
 		return false;
 	}
 
@@ -29,5 +29,6 @@ bool King::isValidMove(Board& board, Position targetPosition) const {
 		}
 	}
 
+	errorMessage = "Invalid move - King can only move one square in any direction";
 	return false;
 }

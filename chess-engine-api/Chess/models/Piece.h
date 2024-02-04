@@ -21,7 +21,7 @@ public:
 
 	Piece(const Piece& piece) noexcept;
 
-	virtual bool isValidMove(Board& board, Position targetPosition) const;
+	virtual bool isValidMove(Board& board, Position targetPosition, std::string& errorMessage) const;
 
 	bool getHasMoved() const;
 

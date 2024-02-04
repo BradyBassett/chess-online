@@ -12,7 +12,7 @@ private:
 public:
 	Pawn(Color pieceColor, Position currentPosition);
 
-	bool isValidMove(Board& board, Position targetPosition) const;
+	bool isValidMove(Board& board, Position targetPosition, std::string& errorMessage) const;
 
 	bool canPromote(Position targetPosition) const override;
 };

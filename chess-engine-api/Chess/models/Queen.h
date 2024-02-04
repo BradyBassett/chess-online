@@ -8,7 +8,7 @@ class Queen : virtual public DiagonalPiece, virtual public StraightPiece {
 public:
 	Queen(Color pieceColor, Position currentPosition);
 
-	bool isValidMove(Board& board, Position targetPosition) const;
+	bool isValidMove(Board& board, Position targetPosition, std::string& errorMessage) const;
 };
 
 #endif

@@ -27,14 +27,20 @@ bool DiagonalPiece::targetSquareIsDiagonal(Position targetPosition) const {
 		   abs(targetPosition.col - currentPosition.col);
 }
 
-bool DiagonalPiece::isValidMove(Board& board, Position targetPosition) const {
-	if (!Piece::isValidMove(board, targetPosition)) {
+bool DiagonalPiece::isValidMove(Board& board, Position targetPosition, std::string& errorMessage) const {
+	if (!Piece::isValidMove(board, targetPosition, errorMessage)) {
 		return false;
 	}
 
 	if (!targetSquareIsDiagonal(targetPosition)) {
+		errorMessage = "Invalid move - Piece must move diagonally";
 		return false;
 	}
 
-	return isValidDiagonalMove(board, targetPosition);
+	if (!isValidDiagonalMove(board, targetPosition)) {
+		errorMessage = "Invalid move - Piece cannot jump over other pieces";
+		return false;
+	}
+
+	return true;
 }

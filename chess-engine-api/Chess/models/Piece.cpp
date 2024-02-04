@@ -16,15 +16,17 @@ Piece::Piece(const Piece& piece) noexcept
 		currentPosition(piece.currentPosition) {
 }
 
-bool Piece::isValidMove(Board& board, Position targetPosition) const {
+bool Piece::isValidMove(Board& board, Position targetPosition, std::string& errorMessage) const {
 	// if target square is same as current square return false
 	if (targetPosition.row == currentPosition.row && targetPosition.col == currentPosition.col) {
+		errorMessage = "Invalid move - Piece must move to a different square";
 		return false;
 	}
 
 	// if target square contains a piece of the same color return false
 	Square& targetSquare = board.getSquare(targetPosition.row, targetPosition.col);
 	if (targetSquare.getPiece() != nullptr && targetSquare.getPiece()->getPieceColor() == pieceColor) {
+		errorMessage = "Invalid move - Piece cannot capture a piece of the same color";
 		return false;
 	}
 
