@@ -10,7 +10,6 @@ int main() {
 	Game game = Game();
 
 	while (true)	{
-		std::system("clear");
 		std::cout << game.ascii() << std::endl;
 
 		std::string line, from, to, promotion;
@@ -28,7 +27,15 @@ int main() {
 		Position fromPosition = game.convertStringToPosition(from);
 		Position toPosition = game.convertStringToPosition(to);
 
-		game.makeMove(fromPosition, toPosition, promotion.c_str()[0]);
+		try
+		{
+			std::system("clear");
+			game.makeMove(fromPosition, toPosition, promotion.c_str()[0]);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << "\n\n";
+		}
 	}
 	
 
