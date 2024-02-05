@@ -155,7 +155,7 @@ Move Game::makeMove(Position from, Position to, char promotion) {
 
 	// move the piece
 	board.movePiece(fromSquare, toSquare);
-	
+
 	return move;
 }
 
