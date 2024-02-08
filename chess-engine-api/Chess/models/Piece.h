@@ -17,7 +17,7 @@ protected:
 	Position currentPosition;
 
 public:
-	Piece(Color pieceColor, Position currentPosition);
+	Piece(Color pieceColor, Position currentPosition, PieceType pieceType = PieceType::Unknown);
 
 	Piece(const Piece& piece) noexcept;
 

@@ -2,10 +2,12 @@
 #include <stdexcept>
 #include "Piece.h"
 #include "Square.h"
+#include "Board.h"
 
-Piece::Piece(Color pieceColor, Position currentPosition)
+Piece::Piece(Color pieceColor, Position currentPosition, PieceType pieceType)
 	: pieceColor(pieceColor),
-		currentPosition(currentPosition) {
+		currentPosition(currentPosition),
+		pieceType(pieceType) {
 }
 
 Piece::Piece(const Piece& piece) noexcept
