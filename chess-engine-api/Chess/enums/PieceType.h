@@ -7,7 +7,8 @@ enum class PieceType {
 	Knight,
 	Pawn,
 	Queen,
-	Rook
+	Rook,
+	Unknown
 };
 
 #endif
