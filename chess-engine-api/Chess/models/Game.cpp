@@ -42,7 +42,7 @@ char Game::pieceToAscii(std::shared_ptr<Piece> piece) {
 	}
 
 	Color pieceColor = piece->getPieceColor();
-	
+
 	switch (piece->getPieceType()) {
 		case PieceType::Pawn:
 			return (pieceColor == Color::White) ? 'P' : 'p';
@@ -117,7 +117,7 @@ Move Game::makeMove(Position from, Position to, char promotion) {
 	std::string errorMessage = "Invalid Move";
 	Square& fromSquare = board.getSquare(from.row, from.col);
 	Square& toSquare = board.getSquare(to.row, to.col);
-	
+
 	if (!fromSquare.getPiece()) {
 		throw std::invalid_argument("No piece at from position");
 	}
