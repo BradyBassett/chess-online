@@ -1,13 +1,10 @@
 #include "Rook.h"
 
-Rook::Rook(Color pieceColor, Position currentPosition) : Piece(pieceColor, currentPosition), StraightPiece(pieceColor, currentPosition) {
+Rook::Rook(Color pieceColor, Position currentPosition, Side side)
+		: Piece(pieceColor, currentPosition),
+		StraightPiece(pieceColor, currentPosition),
+		side(side) {
 	pieceType = PieceType::Rook;
-
-	if (currentPosition.col == 0) {
-		side = Side::QueenSide;
-	} else {
-		side = Side::KingSide;
-	}
 }
 
 Side Rook::getSide() const {

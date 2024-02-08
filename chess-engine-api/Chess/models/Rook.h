@@ -8,7 +8,7 @@ private:
 	Side side;
 
 public:
-	Rook(Color pieceColor, Position currentPosition);
+	Rook(Color pieceColor, Position currentPosition, Side side = Side::None);
 
 	Side getSide() const;
 };
