@@ -66,7 +66,6 @@ std::vector<Square> Board::parseFenPosition(std::string& fenPosition) {
 	};
 
 	for (char c : fenPosition) {
-		Position position = {rowIndex, colIndex};
 		// If character is a /, start the next row, ensuring numSquaresPerRow is equal to 8
 		if (c == '/') {
 			if (colIndex != 8 || rowIndex >= 7) {
@@ -78,7 +77,7 @@ std::vector<Square> Board::parseFenPosition(std::string& fenPosition) {
 		// if the character is any digit from 1-8 add empty squares to pieces (represented as null)
 		else if (isDigitFrom1To8(c)) {
 			for (int i = 0; i < c - '0'; i++) {
-				squares.push_back(Square(position));
+				squares.push_back(Square({rowIndex, colIndex}));
 				colIndex++;
 			}
 		}
@@ -88,7 +87,7 @@ std::vector<Square> Board::parseFenPosition(std::string& fenPosition) {
 		}
 		// All remaining possible characters should represent pieces
 		else {
-			Square square = Square(position);
+			Square square = Square({rowIndex, colIndex});
 			std::shared_ptr<Piece> piece = pieceTypes[c](square);
 			square.setPiece(piece);
 			squares.push_back(square);
