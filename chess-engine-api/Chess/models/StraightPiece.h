@@ -8,7 +8,7 @@ private:
 	bool isValidStraightMove(Board& board, Position targetPosition) const;
 
 	bool targetSquareIsStraight(Position targetPosition) const;
-	
+
 public:
 	using Piece::Piece;
 
