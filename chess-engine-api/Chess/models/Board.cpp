@@ -2,12 +2,12 @@
 #include <stdexcept>
 #include <map>
 #include <regex>
-#include "../models/Rook.h"
-#include "../models/Knight.h"
-#include "../models/Bishop.h"
-#include "../models/Queen.h"
-#include "../models/King.h"
-#include "../models/Pawn.h"
+#include "Rook.h"
+#include "Knight.h"
+#include "Bishop.h"
+#include "Queen.h"
+#include "King.h"
+#include "Pawn.h"
 
 bool Board::isDigitFrom1To8(char c) {
 	std::string s(1, c);
@@ -24,7 +24,7 @@ std::vector<Square> Board::parseFenPosition(std::string& fenPosition) {
 
 	std::map<char, std::function<std::shared_ptr<Piece>(Square)>> pieceTypes = {
 		{'r', [this](Square square) {
-			std::shared_ptr<Rook> rook = std::make_shared<Rook>(Color::Black, square.getPosition());
+			std::shared_ptr<Rook> rook = std::make_shared<Rook>(Color::Black, square.getPosition(), getRookSide(square));
 			rooks.push_back(rook);
 			return rook;
 		}},
@@ -44,7 +44,7 @@ std::vector<Square> Board::parseFenPosition(std::string& fenPosition) {
 			return std::make_shared<Pawn>(Color::Black, square.getPosition());
 		}},
 		{'R', [this](Square square) {
-			std::shared_ptr<Rook> rook = std::make_shared<Rook>(Color::White, square.getPosition());
+			std::shared_ptr<Rook> rook = std::make_shared<Rook>(Color::White, square.getPosition(), getRookSide(square));
 			rooks.push_back(rook);
 			return rook;
 		}},
@@ -142,4 +142,8 @@ Rook& Board::getRook(Color color, Side side) {
 	}
 
 	throw std::invalid_argument("No rook found");
+}
+
+Side Board::getRookSide(Square square) {
+	return (square.getPosition().col == 0) ? Side::QueenSide : Side::KingSide;
 }

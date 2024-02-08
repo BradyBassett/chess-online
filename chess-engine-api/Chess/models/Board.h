@@ -6,6 +6,8 @@
 #include "Square.h"
 #include "../enums/Side.h"
 
+class Rook;
+
 class Board {
 private:
 	std::vector<std::vector<Square>> squares;
@@ -28,6 +30,8 @@ public:
 	void movePiece(Square& fromSquare, Square& toSquare);
 
 	Rook& getRook(Color color, Side side);
+
+	Side getRookSide(Square square);
 };
 
 #endif
