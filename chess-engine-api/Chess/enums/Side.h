@@ -3,7 +3,8 @@
 
 enum class Side {
 	KingSide,
-	QueenSide
+	QueenSide,
+	None
 };
 
 #endif
