@@ -3,12 +3,33 @@
 #include "Square.h"
 #include "../structs/Position.h"
 
+bool King::getIsValidCastle(Board& board, Position targetPosition, std::string& errorMessage) const {
+	Rook& rook = board.getRook(pieceColor, targetPosition.col == 2 ? Side::QueenSide : Side::KingSide);
+
+	if (hasMoved) {
+		errorMessage = "Invalid move - King has already moved";
+		return false;
+	} else if (rook.getHasMoved()) {
+		errorMessage = "Invalid move - Rook has already moved";
+		return false;
+	} else if (isInCheck) {
+		errorMessage = "Invalid move - King is in check";
+		return false;
+	}
+
+	return true;
+}
+
 King::King(Color pieceColor, Position currentPosition) : Piece(pieceColor, currentPosition) {
 	pieceType = PieceType::King;
 }
 
 bool King::isValidMove(Board& board, Position targetPosition, std::string& errorMessage) const {
 	if (!Piece::isValidMove(board, targetPosition, errorMessage)) {
+		return false;
+	}
+
+	if (!getIsValidCastle(board, targetPosition, errorMessage)) {
 		return false;
 	}
 
@@ -40,21 +61,4 @@ bool King::getIsInCheck() const {
 
 void King::setIsInCheck(bool value) {
 	isInCheck = value;
-}
-
-bool King::canCastle(Board& board, Position targetPosition, std::string& errorMessage) const {
-	Rook& rook = board.getRook(pieceColor, targetPosition.col == 2 ? Side::QueenSide : Side::KingSide);
-
-	if (hasMoved) {
-		errorMessage = "Invalid move - King has already moved";
-		return false;
-	} else if (rook.getHasMoved()) {
-		errorMessage = "Invalid move - Rook has already moved";
-		return false;
-	} else if (isInCheck) {
-		errorMessage = "Invalid move - King is in check";
-		return false;
-	}
-
-	return true;
 }

@@ -7,6 +7,8 @@ class King : virtual public Piece {
 private:
 	bool isInCheck = false;
 
+	bool getIsValidCastle(Board& board, Position targetPosition, std::string& errorMessage) const;
+
 public:
 	King(Color pieceColor, Position currentPosition);
 
@@ -15,8 +17,6 @@ public:
 	bool getIsInCheck() const;
 
 	void setIsInCheck(bool value);
-
-	bool canCastle(Board& board, Position targetPosition, std::string& errorMessage) const;
 };
 
 #endif
