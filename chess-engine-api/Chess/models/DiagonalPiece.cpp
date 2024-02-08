@@ -3,8 +3,8 @@
 #include "Board.h"
 
 bool DiagonalPiece::isValidDiagonalMove(Board& board, Position targetPosition) const {
-	uint8_t rowStep = (targetPosition.row - currentPosition.row) > 0 ? 1 : -1;
-	uint8_t colStep = (targetPosition.col - currentPosition.col) > 0 ? 1 : -1;
+	int rowStep = (targetPosition.row - currentPosition.row) > 0 ? 1 : -1;
+	int colStep = (targetPosition.col - currentPosition.col) > 0 ? 1 : -1;
 
 	uint8_t i = currentPosition.row + rowStep;
 	uint8_t j = currentPosition.col + colStep;
@@ -23,7 +23,8 @@ bool DiagonalPiece::isValidDiagonalMove(Board& board, Position targetPosition) c
 }
 
 bool DiagonalPiece::targetSquareIsDiagonal(Position targetPosition) const {
-	return abs(targetPosition.row - currentPosition.row) !=
+	auto x = abs(targetPosition.row - currentPosition.row) == abs(targetPosition.col - currentPosition.col);
+	return abs(targetPosition.row - currentPosition.row) ==
 		   abs(targetPosition.col - currentPosition.col);
 }
 
