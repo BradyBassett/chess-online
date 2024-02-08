@@ -55,4 +55,6 @@ bool King::canCastle(Board& board, Position targetPosition, std::string& errorMe
 		errorMessage = "Invalid move - King is in check";
 		return false;
 	}
+
+	return true;
 }
