@@ -4,13 +4,16 @@
 #include "../structs/Position.h"
 
 bool King::getIsValidCastle(Board& board, Position targetPosition, std::string& errorMessage) const {
-	Rook& rook = board.getRook(pieceColor, targetPosition.col == 2 ? Side::QueenSide : Side::KingSide);
+	// If king is trying to castle queen side get the rook on the queen side and vice versa
+	Side side = targetPosition.col == 2 ? Side::QueenSide : Side::KingSide;
+	std::shared_ptr<Rook> rook = board.getRook(pieceColor, side);
 
 	if (hasMoved) {
 		errorMessage = "Invalid move - King has already moved";
 		return false;
-	} else if (rook.getHasMoved()) {
-		errorMessage = "Invalid move - Rook has already moved";
+	} else if (rook->getHasMoved()) {
+		std::string rookSide = side == Side::QueenSide ? "Queenside " : "Kingside ";
+		errorMessage = "Invalid move - " + rookSide + "Rook has already moved";
 		return false;
 	} else if (isInCheck) {
 		errorMessage = "Invalid move - King is in check";
@@ -29,10 +32,6 @@ bool King::isValidMove(Board& board, Position targetPosition, std::string& error
 		return false;
 	}
 
-	if (!getIsValidCastle(board, targetPosition, errorMessage)) {
-		return false;
-	}
-
 	Position moves[] = {
 		{1, 0},		// Up
 		{1, 1},		// Up-Right
@@ -44,15 +43,22 @@ bool King::isValidMove(Board& board, Position targetPosition, std::string& error
 		{1, -1}		// Up-Left
 	};
 
-	for (const auto& move : moves) {
-		if (targetPosition.row == currentPosition.row + move.row &&
-				targetPosition.col == currentPosition.col + move.col) {
-			return true;
+	// If the target position is two squares away from the king then it is a castle
+	if ((targetPosition.col == 2 && targetPosition.row == currentPosition.row) ||
+			(targetPosition.col == 6 && targetPosition.row == currentPosition.row)) {
+		return getIsValidCastle(board, targetPosition, errorMessage);
+	// Otherwise, the king can only move one square in any direction
+	} else {
+		for (const auto& move : moves) {
+			if (targetPosition.row == currentPosition.row + move.row &&
+					targetPosition.col == currentPosition.col + move.col) {
+				return true;
+			}
 		}
-	}
 
-	errorMessage = "Invalid move - King can only move one square in any direction";
-	return false;
+		errorMessage = "Invalid move - King can only move one square in any direction";
+		return false;
+	}
 }
 
 bool King::getIsInCheck() const {
