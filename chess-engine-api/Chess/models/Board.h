@@ -5,6 +5,7 @@
 #include <vector>
 #include "Square.h"
 #include "../enums/Side.h"
+#include "../structs/Move.h"
 
 class Rook;
 
@@ -18,6 +19,8 @@ private:
 
 	std::vector<Square> parseFenPosition(std::string& fenPosition);
 
+	void movePiece(Square& fromSquare, Square& toSquare, std::shared_ptr<Piece> piece);
+
 public:
 	Board(std::string fenPosition);
 
@@ -27,9 +30,9 @@ public:
 
 	std::vector<std::vector<Square>> getSquares();
 
-	void movePiece(Square& fromSquare, Square& toSquare);
+	void setupMove(Move move);
 
-	Rook& getRook(Color color, Side side);
+	std::shared_ptr<Rook> getRook(Color color, Side side);
 
 	Side getRookSide(Square square);
 };

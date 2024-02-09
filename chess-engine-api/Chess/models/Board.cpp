@@ -98,6 +98,13 @@ std::vector<Square> Board::parseFenPosition(std::string& fenPosition) {
 	return squares;
 }
 
+void Board::movePiece(Square& fromSquare, Square& toSquare, std::shared_ptr<Piece> piece) {
+	toSquare.setPiece(piece);
+	fromSquare.setPiece(nullptr);
+	piece->setHasMoved();
+	piece->setCurrentPosition(toSquare.getPosition());
+}
+
 Board::Board(std::string fenPosition) {
 	setStartingPosition(fenPosition);
 }
@@ -124,19 +131,35 @@ std::vector<std::vector<Square>> Board::getSquares() {
 	return squares;
 }
 
-void Board::movePiece(Square& fromSquare, Square& toSquare) {
+void Board::setupMove(Move move) {
+	Square& fromSquare = getSquare(move.from.row, move.from.col);
+	Square& toSquare = getSquare(move.to.row, move.to.col);
 	std::shared_ptr<Piece> piece = fromSquare.getPiece();
 
-	toSquare.setPiece(piece);
-	fromSquare.setPiece(nullptr);
-	piece->setHasMoved();
-	piece->setCurrentPosition(toSquare.getPosition());
+	// If the move is a castling move, move the rook as well
+	auto x = static_cast<int>(MoveFlag::KingsideCastling);
+	auto y = static_cast<int>(MoveFlag::QueensideCastling);
+	if (piece->getPieceType() == PieceType::King && piece->getHasMoved() == false) {
+		if (move.flags.test(static_cast<int>(MoveFlag::KingsideCastling))) {
+			std::shared_ptr<Rook> rook = getRook(piece->getPieceColor(), Side::KingSide);
+			Square& rookFromSquare = getSquare(move.from.row, 7);
+			Square& rookToSquare = getSquare(move.to.row, 5);
+			movePiece(rookFromSquare, rookToSquare, rook);
+		} else if (move.flags.test(static_cast<int>(MoveFlag::QueensideCastling))) {
+			std::shared_ptr<Rook> rook = getRook(piece->getPieceColor(), Side::QueenSide);
+			Square& rookFromSquare = getSquare(move.from.row, 0);
+			Square& rookToSquare = getSquare(move.to.row, 3);
+			movePiece(rookFromSquare, rookToSquare, rook);
+		}
+	}
+
+	movePiece(fromSquare, toSquare, piece);
 }
 
-Rook& Board::getRook(Color color, Side side) {
+std::shared_ptr<Rook> Board::getRook(Color color, Side side) {
 	for (auto rook : rooks) {
 		if (rook->getPieceColor() == color && rook->getSide() == side) {
-			return *rook;
+			return rook;
 		}
 	}
 
