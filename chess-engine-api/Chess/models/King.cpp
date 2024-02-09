@@ -20,6 +20,16 @@ bool King::getIsValidCastle(Board& board, Position targetPosition, std::string& 
 		return false;
 	}
 
+	int direction = side == Side::QueenSide ? -1 : 1;
+	for (int i = currentPosition.col + direction; i != rook->getCurrentPosition().col; i + direction) {
+		Square& square = board.getSquare(currentPosition.row, i);
+		// If there is a piece between the king and the rook then the king cannot castle
+		if (square.getPiece() != nullptr) {
+			errorMessage = "Invalid move - King cannot castle through other pieces";
+			return false;
+		} // todo - check if the king passes through check
+	}
+
 	return true;
 }
 
