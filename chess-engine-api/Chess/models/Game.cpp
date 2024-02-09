@@ -46,19 +46,14 @@ char Game::pieceToAscii(std::shared_ptr<Piece> piece) {
 	switch (piece->getPieceType()) {
 		case PieceType::Pawn:
 			return (pieceColor == Color::White) ? 'P' : 'p';
-			break;
 		case PieceType::Knight:
 			return (pieceColor == Color::White) ? 'N' : 'n';
-			break;
 		case PieceType::Bishop:
 			return (pieceColor == Color::White) ? 'B' : 'b';
-			break;
 		case PieceType::Rook:
 			return (pieceColor == Color::White) ? 'R' : 'r';
-			break;
 		case PieceType::Queen:
 			return (pieceColor == Color::White) ? 'Q' : 'q';
-			break;
 		case PieceType::King:
 			return (pieceColor == Color::White) ? 'K' : 'k';
 		default:
@@ -108,12 +103,16 @@ Move Game::composeMoveStruct(Position from, Position to, char promotion, std::op
 		move.capturedPiece = capturedPiece.value()->getPieceType();
 	}
 
+	if (move.piece == PieceType::King && to.col > from.col) {
+		move.setFlag(MoveFlag::KingsideCastling);
+	} else if (move.piece == PieceType::King && to.col < from.col) {
+		move.setFlag(MoveFlag::QueensideCastling);
+	}
+
 	return move;
 }
 
-
 Move Game::makeMove(Position from, Position to, char promotion) {
-	Move move;
 	std::string errorMessage = "Invalid Move";
 	Square& fromSquare = board.getSquare(from.row, from.col);
 	Square& toSquare = board.getSquare(to.row, to.col);
@@ -151,10 +150,10 @@ Move Game::makeMove(Position from, Position to, char promotion) {
 	}
 
 	// compose the move struct
-	move = composeMoveStruct(from, to, promotion, toSquare.getPiece());
+	Move move = composeMoveStruct(from, to, promotion, toSquare.getPiece());
 
 	// move the piece
-	board.movePiece(fromSquare, toSquare);
+	board.setupMove(move);
 
 	return move;
 }
