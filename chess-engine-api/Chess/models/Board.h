@@ -9,7 +9,8 @@
 
 class Rook;
 
-class Board {
+class Board
+{
 private:
 	std::vector<std::vector<Square>> squares;
 
@@ -17,16 +18,16 @@ private:
 
 	bool isDigitFrom1To8(char c);
 
-	std::vector<Square> parseFenPosition(std::string& fenPosition);
+	std::vector<Square> parseFenPosition(std::string &fenPosition);
 
-	void movePiece(Square& fromSquare, Square& toSquare, std::shared_ptr<Piece> piece);
+	void movePiece(Square &fromSquare, Square &toSquare, std::shared_ptr<Piece> piece);
 
 public:
 	Board(std::string fenPosition);
 
 	void setStartingPosition(std::string fenPosition);
 
-	Square& getSquare(int rowIndex, int colIndex);
+	Square &getSquare(int rowIndex, int colIndex);
 
 	std::vector<std::vector<Square>> getSquares();
 

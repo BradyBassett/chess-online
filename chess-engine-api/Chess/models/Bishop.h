@@ -3,7 +3,8 @@
 
 #include "DiagonalPiece.h"
 
-class Bishop : public DiagonalPiece {
+class Bishop : public DiagonalPiece
+{
 public:
 	Bishop(Color pieceColor, Position currentPosition);
 };

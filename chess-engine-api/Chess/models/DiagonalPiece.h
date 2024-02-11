@@ -3,16 +3,17 @@
 
 #include "Piece.h"
 
-class DiagonalPiece : virtual public Piece {
+class DiagonalPiece : virtual public Piece
+{
 private:
-	bool isValidDiagonalMove(Board& board, Position targetPosition) const;
+	bool isValidDiagonalMove(Board &board, Position targetPosition) const;
 
 	bool targetSquareIsDiagonal(Position targetPosition) const;
 
 public:
 	using Piece::Piece;
 
-	bool isValidMove(Board& board, Position targetPosition, std::string& errorMessage) const;
+	bool isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const;
 };
 
 #endif

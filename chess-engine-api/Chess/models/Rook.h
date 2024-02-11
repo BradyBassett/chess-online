@@ -3,7 +3,8 @@
 
 #include "StraightPiece.h"
 
-class Rook : public StraightPiece {
+class Rook : public StraightPiece
+{
 private:
 	Side side;
 

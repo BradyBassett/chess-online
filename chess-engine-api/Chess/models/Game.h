@@ -9,7 +9,8 @@
 #include "Piece.h"
 #include <optional>
 
-class Game {
+class Game
+{
 private:
 	Color turn;
 	Board board;
@@ -21,7 +22,7 @@ private:
 	Move composeMoveStruct(Position from, Position to, char promotion, std::optional<std::shared_ptr<Piece>> capturedPiece);
 
 public:
-	Game(std::string fenPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"); //w KQkq - 0 1
+	Game(std::string fenPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"); // w KQkq - 0 1
 
 	Color getTurn();
 

@@ -2,7 +2,8 @@
 #include "Square.h"
 #include "Board.h"
 
-bool DiagonalPiece::isValidDiagonalMove(Board& board, Position targetPosition) const {
+bool DiagonalPiece::isValidDiagonalMove(Board &board, Position targetPosition) const
+{
 	int rowStep = (targetPosition.row - currentPosition.row) > 0 ? 1 : -1;
 	int colStep = (targetPosition.col - currentPosition.col) > 0 ? 1 : -1;
 
@@ -10,8 +11,10 @@ bool DiagonalPiece::isValidDiagonalMove(Board& board, Position targetPosition) c
 	uint8_t j = currentPosition.col + colStep;
 
 	while ((rowStep > 0 ? i < targetPosition.row : i > targetPosition.row) &&
-		   (colStep > 0 ? j < targetPosition.col : j > targetPosition.col)) {
-		if (board.getSquare(i, j).getPiece() != nullptr) {
+		   (colStep > 0 ? j < targetPosition.col : j > targetPosition.col))
+	{
+		if (board.getSquare(i, j).getPiece() != nullptr)
+		{
 			return false;
 		}
 
@@ -22,23 +25,28 @@ bool DiagonalPiece::isValidDiagonalMove(Board& board, Position targetPosition) c
 	return true;
 }
 
-bool DiagonalPiece::targetSquareIsDiagonal(Position targetPosition) const {
+bool DiagonalPiece::targetSquareIsDiagonal(Position targetPosition) const
+{
 	auto x = abs(targetPosition.row - currentPosition.row) == abs(targetPosition.col - currentPosition.col);
 	return abs(targetPosition.row - currentPosition.row) ==
 		   abs(targetPosition.col - currentPosition.col);
 }
 
-bool DiagonalPiece::isValidMove(Board& board, Position targetPosition, std::string& errorMessage) const {
-	if (!Piece::isValidMove(board, targetPosition, errorMessage)) {
+bool DiagonalPiece::isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const
+{
+	if (!Piece::isValidMove(board, targetPosition, errorMessage))
+	{
 		return false;
 	}
 
-	if (!targetSquareIsDiagonal(targetPosition)) {
+	if (!targetSquareIsDiagonal(targetPosition))
+	{
 		errorMessage = "Invalid move - Piece must move diagonally";
 		return false;
 	}
 
-	if (!isValidDiagonalMove(board, targetPosition)) {
+	if (!isValidDiagonalMove(board, targetPosition))
+	{
 		errorMessage = "Invalid move - Piece cannot jump over other pieces";
 		return false;
 	}

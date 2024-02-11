@@ -6,7 +6,8 @@
 
 class Piece;
 
-class Square {
+class Square
+{
 private:
 	Position position;
 	std::shared_ptr<Piece> piece;

@@ -6,10 +6,12 @@
 
 int main();
 
-int main() {
+int main()
+{
 	Game game = Game();
 
-	while (true)	{
+	while (true)
+	{
 		std::cout << game.ascii() << std::endl;
 
 		std::string line, from, to, promotion;
@@ -20,7 +22,8 @@ int main() {
 		std::istringstream iss(line);
 		iss >> from >> to >> promotion;
 
-		if (from == "quit") {
+		if (from == "quit")
+		{
 			break;
 		}
 
@@ -32,7 +35,7 @@ int main() {
 			std::system("clear");
 			game.makeMove(fromPosition, toPosition, promotion.c_str()[0]);
 		}
-		catch(const std::exception& e)
+		catch (const std::exception &e)
 		{
 			std::cerr << e.what() << "\n\n";
 		}

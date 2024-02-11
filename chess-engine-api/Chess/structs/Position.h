@@ -1,7 +1,8 @@
 #ifndef POSITION_H
 #define POSITION_H
 
-struct Position {
+struct Position
+{
 	int row;
 	int col;
 };

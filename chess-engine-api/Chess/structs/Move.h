@@ -9,14 +9,17 @@
 #include <bitset>
 #include <optional>
 
-struct Move {
+struct Move
+{
 	std::bitset<7> flags; // NonCapture, PawnPush, EnPassant, StandardCapture, Promotion, KingsideCastling, QueensideCastling
 
-	void setFlag(MoveFlag flag) {
+	void setFlag(MoveFlag flag)
+	{
 		flags.set(flag);
 	}
 
-	bool hasFlag(MoveFlag flag) {
+	bool hasFlag(MoveFlag flag)
+	{
 		return flags.test(flag);
 	}
 

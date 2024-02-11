@@ -8,7 +8,8 @@
 
 class Board;
 
-class Piece {
+class Piece
+{
 protected:
 	bool hasMoved = false;
 	bool isCaptured = false;
@@ -19,9 +20,9 @@ protected:
 public:
 	Piece(Color pieceColor, Position currentPosition, PieceType pieceType = PieceType::Unknown);
 
-	Piece(const Piece& piece) noexcept;
+	Piece(const Piece &piece) noexcept;
 
-	virtual bool isValidMove(Board& board, Position targetPosition, std::string& errorMessage) const;
+	virtual bool isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const;
 
 	bool getHasMoved() const;
 
