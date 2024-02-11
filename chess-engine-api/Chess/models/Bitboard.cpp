@@ -1,5 +1,10 @@
 #include "Bitboard.h"
 
+int Bitboard::getSquareNumber(Position position)
+{
+	return position.row * 8 + position.col;
+}
+
 Bitboard::Bitboard()
 {
 	whitePawns = 0xff000000000000;	   // hexidecimal representation of pa whitewns in starting position
@@ -49,4 +54,14 @@ uint64_t Bitboard::getBlackPieces()
 uint64_t Bitboard::getAllPieces()
 {
 	return getWhitePieces() | getBlackPieces();
+}
+
+void Bitboard::setBit(Color color, PieceType pieceType, Position position)
+{
+	getBitboard(color, pieceType) |= 1ULL << getSquareNumber(position);
+}
+
+void Bitboard::clearBit(Color color, PieceType pieceType, Position position)
+{
+	getBitboard(color, pieceType) &= ~(1ULL << getSquareNumber(position));
 }

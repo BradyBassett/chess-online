@@ -4,6 +4,7 @@
 #include <cstdint>
 #include "../enums/PieceType.h"
 #include "../enums/Color.h"
+#include "../structs/Position.h"
 
 class Bitboard
 {
@@ -24,6 +25,8 @@ private:
 	uint64_t blackQueens;
 	uint64_t blackKing;
 
+	int getSquareNumber(Position position);
+
 public:
 	Bitboard();
 
@@ -35,9 +38,9 @@ public:
 
 	uint64_t getAllPieces();
 
-	void setBit(Color color, PieceType pieceType);
+	void setBit(Color color, PieceType pieceType, Position position);
 
-	void clearBit(Color color, PieceType pieceType);
+	void clearBit(Color color, PieceType pieceType, Position position);
 };
 
 #endif
