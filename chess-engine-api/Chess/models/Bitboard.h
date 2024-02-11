@@ -16,7 +16,6 @@ private:
 	uint64_t whiteRooks;
 	uint64_t whiteQueens;
 	uint64_t whiteKing;
-	uint64_t whitePieces; // maybe remove this
 
 	uint64_t blackPawns;
 	uint64_t blackKnights;
@@ -24,15 +23,11 @@ private:
 	uint64_t blackRooks;
 	uint64_t blackQueens;
 	uint64_t blackKing;
-	uint64_t blackPieces; // maybe remove this
-
-	uint64_t allPieces;	   // maybe remove this
-	uint64_t emptySquares; // maybe remove this
 
 public:
 	Bitboard();
 
-	uint64_t getBitboard(Color color, PieceType pieceType);
+	uint64_t &getBitboard(Color color, PieceType pieceType);
 
 	uint64_t getWhitePieces();
 
