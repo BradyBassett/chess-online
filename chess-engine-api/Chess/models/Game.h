@@ -5,6 +5,7 @@
 #include "../structs/Position.h"
 #include "../structs/Move.h"
 #include "Board.h"
+#include "Bitboard.h"
 #include <string>
 #include "Piece.h"
 #include <optional>
@@ -14,6 +15,7 @@ class Game
 private:
 	Color turn;
 	Board board;
+	Bitboard bitboard;
 
 	char pieceToAscii(std::shared_ptr<Piece> piece);
 
