@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "Square.h"
+#include "Bitboard.h"
 #include "../enums/Side.h"
 #include "../structs/Move.h"
 
@@ -13,8 +14,8 @@ class Board
 {
 private:
 	std::vector<std::vector<Square>> squares;
-
 	std::vector<std::shared_ptr<Rook>> rooks;
+	Bitboard bitboard;
 
 	bool isDigitFrom1To8(char c);
 

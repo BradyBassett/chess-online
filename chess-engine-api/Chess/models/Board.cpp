@@ -120,13 +120,16 @@ std::vector<Square> Board::parseFenPosition(std::string &fenPosition)
 
 void Board::movePiece(Square &fromSquare, Square &toSquare, std::shared_ptr<Piece> piece)
 {
+	uint64_t &pieceBitboard = bitboard.getBitboard(piece->getPieceColor(), piece->getPieceType());
+	bitboard.clearBit(pieceBitboard, fromSquare.getPosition());
+	bitboard.setBit(pieceBitboard, toSquare.getPosition());
 	toSquare.setPiece(piece);
 	fromSquare.setPiece(nullptr);
 	piece->setHasMoved();
 	piece->setCurrentPosition(toSquare.getPosition());
 }
 
-Board::Board(std::string fenPosition)
+Board::Board(std::string fenPosition) : bitboard()
 {
 	setStartingPosition(fenPosition);
 }
