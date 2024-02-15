@@ -144,19 +144,19 @@ void Board::initializeStartingPosition(std::string fenPosition)
 void Board::initializeBitboards()
 {
 	// TODO - dynamically set bitboards based on fen position
-	bitboards[0][0] = 0xff000000000000;	  // hexidecimal representation of white pawns in starting position
-	bitboards[0][1] = 0x4200000000000000; // hexidecimal representation of white knights in starting position
-	bitboards[0][2] = 0x2400000000000000; // hexidecimal representation of white bishops in starting position
-	bitboards[0][3] = 0x8100000000000000; // hexidecimal representation of white rooks in starting position
-	bitboards[0][4] = 0x800000000000000;  // hexidecimal representation of white queens in starting position
-	bitboards[0][5] = 0x1000000000000000; // hexidecimal representation of white king in starting position
+	bitboards[0][0].setValue(0xff000000000000);	  // hexidecimal representation of white pawns in starting position
+	bitboards[0][1].setValue(0x4200000000000000); // hexidecimal representation of white knights in starting position
+	bitboards[0][2].setValue(0x2400000000000000); // hexidecimal representation of white bishops in starting position
+	bitboards[0][3].setValue(0x8100000000000000); // hexidecimal representation of white rooks in starting position
+	bitboards[0][4].setValue(0x800000000000000);  // hexidecimal representation of white queens in starting position
+	bitboards[0][5].setValue(0x1000000000000000); // hexidecimal representation of white king in starting position
 
-	bitboards[1][0] = 0xff00; // hexidecimal representation of black pawns in starting position
-	bitboards[1][1] = 0x42;	  // hexidecimal representation of black knights in starting position
-	bitboards[1][2] = 0x24;	  // hexidecimal representation of black bishops in starting position
-	bitboards[1][3] = 0x81;	  // hexidecimal representation of black rooks in starting position
-	bitboards[1][4] = 0x8;	  // hexidecimal representation of black queens in starting position
-	bitboards[1][5] = 0x10;	  // hexidecimal representation of black king in starting position
+	bitboards[1][0].setValue(0xff00); // hexidecimal representation of black pawns in starting position
+	bitboards[1][1].setValue(0x42);	  // hexidecimal representation of black knights in starting position
+	bitboards[1][2].setValue(0x24);	  // hexidecimal representation of black bishops in starting position
+	bitboards[1][3].setValue(0x81);	  // hexidecimal representation of black rooks in starting position
+	bitboards[1][4].setValue(0x8);	  // hexidecimal representation of black queens in starting position
+	bitboards[1][5].setValue(0x10);	  // hexidecimal representation of black king in starting position
 }
 
 Board::Board(std::string fenPosition)
@@ -187,8 +187,6 @@ void Board::setupMove(Move move)
 	std::shared_ptr<Piece> piece = fromSquare.getPiece();
 
 	// If the move is a castling move, move the rook as well
-	auto x = static_cast<int>(MoveFlag::KingsideCastling);
-	auto y = static_cast<int>(MoveFlag::QueensideCastling);
 	if (piece->getPieceType() == PieceType::King && piece->getHasMoved() == false)
 	{
 		if (move.flags.test(static_cast<int>(MoveFlag::KingsideCastling)))
@@ -212,7 +210,7 @@ void Board::setupMove(Move move)
 
 std::shared_ptr<Rook> Board::getRook(Color color, Side side)
 {
-	for (auto rook : rooks)
+	for (std::shared_ptr<Rook> rook : rooks)
 	{
 		if (rook->getPieceColor() == color && rook->getSide() == side)
 		{
