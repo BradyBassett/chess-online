@@ -40,6 +40,30 @@ bool Piece::isValidMove(Board &board, Position targetPosition, std::string &erro
 	return true;
 }
 
+Bitboard Piece::getValidMoves(Board &board, int (&directions)[4][2]) const
+{
+	Bitboard validMoves = 0x0;
+
+	for (const auto &direction : directions)
+	{
+		for (int x = currentPosition.row + direction[0], y = currentPosition.col + direction[1]; x >= 0 && x < 8 && y >= 0 && y < 8; x += direction[0], y += direction[1])
+		{
+			Position targetPosition = {x, y};
+			std::string errorMessage;
+			if (isValidMove(board, targetPosition, errorMessage))
+			{
+				validMoves.setBit(targetPosition);
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+	return validMoves;
+}
+
 bool Piece::getHasMoved() const
 {
 	return hasMoved;
@@ -68,16 +92,6 @@ PieceType Piece::getPieceType() const
 Position Piece::getCurrentPosition() const
 {
 	return currentPosition;
-}
-
-uint64_t Piece::getAttackTable() const
-{
-	return attackTable;
-}
-
-void Piece::updateAttackTable(uint64_t attackTable)
-{
-	// todo - implement this
 }
 
 void Piece::setCurrentPosition(Position newPosition)
