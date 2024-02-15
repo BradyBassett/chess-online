@@ -73,7 +73,7 @@ bool King::isValidMove(Board &board, Position targetPosition, std::string &error
 	}
 	else
 	{
-		for (const auto &move : moves)
+		for (const Position &move : moves)
 		{
 			if (targetPosition.row == currentPosition.row + move.row &&
 				targetPosition.col == currentPosition.col + move.col)
