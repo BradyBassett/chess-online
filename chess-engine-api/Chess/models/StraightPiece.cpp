@@ -60,3 +60,9 @@ bool StraightPiece::isValidMove(Board &board, Position targetPosition, std::stri
 
 	return true;
 }
+
+Bitboard StraightPiece::getValidMoves(Board &board) const
+{
+	int directions[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+	return Piece::getValidMoves(board, directions);
+}
