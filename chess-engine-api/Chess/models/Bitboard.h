@@ -18,13 +18,23 @@ public:
 
 	Bitboard operator|(const Bitboard &other) const;
 
+	Bitboard &operator|=(const Bitboard &other);
+
 	Bitboard operator&(const Bitboard &other) const;
+
+	Bitboard &operator&=(const Bitboard &other);
 
 	Bitboard operator^(const Bitboard &other) const;
 
+	Bitboard &operator^=(const Bitboard &other);
+
 	Bitboard operator~() const;
 
+	Bitboard operator<<(uint64_t shift) const;
+
 	Bitboard &operator<<=(uint64_t shift);
+
+	Bitboard operator>>(uint64_t shift) const;
 
 	Bitboard &operator>>=(uint64_t shift);
 

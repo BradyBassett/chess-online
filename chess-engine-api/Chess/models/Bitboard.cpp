@@ -2,7 +2,7 @@
 
 int Bitboard::getSquareNumber(Position position)
 {
-	return position.row * 8 + position.col;
+	return 8 * position.row + position.col;
 }
 
 Bitboard::Bitboard(uint64_t value) : value(value)
@@ -14,9 +14,21 @@ Bitboard Bitboard::operator|(const Bitboard &other) const
 	return Bitboard(value | other.value);
 }
 
+Bitboard &Bitboard::operator|=(const Bitboard &other)
+{
+	value |= other.value;
+	return *this;
+}
+
 Bitboard Bitboard::operator&(const Bitboard &other) const
 {
 	return Bitboard(value & other.value);
+}
+
+Bitboard &Bitboard::operator&=(const Bitboard &other)
+{
+	value &= other.value;
+	return *this;
 }
 
 Bitboard Bitboard::operator^(const Bitboard &other) const
@@ -24,15 +36,31 @@ Bitboard Bitboard::operator^(const Bitboard &other) const
 	return Bitboard(value ^ other.value);
 }
 
+Bitboard &Bitboard::operator^=(const Bitboard &other)
+{
+	value ^= other.value;
+	return *this;
+}
+
 Bitboard Bitboard::operator~() const
 {
 	return Bitboard(~value);
+}
+
+Bitboard Bitboard::operator<<(uint64_t shift) const
+{
+	return Bitboard(value << shift);
 }
 
 Bitboard &Bitboard::operator<<=(uint64_t shift)
 {
 	value <<= shift;
 	return *this;
+}
+
+Bitboard Bitboard::operator>>(uint64_t shift) const
+{
+	return Bitboard(value >> shift);
 }
 
 Bitboard &Bitboard::operator>>=(uint64_t shift)
