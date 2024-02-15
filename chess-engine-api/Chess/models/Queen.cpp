@@ -21,3 +21,14 @@ bool Queen::isValidMove(Board &board, Position targetPosition, std::string &erro
 
 	return true;
 }
+
+Bitboard Queen::getValidMoves(Board &board) const
+{
+	Bitboard validMoves = 0x0;
+
+	// get valid moves for diagonal and straight moves
+	validMoves |= DiagonalPiece::getValidMoves(board);
+	validMoves |= StraightPiece::getValidMoves(board);
+
+	return validMoves;
+}
