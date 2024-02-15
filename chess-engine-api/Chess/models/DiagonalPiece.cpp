@@ -27,7 +27,6 @@ bool DiagonalPiece::isValidDiagonalMove(Board &board, Position targetPosition) c
 
 bool DiagonalPiece::targetSquareIsDiagonal(Position targetPosition) const
 {
-	auto x = abs(targetPosition.row - currentPosition.row) == abs(targetPosition.col - currentPosition.col);
 	return abs(targetPosition.row - currentPosition.row) ==
 		   abs(targetPosition.col - currentPosition.col);
 }
