@@ -53,12 +53,10 @@ void Bitboard::setValue(uint64_t bitboard)
 
 void Bitboard::setBit(Position position)
 {
-	auto x = 1ULL << getSquareNumber(position);
 	value |= 1ULL << getSquareNumber(position);
 }
 
 void Bitboard::clearBit(Position position)
 {
-	auto x = 1ULL << getSquareNumber(position);
 	value ^= (1ULL << getSquareNumber(position));
 }
