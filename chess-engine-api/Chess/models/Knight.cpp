@@ -25,7 +25,7 @@ bool Knight::isValidMove(Board &board, Position targetPosition, std::string &err
 		{-1, -2}, // down 1 left 2
 	};
 
-	for (const auto &move : moves)
+	for (const Position &move : moves)
 	{
 		if (targetPosition.row == currentPosition.row + move.row &&
 			targetPosition.col == currentPosition.col + move.col)
