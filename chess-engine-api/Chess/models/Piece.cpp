@@ -70,6 +70,16 @@ Position Piece::getCurrentPosition() const
 	return currentPosition;
 }
 
+uint64_t Piece::getAttackTable() const
+{
+	return attackTable;
+}
+
+void Piece::updateAttackTable(uint64_t attackTable)
+{
+	// todo - implement this
+}
+
 void Piece::setCurrentPosition(Position newPosition)
 {
 	currentPosition = newPosition;

@@ -16,6 +16,7 @@ protected:
 	Color pieceColor;
 	PieceType pieceType;
 	Position currentPosition;
+	uint64_t attackTable;
 
 public:
 	Piece(Color pieceColor, Position currentPosition, PieceType pieceType = PieceType::Unknown);
@@ -37,6 +38,10 @@ public:
 	Position getCurrentPosition() const;
 
 	void setCurrentPosition(Position newPosition);
+
+	uint64_t getAttackTable() const;
+
+	void updateAttackTable(uint64_t attackTable);
 
 	virtual bool canPromote(Position targetPosition) const;
 };
