@@ -9,7 +9,6 @@
 #include "../structs/Move.h"
 
 class Rook;
-
 class Board
 {
 private:
