@@ -2,31 +2,39 @@
 #define BITBOARD_H
 
 #include <cstdint>
+#include "../structs/Position.h"
 #include "../enums/PieceType.h"
 #include "../enums/Color.h"
-#include "../structs/Position.h"
 
 class Bitboard
 {
 private:
-	uint64_t bitboards[2][6]; // [color][pieceType] = [white, black][pawns, knights, bishops, rooks, queens, king]
+	uint64_t value;
 
 	int getSquareNumber(Position position);
 
 public:
-	Bitboard();
+	Bitboard(uint64_t value = 0x0ULL);
 
-	uint64_t &getBitboard(Color color, PieceType pieceType);
+	Bitboard operator|(const Bitboard &other) const;
 
-	uint64_t getWhitePieces();
+	Bitboard operator&(const Bitboard &other) const;
 
-	uint64_t getBlackPieces();
+	Bitboard operator^(const Bitboard &other) const;
 
-	uint64_t getAllPieces();
+	Bitboard operator~() const;
 
-	void setBit(uint64_t &bitboard, Position position);
+	Bitboard &operator<<=(uint64_t shift);
 
-	void clearBit(uint64_t &bitboard, Position position);
+	Bitboard &operator>>=(uint64_t shift);
+
+	uint64_t getValue();
+
+	void setValue(uint64_t value);
+
+	void setBit(Position position);
+
+	void clearBit(Position position);
 };
 
 #endif
