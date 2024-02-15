@@ -52,3 +52,9 @@ bool DiagonalPiece::isValidMove(Board &board, Position targetPosition, std::stri
 
 	return true;
 }
+
+Bitboard DiagonalPiece::getValidMoves(Board &board) const
+{
+	int directions[4][2] = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+	return Piece::getValidMoves(board, directions);
+}

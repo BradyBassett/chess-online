@@ -14,6 +14,8 @@ public:
 	using Piece::Piece;
 
 	bool isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const;
+
+	Bitboard getValidMoves(Board &board) const;
 };
 
 #endif
