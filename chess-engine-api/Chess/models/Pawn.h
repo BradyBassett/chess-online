@@ -6,14 +6,19 @@
 class Pawn : virtual public Piece
 {
 private:
-	bool moveOneSquare(Board &board, Position targetPosition) const;
+	const int singleStepDirection = pieceColor == Color::White ? 1 : -1;
+	const int doubleStepDirection = pieceColor == Color::White ? 2 : -2;
 
-	bool moveTwoSquares(Board &board, Position targetPosition) const;
+	bool canMoveOneSquare(Board &board, Position targetPosition) const;
+
+	bool canMoveTwoSquares(Board &board, Position targetPosition) const;
 
 public:
 	Pawn(Color pieceColor, Position currentPosition);
 
 	bool isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const;
+
+	Bitboard getValidMoves(Board &board) const;
 
 	bool canPromote(Position targetPosition) const override;
 };
