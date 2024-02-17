@@ -3,6 +3,8 @@
 #include "Square.h"
 #include "../structs/Position.h"
 
+const Position King::moves[8] = {{1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
+
 bool King::getIsValidCastle(Board &board, Position targetPosition, std::string &errorMessage) const
 {
 	// If king is trying to castle queen side get the rook on the queen side and vice versa
@@ -53,17 +55,6 @@ bool King::isValidMove(Board &board, Position targetPosition, std::string &error
 		return false;
 	}
 
-	Position moves[] = {
-		{1, 0},	  // Up
-		{1, 1},	  // Up-Right
-		{0, 1},	  // Right
-		{-1, 1},  // Down-Right
-		{-1, 0},  // Down
-		{-1, -1}, // Down-Left
-		{0, -1},  // Left
-		{1, -1}	  // Up-Left
-	};
-
 	// If the target position is two squares away from the king then it is a castle
 	if ((targetPosition.col == 2 && targetPosition.row == currentPosition.row) ||
 		(targetPosition.col == 6 && targetPosition.row == currentPosition.row))
@@ -84,6 +75,25 @@ bool King::isValidMove(Board &board, Position targetPosition, std::string &error
 
 		errorMessage = "Invalid move - King can only move one square in any direction";
 		return false;
+	}
+}
+
+Bitboard King::getValidMoves(Board &board) const
+{
+	Bitboard validMoves = 0x0;
+
+	for (const Position &move : moves)
+	{
+		Position targetPosition = {currentPosition.row + move.row, currentPosition.col + move.col};
+
+		if (targetPosition.row >= 0 && targetPosition.row < 8 && targetPosition.col >= 0 && targetPosition.col < 8)
+		{
+			std::string errorMessage;
+			if (isValidMove(board, targetPosition, errorMessage))
+			{
+				validMoves.setBit(targetPosition);
+			}
+		}
 	}
 }
 
