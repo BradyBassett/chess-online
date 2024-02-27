@@ -6,9 +6,8 @@
 #include "../enums/Color.h"
 #include "../structs/Position.h"
 #include "Bitboard.h"
-#include "Game.h"
 
-class Board;
+class Game;
 
 class Piece
 {

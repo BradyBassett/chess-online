@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include "Piece.h"
 #include "Square.h"
-#include "Board.h"
+#include "Game.h"
 
 Piece::Piece(Color pieceColor, Position currentPosition, PieceType pieceType)
 	: pieceColor(pieceColor),
