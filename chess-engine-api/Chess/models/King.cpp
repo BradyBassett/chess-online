@@ -95,6 +95,8 @@ Bitboard King::getValidMoves(Game &game) const
 			}
 		}
 	}
+
+	return validMoves;
 }
 
 bool King::getIsInCheck() const
