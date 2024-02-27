@@ -14,6 +14,7 @@ class Game
 private:
 	Color turn;
 	Board board;
+	std::vector<Move> moves;
 
 	char pieceToAscii(std::shared_ptr<Piece> piece);
 
@@ -28,11 +29,21 @@ public:
 
 	void changeTurn();
 
+	Board &getBoard();
+
 	std::string ascii();
 
 	Move makeMove(Position from, Position to, char promotion = '\0');
 
 	Position convertStringToPosition(std::string position);
+
+	std::vector<Move> getMoves();
+
+	Move getLastMove();
+
+	void addMove(Move move);
+
+	void undoPreviousMove();
 };
 
 #endif

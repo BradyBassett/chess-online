@@ -21,6 +21,11 @@ void Game::changeTurn()
 	turn = (turn == Color::White) ? Color::Black : Color::White;
 }
 
+Board &Game::getBoard()
+{
+	return board;
+}
+
 std::string Game::ascii()
 {
 	std::string result;
@@ -105,6 +110,19 @@ Move Game::composeMoveStruct(Position from, Position to, char promotion, std::op
 	move.to = to;
 	move.piece = board.getSquare(from.row, from.col).getPiece()->getPieceType();
 
+	if (move.piece == PieceType::Pawn)
+	{
+		if (promotion != '\0')
+		{
+			move.setFlag(MoveFlag::Promotion);
+			move.promotion = charToPieceType(promotion);
+		}
+		else if (abs(from.row - to.row) == 2)
+		{
+			move.setFlag(MoveFlag::PawnPush);
+		}
+	}
+
 	if (promotion != '\0' && move.piece == PieceType::Pawn)
 	{
 		move.setFlag(MoveFlag::Promotion);
@@ -113,8 +131,19 @@ Move Game::composeMoveStruct(Position from, Position to, char promotion, std::op
 
 	if (capturedPiece.value() && capturedPiece.value()->getPieceColor() != turn)
 	{
-		move.setFlag(MoveFlag::StandardCapture); // FIXME - This is not necessarily a standard capture add a check for en passant
+		if (move.piece == PieceType::Pawn && abs(from.row - to.row) == 1 && abs(from.col - to.col) == 1 && !board.getSquare(to.row, to.col).getPiece())
+		{
+			move.setFlag(MoveFlag::EnPassant);
+		}
+		else
+		{
+			move.setFlag(MoveFlag::StandardCapture);
+		}
 		move.capturedPiece = capturedPiece.value()->getPieceType();
+	}
+	else
+	{
+		move.setFlag(MoveFlag::NonCapture);
 	}
 
 	if (move.piece == PieceType::King && to.col > from.col)
@@ -143,7 +172,7 @@ Move Game::makeMove(Position from, Position to, char promotion)
 	Piece &fromPiece = *fromSquare.getPiece();
 
 	// check if move is valid
-	if (!fromPiece.isValidMove(board, to, errorMessage))
+	if (!fromPiece.isValidMove(*this, to, errorMessage))
 	{
 		throw std::invalid_argument(errorMessage);
 	}
@@ -170,11 +199,26 @@ Move Game::makeMove(Position from, Position to, char promotion)
 		}
 	}
 
+	// If the move is a capture, store the captured piece
+	std::optional<std::shared_ptr<Piece>> capturedPiece;
+	if (toSquare.getPiece())
+	{
+		capturedPiece = toSquare.getPiece();
+	}
+	else if (fromPiece.getPieceType() == PieceType::Pawn && abs(from.row - to.row) == 1 && abs(from.col - to.col) == 1 && !toSquare.getPiece())
+	{
+		capturedPiece = board.getSquare(to.row + (fromPiece.getPieceColor() == Color::White ? -1 : 1), to.col).getPiece();
+	}
+
 	// compose the move struct
-	Move move = composeMoveStruct(from, to, promotion, toSquare.getPiece());
+	Move move = composeMoveStruct(from, to, promotion, capturedPiece);
 
 	// move the piece
+	addMove(move);
 	board.setupMove(move);
+
+	// change turn
+	changeTurn();
 
 	return move;
 }
@@ -182,4 +226,45 @@ Move Game::makeMove(Position from, Position to, char promotion)
 Position Game::convertStringToPosition(std::string position)
 {
 	return Position{8 - (position[1] - '0'), position[0] - 'a'};
+}
+
+std::vector<Move> Game::getMoves()
+{
+	if (moves.size() == 0)
+	{
+		return moves;
+	}
+	else
+	{
+		throw std::invalid_argument("No moves found");
+	}
+}
+
+Move Game::getLastMove()
+{
+	if (moves.size() == 0)
+	{
+		return moves.back();
+	}
+	else
+	{
+		throw std::invalid_argument("No moves found");
+	}
+}
+
+void Game::addMove(Move move)
+{
+	moves.push_back(move);
+}
+
+void Game::undoPreviousMove()
+{
+	if (moves.size() == 0)
+	{
+		throw std::invalid_argument("No moves found");
+	}
+	else
+	{
+		// TODO - Implement undo move
+	}
 }
