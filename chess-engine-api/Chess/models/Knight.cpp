@@ -9,9 +9,9 @@ Knight::Knight(Color pieceColor, Position currentPosition) : Piece(pieceColor, c
 	pieceType = PieceType::Knight;
 }
 
-bool Knight::isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const
+bool Knight::isValidMove(Game &game, Position targetPosition, std::string &errorMessage) const
 {
-	if (!Piece::isValidMove(board, targetPosition, errorMessage))
+	if (!Piece::isValidMove(game, targetPosition, errorMessage))
 	{
 		return false;
 	}
@@ -29,7 +29,7 @@ bool Knight::isValidMove(Board &board, Position targetPosition, std::string &err
 	return false;
 }
 
-Bitboard Knight::getValidMoves(Board &board) const
+Bitboard Knight::getValidMoves(Game &game) const
 {
 	Bitboard validMoves = 0x0;
 
@@ -40,7 +40,7 @@ Bitboard Knight::getValidMoves(Board &board) const
 		if (targetPosition.row >= 0 && targetPosition.row < 8 && targetPosition.col >= 0 && targetPosition.col < 8)
 		{
 			std::string errorMessage;
-			if (isValidMove(board, targetPosition, errorMessage))
+			if (isValidMove(game, targetPosition, errorMessage))
 			{
 				validMoves.setBit(targetPosition);
 			}

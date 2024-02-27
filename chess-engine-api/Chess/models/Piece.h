@@ -6,6 +6,7 @@
 #include "../enums/Color.h"
 #include "../structs/Position.h"
 #include "Bitboard.h"
+#include "Game.h"
 
 class Board;
 
@@ -23,9 +24,9 @@ public:
 
 	Piece(const Piece &piece) noexcept;
 
-	virtual bool isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const;
+	virtual bool isValidMove(Game &game, Position targetPosition, std::string &errorMessage) const;
 
-	virtual Bitboard getValidMoves(Board &board, int (&directions)[4][2]) const;
+	virtual Bitboard getValidMoves(Game &game, int (&directions)[4][2]) const;
 
 	bool getHasMoved() const;
 

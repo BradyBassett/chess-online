@@ -48,9 +48,9 @@ King::King(Color pieceColor, Position currentPosition) : Piece(pieceColor, curre
 	pieceType = PieceType::King;
 }
 
-bool King::isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const
+bool King::isValidMove(Game &game, Position targetPosition, std::string &errorMessage) const
 {
-	if (!Piece::isValidMove(board, targetPosition, errorMessage))
+	if (!Piece::isValidMove(game, targetPosition, errorMessage))
 	{
 		return false;
 	}
@@ -59,7 +59,7 @@ bool King::isValidMove(Board &board, Position targetPosition, std::string &error
 	if ((targetPosition.col == 2 && targetPosition.row == currentPosition.row) ||
 		(targetPosition.col == 6 && targetPosition.row == currentPosition.row))
 	{
-		return getIsValidCastle(board, targetPosition, errorMessage);
+		return getIsValidCastle(game.getBoard(), targetPosition, errorMessage);
 		// Otherwise, the king can only move one square in any direction
 	}
 	else
@@ -78,7 +78,7 @@ bool King::isValidMove(Board &board, Position targetPosition, std::string &error
 	}
 }
 
-Bitboard King::getValidMoves(Board &board) const
+Bitboard King::getValidMoves(Game &game) const
 {
 	Bitboard validMoves = 0x0;
 
@@ -89,7 +89,7 @@ Bitboard King::getValidMoves(Board &board) const
 		if (targetPosition.row >= 0 && targetPosition.row < 8 && targetPosition.col >= 0 && targetPosition.col < 8)
 		{
 			std::string errorMessage;
-			if (isValidMove(board, targetPosition, errorMessage))
+			if (isValidMove(game, targetPosition, errorMessage))
 			{
 				validMoves.setBit(targetPosition);
 			}

@@ -11,9 +11,9 @@ private:
 public:
 	Knight(Color pieceColor, Position currentPosition);
 
-	bool isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const;
+	bool isValidMove(Game &game, Position targetPosition, std::string &errorMessage) const;
 
-	Bitboard getValidMoves(Board &board) const;
+	Bitboard getValidMoves(Game &game) const;
 };
 
 #endif

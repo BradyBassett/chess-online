@@ -20,7 +20,7 @@ Piece::Piece(const Piece &piece) noexcept
 {
 }
 
-bool Piece::isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const
+bool Piece::isValidMove(Game &game, Position targetPosition, std::string &errorMessage) const
 {
 	// if target square is same as current square return false
 	if (targetPosition.row == currentPosition.row && targetPosition.col == currentPosition.col)
@@ -30,7 +30,7 @@ bool Piece::isValidMove(Board &board, Position targetPosition, std::string &erro
 	}
 
 	// if target square contains a piece of the same color return false
-	Square &targetSquare = board.getSquare(targetPosition.row, targetPosition.col);
+	Square &targetSquare = game.getBoard().getSquare(targetPosition.row, targetPosition.col);
 	if (targetSquare.getPiece() != nullptr && targetSquare.getPiece()->getPieceColor() == pieceColor)
 	{
 		errorMessage = "Invalid move - Piece cannot capture a piece of the same color";
@@ -40,7 +40,7 @@ bool Piece::isValidMove(Board &board, Position targetPosition, std::string &erro
 	return true;
 }
 
-Bitboard Piece::getValidMoves(Board &board, int (&directions)[4][2]) const
+Bitboard Piece::getValidMoves(Game &game, int (&directions)[4][2]) const
 {
 	Bitboard validMoves = 0x0;
 
@@ -50,7 +50,7 @@ Bitboard Piece::getValidMoves(Board &board, int (&directions)[4][2]) const
 		{
 			Position targetPosition = {x, y};
 			std::string errorMessage;
-			if (isValidMove(board, targetPosition, errorMessage))
+			if (isValidMove(game, targetPosition, errorMessage))
 			{
 				validMoves.setBit(targetPosition);
 			}
