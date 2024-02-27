@@ -4,10 +4,13 @@
 #include "../enums/Color.h"
 #include "../structs/Position.h"
 #include "../structs/Move.h"
+#include "Piece.h"
 #include "Board.h"
 #include <string>
-#include "Piece.h"
 #include <optional>
+#include <vector>
+
+class Board;
 
 class Game
 {
