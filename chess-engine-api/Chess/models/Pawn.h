@@ -2,6 +2,7 @@
 #define PAWN_H
 
 #include "Piece.h"
+#include "Game.h"
 
 class Pawn : virtual public Piece
 {

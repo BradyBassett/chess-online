@@ -2,6 +2,7 @@
 #define DIAGONALPIECE_H
 
 #include "Piece.h"
+#include "Game.h"
 
 class DiagonalPiece : virtual public Piece
 {

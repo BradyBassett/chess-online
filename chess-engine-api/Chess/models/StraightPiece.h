@@ -2,6 +2,7 @@
 #define STRAIGHTPIECE_H
 
 #include "Piece.h"
+#include "Game.h"
 
 class StraightPiece : virtual public Piece
 {
