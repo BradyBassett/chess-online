@@ -205,6 +205,16 @@ void Board::setupMove(Move move)
 		}
 	}
 
+	// If the move is an en passant move, remove the captured pawn
+	if (move.flags.test(static_cast<int>(MoveFlag::EnPassant)))
+	{
+		// remove from board and bitboard
+		Square &capturedPawnSquare = getSquare(move.from.row, move.to.col);
+		capturedPawnSquare.setPiece(nullptr);
+		Bitboard &capturedPawnBitboard = getBitboard(piece->getPieceColor() == Color::White ? Color::Black : Color::White, PieceType::Pawn);
+		capturedPawnBitboard.clearBit(capturedPawnSquare.getPosition());
+	}
+
 	movePiece(fromSquare, toSquare, piece);
 }
 
