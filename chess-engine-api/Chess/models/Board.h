@@ -14,7 +14,7 @@ class Board
 private:
 	std::vector<std::vector<Square>> squares;
 	std::vector<std::shared_ptr<Rook>> rooks;
-	Bitboard bitboards[2][6]; // [color][pieceType] = [white, black][pawns, knights, bishops, rooks, queens, king
+	Bitboard bitboards[2][6]; // [color][pieceType] = [white, black][pawns, knights, bishops, rooks, queens, king]
 
 	bool isDigitFrom1To8(char c);
 
