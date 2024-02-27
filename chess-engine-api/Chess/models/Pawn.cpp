@@ -43,7 +43,6 @@ bool Pawn::isValidMove(Game &game, Position targetPosition, std::string &errorMe
 	// if piece is on en passant eligible row
 	// if last move was a pawn move of 2 squares that landed next to this pawn
 	// then this pawn can capture the other pawn en passant
-
 	int enPassantEligibleRow = pieceColor == Color::White ? 3 : 4;
 	Move lastMove = game.getLastMove();
 
@@ -55,6 +54,7 @@ bool Pawn::isValidMove(Game &game, Position targetPosition, std::string &errorMe
 			return false;
 		}
 	}
+
 	return true;
 }
 
@@ -90,6 +90,8 @@ Bitboard Pawn::getValidMoves(Game &game) const
 			}
 		}
 	}
+
+	return validMoves;
 }
 
 bool Pawn::canPromote(Position targetPosition) const
