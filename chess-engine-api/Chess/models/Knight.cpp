@@ -2,7 +2,7 @@
 #include "Square.h"
 #include "../structs/Position.h"
 
-static const Position moves[8] = {{2, 1}, {1, 2}, {-1, 2}, {-2, 1}, {-2, -1}, {-1, -2}, {1, -2}, {2, -1}};
+const Position Knight::moves[8] = {{2, 1}, {1, 2}, {-1, 2}, {-2, 1}, {-2, -1}, {-1, -2}, {1, -2}, {2, -1}};
 
 Knight::Knight(Color pieceColor, Position currentPosition) : Piece(pieceColor, currentPosition)
 {
