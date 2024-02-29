@@ -24,7 +24,7 @@ private:
 
 	void initializeStartingPosition(std::string fenPosition);
 
-	void initializeBitboards();
+	void initializeBitboards(std::string fenPosition);
 
 public:
 	Board(std::string fenPosition);

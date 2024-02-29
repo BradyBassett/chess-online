@@ -141,7 +141,7 @@ void Board::initializeStartingPosition(std::string fenPosition)
 	}
 }
 
-void Board::initializeBitboards()
+void Board::initializeBitboards(std::string fenPosition)
 {
 	// TODO - dynamically set bitboards based on fen position
 	bitboards[0][0].setValue(0xff000000000000);	  // hexidecimal representation of white pawns in starting position
@@ -162,7 +162,7 @@ void Board::initializeBitboards()
 Board::Board(std::string fenPosition)
 {
 	initializeStartingPosition(fenPosition);
-	initializeBitboards();
+	initializeBitboards(fenPosition);
 }
 
 Square &Board::getSquare(int rowIndex, int colIndex)
