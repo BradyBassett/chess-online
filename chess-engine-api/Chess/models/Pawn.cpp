@@ -40,18 +40,22 @@ bool Pawn::isValidMove(Game &game, Position targetPosition, std::string &errorMe
 		}
 	}
 
-	// if piece is on en passant eligible row
-	// if last move was a pawn move of 2 squares that landed next to this pawn
-	// then this pawn can capture the other pawn en passant
-	int enPassantEligibleRow = pieceColor == Color::White ? 3 : 4;
-	Move lastMove = game.getLastMove();
-
-	if (currentPosition.row == enPassantEligibleRow)
+	// if there has been at least one move
+	if (game.getMoves().size() > 0)
 	{
-		if (!(lastMove.hasFlag(MoveFlag::PawnPush) && (lastMove.to.col == currentPosition.col + 1 || lastMove.to.col == currentPosition.col - 1)))
+		// if piece is on en passant eligible row
+		// if last move was a pawn move of 2 squares that landed next to this pawn
+		// then this pawn can capture the other pawn en passant
+		int enPassantEligibleRow = pieceColor == Color::White ? 3 : 4;
+		Move lastMove = game.getLastMove();
+
+		if (currentPosition.row == enPassantEligibleRow)
 		{
-			errorMessage = "Invalid move - Pawn can only capture en passant if the opponents move was a pawn move of 2 squares that landed next to this pawn";
-			return false;
+			if (!(lastMove.hasFlag(MoveFlag::PawnPush) && (lastMove.to.col == currentPosition.col + 1 || lastMove.to.col == currentPosition.col - 1)))
+			{
+				errorMessage = "Invalid move - Pawn can only capture en passant if the opponents move was a pawn move of 2 squares that landed next to this pawn";
+				return false;
+			}
 		}
 	}
 
