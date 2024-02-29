@@ -6,19 +6,20 @@
 #include "Bishop.h"
 #include "Knight.h"
 
-Game::Game(std::string fenPosition) : board(fenPosition)
+Game::Game(std::string fenString) : board(fenString) // FIXME - seperate fenString into fen position and the rest
 {
-	turn = Color::White;
+	activeColor = Color::White;
+	enPassantTargetSquare; // FIXME - set the correct square
 }
 
-Color Game::getTurn()
+Color Game::getActiveColor()
 {
-	return turn;
+	return activeColor;
 }
 
-void Game::changeTurn()
+void Game::switchActiveColor()
 {
-	turn = (turn == Color::White) ? Color::Black : Color::White;
+	activeColor = (activeColor == Color::White) ? Color::Black : Color::White;
 }
 
 Board &Game::getBoard()
@@ -105,7 +106,7 @@ PieceType Game::charToPieceType(char piece)
 Move Game::composeMoveStruct(Position from, Position to, char promotion, std::optional<std::shared_ptr<Piece>> capturedPiece)
 {
 	Move move;
-	move.color = turn;
+	move.color = activeColor;
 	move.from = from;
 	move.to = to;
 	move.piece = board.getSquare(from.row, from.col).getPiece()->getPieceType();
@@ -129,7 +130,7 @@ Move Game::composeMoveStruct(Position from, Position to, char promotion, std::op
 		move.promotion = charToPieceType(promotion);
 	}
 
-	if (capturedPiece.value() && capturedPiece.value()->getPieceColor() != turn)
+	if (capturedPiece.has_value() && capturedPiece.value()->getPieceColor() != activeColor)
 	{
 		if (move.piece == PieceType::Pawn && abs(from.row - to.row) == 1 && abs(from.col - to.col) == 1 && !board.getSquare(to.row, to.col).getPiece())
 		{
@@ -158,7 +159,7 @@ Move Game::composeMoveStruct(Position from, Position to, char promotion, std::op
 	return move;
 }
 
-Move Game::makeMove(Position from, Position to, char promotion)
+Move Game::attemptMove(Position from, Position to, char promotion)
 {
 	std::string errorMessage = "Invalid Move";
 	Square &fromSquare = board.getSquare(from.row, from.col);
@@ -171,6 +172,12 @@ Move Game::makeMove(Position from, Position to, char promotion)
 
 	Piece &fromPiece = *fromSquare.getPiece();
 
+	// check if it's the right turn
+	if (fromPiece.getPieceColor() != activeColor)
+	{
+		throw std::invalid_argument("Invalid move - You can only move your own pieces");
+	}
+
 	// check if move is valid
 	if (!fromPiece.isValidMove(*this, to, errorMessage))
 	{
@@ -178,6 +185,50 @@ Move Game::makeMove(Position from, Position to, char promotion)
 	}
 
 	// check if move is a promotion
+	handlePawnPromotion(fromPiece, fromSquare, to, from, promotion);
+
+	// If the move is a capture, store the captured piece
+	std::optional<std::shared_ptr<Piece>> capturedPiece = getCapturedPiece(toSquare, from, to, fromPiece);
+
+	// compose the move struct
+	Move move = composeMoveStruct(from, to, promotion, capturedPiece);
+
+	// add the move to the list of moves
+	addMove(move);
+
+	// update castling availability if the move was the first move of a rook or the king
+	updateCastlingAvailability(fromPiece);
+
+	// move the piece
+	board.setupMove(move);
+
+	// update en passant target square if the move was a double pawn push
+	updateEnPassantTargetSquare(fromPiece, from, to);
+
+	// increment half move clock if the move is not a pawn move or a capture
+	if (fromPiece.getPieceType() != PieceType::Pawn && !capturedPiece.has_value())
+	{
+		incrementHalfMoveClock();
+	}
+	else
+	{
+		resetHalfMoveClock();
+	}
+
+	// increment full move number if the move was made by black
+	if (activeColor == Color::Black)
+	{
+		incrementFullMoveNumber();
+	}
+
+	// change turn
+	switchActiveColor();
+
+	return move;
+}
+
+void Game::handlePawnPromotion(Piece &fromPiece, Square &fromSquare, Position to, Position from, char promotion)
+{
 	if (fromPiece.getPieceType() == PieceType::Pawn && fromPiece.canPromote(to))
 	{
 		switch (promotion)
@@ -198,29 +249,80 @@ Move Game::makeMove(Position from, Position to, char promotion)
 			throw std::invalid_argument("Invalid move - Promotion required");
 		}
 	}
+}
 
-	// If the move is a capture, store the captured piece
-	std::optional<std::shared_ptr<Piece>> capturedPiece;
+std::optional<std::shared_ptr<Piece>> Game::getCapturedPiece(Square &toSquare, Position from, Position to, Piece &fromPiece)
+{
 	if (toSquare.getPiece())
 	{
-		capturedPiece = toSquare.getPiece();
+		return toSquare.getPiece();
 	}
 	else if (fromPiece.getPieceType() == PieceType::Pawn && abs(from.row - to.row) == 1 && abs(from.col - to.col) == 1 && !toSquare.getPiece())
 	{
-		capturedPiece = board.getSquare(to.row + (fromPiece.getPieceColor() == Color::White ? -1 : 1), to.col).getPiece();
+		return board.getSquare(to.row + (fromPiece.getPieceColor() == Color::White ? 1 : -1), to.col).getPiece();
 	}
+	else
+	{
+		return std::nullopt;
+	}
+}
 
-	// compose the move struct
-	Move move = composeMoveStruct(from, to, promotion, capturedPiece);
+void Game::updateCastlingAvailability(Piece &fromPiece)
+{
+	if (!fromPiece.getHasMoved())
+	{
+		if (fromPiece.getPieceType() == PieceType::King)
+		{
+			if (fromPiece.getPieceColor() == Color::White)
+			{
+				whiteCanCastleKingside = false;
+				whiteCanCastleQueenside = false;
+			}
+			else
+			{
+				blackCanCastleKingside = false;
+				blackCanCastleQueenside = false;
+			}
+		}
+		else if (fromPiece.getPieceType() == PieceType::Rook)
+		{
+			Rook &rook = dynamic_cast<Rook &>(fromPiece);
+			if (fromPiece.getPieceColor() == Color::White)
+			{
+				if (rook.getSide() == Side::KingSide)
+				{
+					whiteCanCastleKingside = false;
+				}
+				else
+				{
+					whiteCanCastleQueenside = false;
+				}
+			}
+			else
+			{
+				if (rook.getSide() == Side::KingSide)
+				{
+					blackCanCastleKingside = false;
+				}
+				else
+				{
+					blackCanCastleQueenside = false;
+				}
+			}
+		}
+	}
+}
 
-	// move the piece
-	addMove(move);
-	board.setupMove(move);
-
-	// change turn
-	changeTurn();
-
-	return move;
+void Game::updateEnPassantTargetSquare(Piece &fromPiece, Position from, Position to)
+{
+	if (fromPiece.getPieceType() == PieceType::Pawn && abs(from.row - to.row) == 2)
+	{
+		enPassantTargetSquare = &board.getSquare((from.row + to.row) / 2, from.col);
+	}
+	else
+	{
+		enPassantTargetSquare = nullptr;
+	}
 }
 
 Position Game::convertStringToPosition(std::string position)
@@ -230,26 +332,12 @@ Position Game::convertStringToPosition(std::string position)
 
 std::vector<Move> Game::getMoves()
 {
-	if (moves.size() == 0)
-	{
-		return moves;
-	}
-	else
-	{
-		throw std::invalid_argument("No moves found");
-	}
+	return moves;
 }
 
 Move Game::getLastMove()
 {
-	if (moves.size() == 0)
-	{
-		return moves.back();
-	}
-	else
-	{
-		throw std::invalid_argument("No moves found");
-	}
+	return moves.back();
 }
 
 void Game::addMove(Move move)
@@ -267,4 +355,29 @@ void Game::undoPreviousMove()
 	{
 		// TODO - Implement undo move
 	}
+}
+
+uint8_t Game::getHalfMoveClock()
+{
+	return halfMoveClock;
+}
+
+uint8_t Game::getFullMoveNumber()
+{
+	return fullMoveNumber;
+}
+
+void Game::incrementHalfMoveClock()
+{
+	halfMoveClock++;
+}
+
+void Game::resetHalfMoveClock()
+{
+	halfMoveClock = 0;
+}
+
+void Game::incrementFullMoveNumber()
+{
+	fullMoveNumber++;
 }
