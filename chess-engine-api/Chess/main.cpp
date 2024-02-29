@@ -6,9 +6,34 @@
 
 int main();
 
+std::vector<std::string> splitFenString(const std::string &fenString)
+{
+	std::vector<std::string> parts;
+	std::istringstream iss(fenString);
+	std::string part;
+	while (std::getline(iss, part, ' '))
+	{
+		parts.push_back(part);
+	}
+
+	return parts;
+}
+
 int main()
 {
-	Game game = Game();
+	std::string fenString = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+	std::cout << "Enter Fen String (or press enter for default): ";
+	std::string input;
+	std::getline(std::cin, input);
+	if (!input.empty())
+	{
+		fenString = input;
+	}
+
+	// split the fen string into its parts
+	std::vector<std::string> fenParts = splitFenString(fenString);
+
+	Game game = Game(fenParts);
 
 	while (true)
 	{
