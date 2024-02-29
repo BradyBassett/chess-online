@@ -1,15 +1,54 @@
+#include <stdexcept>
+#include <sstream>
 #include "Game.h"
 #include "../enums/PieceType.h"
-#include <stdexcept>
 #include "Queen.h"
 #include "Rook.h"
 #include "Bishop.h"
 #include "Knight.h"
 
-Game::Game(std::string fenString) : board(fenString) // FIXME - seperate fenString into fen position and the rest
+Game::Game(std::vector<std::string> fenParts) : board(fenParts[0])
 {
-	activeColor = Color::White;
-	enPassantTargetSquare; // FIXME - set the correct square
+	parseActiveColor(fenParts[1]);
+	parseCastlingAvailability(fenParts[2]);
+	parseEnPassantTarget(fenParts[3]);
+	parseHalfmoveClock(fenParts[4]);
+	parseFullmoveNumber(fenParts[5]);
+}
+
+void Game::parseActiveColor(const std::string &color)
+{
+	activeColor = (color == "w") ? Color::White : Color::Black;
+}
+
+void Game::parseCastlingAvailability(const std::string &castling)
+{
+	whiteCanCastleKingside = castling.find('K') != std::string::npos;
+	whiteCanCastleQueenside = castling.find('Q') != std::string::npos;
+	blackCanCastleKingside = castling.find('k') != std::string::npos;
+	blackCanCastleQueenside = castling.find('q') != std::string::npos;
+}
+
+void Game::parseEnPassantTarget(const std::string &enPassant)
+{
+	if (enPassant == "-")
+	{
+		enPassantTargetSquare = nullptr;
+	}
+	else
+	{
+		enPassantTargetSquare = &board.getSquare(8 - (enPassant[1] - '0'), enPassant[0] - 'a');
+	}
+}
+
+void Game::parseHalfmoveClock(const std::string &halfmove)
+{
+	halfMoveClock = std::stoi(halfmove);
+}
+
+void Game::parseFullmoveNumber(const std::string &fullmove)
+{
+	fullMoveNumber = std::stoi(fullmove);
 }
 
 Color Game::getActiveColor()

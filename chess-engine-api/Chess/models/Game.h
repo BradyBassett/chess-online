@@ -17,7 +17,7 @@ class Game
 private:
 	Color activeColor;
 	Board board;
-	std::vector<Move> moves; // TODO - fill this with moves from FEN string
+	std::vector<Move> moves;
 	uint8_t halfMoveClock;
 	uint8_t fullMoveNumber;
 	Square *enPassantTargetSquare;
@@ -26,6 +26,20 @@ private:
 	bool blackCanCastleKingside;
 	bool blackCanCastleQueenside;
 
+	std::vector<std::string> splitFenString(const std::string &fenString);
+
+	void parsePiecePositions(const std::string &positions);
+
+	void parseActiveColor(const std::string &color);
+
+	void parseCastlingAvailability(const std::string &castling);
+
+	void parseEnPassantTarget(const std::string &enPassant);
+
+	void parseHalfmoveClock(const std::string &halfmove);
+
+	void parseFullmoveNumber(const std::string &fullmove);
+
 	char pieceToAscii(std::shared_ptr<Piece> piece);
 
 	PieceType charToPieceType(char piece);
@@ -33,7 +47,7 @@ private:
 	Move composeMoveStruct(Position from, Position to, char promotion, std::optional<std::shared_ptr<Piece>> capturedPiece);
 
 public:
-	Game(std::string fenString = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+	Game(std::vector<std::string> fenParts);
 
 	Color getActiveColor();
 
