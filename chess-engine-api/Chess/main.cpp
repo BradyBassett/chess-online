@@ -16,7 +16,7 @@ int main()
 
 		std::string line, from, to, promotion;
 
-		std::cout << "Enter move: ";
+		std::cout << (game.getActiveColor() == Color::White ? "White" : "Black") << " - Enter move: ";
 		std::getline(std::cin, line);
 
 		std::istringstream iss(line);
@@ -33,7 +33,7 @@ int main()
 		try
 		{
 			std::system("clear");
-			game.makeMove(fromPosition, toPosition, promotion.c_str()[0]);
+			game.attemptMove(fromPosition, toPosition, promotion.c_str()[0]);
 		}
 		catch (const std::exception &e)
 		{
