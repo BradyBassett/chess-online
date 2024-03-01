@@ -37,7 +37,8 @@ void Game::parseEnPassantTarget(const std::string &enPassant)
 	}
 	else
 	{
-		enPassantTargetSquare = &board.getSquare(8 - (enPassant[1] - '0'), enPassant[0] - 'a');
+		Position pos = convertStringToPosition(enPassant);
+		enPassantTargetSquare = &board.getSquare(pos.row, pos.col);
 	}
 }
 
@@ -306,6 +307,7 @@ std::optional<std::shared_ptr<Piece>> Game::getCapturedPiece(Square &toSquare, P
 	}
 }
 
+// TODO - Actually use the castling availability in the logic for checking a valid castle
 void Game::updateCastlingAvailability(Piece &fromPiece)
 {
 	if (!fromPiece.getHasMoved())
@@ -352,6 +354,7 @@ void Game::updateCastlingAvailability(Piece &fromPiece)
 	}
 }
 
+// TODO - See if it is possible to use the enpassant target square in the logic for en passant to maybe make it more efficient idk
 void Game::updateEnPassantTargetSquare(Piece &fromPiece, Position from, Position to)
 {
 	if (fromPiece.getPieceType() == PieceType::Pawn && abs(from.row - to.row) == 2)
