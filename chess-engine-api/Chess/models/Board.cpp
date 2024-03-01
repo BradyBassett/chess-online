@@ -17,6 +17,9 @@ bool Board::isDigitFrom1To8(char c)
 	return std::regex_match(s, pattern);
 }
 
+// TODO - I need to dynamically set the bits for each piece's bitboard when parsing the pieces from the fen position
+// Whenever a piece appears I determine its color and type enums, from that I can access the specific bitboard by using the enum values as the indexes
+
 std::vector<Square> Board::parseFenPosition(std::string &fenPosition)
 {
 	std::vector<Square> squares;
@@ -143,20 +146,15 @@ void Board::initializeStartingPosition(std::string fenPosition)
 
 void Board::initializeBitboards(std::string fenPosition)
 {
-	// TODO - dynamically set bitboards based on fen position
-	bitboards[0][0].setValue(0xff000000000000);	  // hexidecimal representation of white pawns in starting position
-	bitboards[0][1].setValue(0x4200000000000000); // hexidecimal representation of white knights in starting position
-	bitboards[0][2].setValue(0x2400000000000000); // hexidecimal representation of white bishops in starting position
-	bitboards[0][3].setValue(0x8100000000000000); // hexidecimal representation of white rooks in starting position
-	bitboards[0][4].setValue(0x800000000000000);  // hexidecimal representation of white queens in starting position
-	bitboards[0][5].setValue(0x1000000000000000); // hexidecimal representation of white king in starting position
-
-	bitboards[1][0].setValue(0xff00); // hexidecimal representation of black pawns in starting position
-	bitboards[1][1].setValue(0x42);	  // hexidecimal representation of black knights in starting position
-	bitboards[1][2].setValue(0x24);	  // hexidecimal representation of black bishops in starting position
-	bitboards[1][3].setValue(0x81);	  // hexidecimal representation of black rooks in starting position
-	bitboards[1][4].setValue(0x8);	  // hexidecimal representation of black queens in starting position
-	bitboards[1][5].setValue(0x10);	  // hexidecimal representation of black king in starting position
+	// initialize bitboards to 0
+	// TODO - set the actual bitboard values in the parseFenPosition method
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 6; j++)
+		{
+			bitboards[i][j].setValue(0ULL);
+		}
+	}
 }
 
 Board::Board(std::string fenPosition)
@@ -165,6 +163,7 @@ Board::Board(std::string fenPosition)
 	initializeBitboards(fenPosition);
 }
 
+// TODO - Replace the parameters with a single Position object
 Square &Board::getSquare(int rowIndex, int colIndex)
 {
 	uint8_t boardSize = squares.size();

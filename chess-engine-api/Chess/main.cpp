@@ -21,6 +21,22 @@ std::vector<std::string> splitFenString(const std::string &fenString)
 
 int main()
 {
+	// TODO - Add a way to load a game from a PGN file and eventually save games to PGN
+	// TODO - Implement Evaluation function
+	// TODO - Implement Search function
+	// TODO - Implement Transposition table
+	// TODO - Implement Opening book
+	// TODO - Implement Endgame tablebases
+	// TODO - Add a way to play against the engine
+	// TODO - Add tests for everything - DO THIS BEFORE STARTING THE ENGINE FOR THE LOVE OF GOD
+	// TODO - Add a way to play the engine against itself
+	// TODO - Add a way to play the engine against another engine
+	// TODO - Add a way to play the engine against its older versions
+	// TODO - Ad Checkmate, Stalemate, and Draw detection
+	// TODO - Add console arguments for undoing moves and specifying preferred color
+	// TODO - Implement a way to communicate with the web app
+	// TODO - Implement a way to communicate with UCI
+
 	std::string fenString = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 	std::cout << "Enter Fen String (or press enter for default): ";
 	std::string input;

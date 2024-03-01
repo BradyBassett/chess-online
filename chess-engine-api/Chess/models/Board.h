@@ -15,6 +15,9 @@ private:
 	std::vector<std::vector<Square>> squares;
 	std::vector<std::shared_ptr<Rook>> rooks;
 	Bitboard bitboards[2][6]; // [color][pieceType] = [white, black][pawns, knights, bishops, rooks, queens, king]
+	// TODO - Add methods to generate attack tables for each piece using something called incremental updates after the following
+	// TODO - Conditions are met: 1. A piece is moved 2. A piece is captured 3. A piece is Promoted 4. On initialization 5. On castling
+	// TODO - 6. on en passant (Research incremental updates)
 
 	bool isDigitFrom1To8(char c);
 
