@@ -173,6 +173,16 @@ Square &Board::getSquare(int rowIndex, int colIndex)
 	return squares[rowIndex][colIndex];
 }
 
+Square &Board::getSquare(Position position)
+{
+	uint8_t boardSize = squares.size();
+	if (position.row < 0 || position.row >= boardSize || position.col < 0 || position.col >= boardSize)
+	{
+		throw std::out_of_range("Square coordinates are out of range");
+	}
+	return squares[position.row][position.col];
+}
+
 std::vector<std::vector<Square>> Board::getSquares()
 {
 	return squares;
@@ -180,8 +190,8 @@ std::vector<std::vector<Square>> Board::getSquares()
 
 void Board::setupMove(Move move)
 {
-	Square &fromSquare = getSquare(move.from.row, move.from.col);
-	Square &toSquare = getSquare(move.to.row, move.to.col);
+	Square &fromSquare = getSquare(move.from);
+	Square &toSquare = getSquare(move.to);
 	std::shared_ptr<Piece> piece = fromSquare.getPiece();
 
 	// If the move is a castling move, move the rook as well

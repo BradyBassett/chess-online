@@ -30,7 +30,7 @@ bool Piece::isValidMove(Game &game, Position targetPosition, std::string &errorM
 	}
 
 	// if target square contains a piece of the same color return false
-	Square &targetSquare = game.getBoard().getSquare(targetPosition.row, targetPosition.col);
+	Square &targetSquare = game.getBoard().getSquare(targetPosition);
 	if (targetSquare.getPiece() != nullptr && targetSquare.getPiece()->getPieceColor() == pieceColor)
 	{
 		errorMessage = "Invalid move - Piece cannot capture a piece of the same color";

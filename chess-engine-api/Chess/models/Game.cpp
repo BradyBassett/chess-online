@@ -38,7 +38,7 @@ void Game::parseEnPassantTarget(const std::string &enPassant)
 	else
 	{
 		Position pos = convertStringToPosition(enPassant);
-		enPassantTargetSquare = &board.getSquare(pos.row, pos.col);
+		enPassantTargetSquare = &board.getSquare(pos);
 	}
 }
 
@@ -149,7 +149,7 @@ Move Game::composeMoveStruct(Position from, Position to, char promotion, std::op
 	move.color = activeColor;
 	move.from = from;
 	move.to = to;
-	move.piece = board.getSquare(from.row, from.col).getPiece()->getPieceType();
+	move.piece = board.getSquare(from).getPiece()->getPieceType();
 
 	if (move.piece == PieceType::Pawn)
 	{
@@ -172,7 +172,7 @@ Move Game::composeMoveStruct(Position from, Position to, char promotion, std::op
 
 	if (capturedPiece.has_value() && capturedPiece.value()->getPieceColor() != activeColor)
 	{
-		if (move.piece == PieceType::Pawn && abs(from.row - to.row) == 1 && abs(from.col - to.col) == 1 && !board.getSquare(to.row, to.col).getPiece())
+		if (move.piece == PieceType::Pawn && abs(from.row - to.row) == 1 && abs(from.col - to.col) == 1 && !board.getSquare(to).getPiece())
 		{
 			move.setFlag(MoveFlag::EnPassant);
 		}
@@ -202,8 +202,8 @@ Move Game::composeMoveStruct(Position from, Position to, char promotion, std::op
 Move Game::attemptMove(Position from, Position to, char promotion)
 {
 	std::string errorMessage = "Invalid Move";
-	Square &fromSquare = board.getSquare(from.row, from.col);
-	Square &toSquare = board.getSquare(to.row, to.col);
+	Square &fromSquare = board.getSquare(from);
+	Square &toSquare = board.getSquare(to);
 
 	if (!fromSquare.getPiece())
 	{

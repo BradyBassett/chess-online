@@ -34,6 +34,8 @@ public:
 
 	Square &getSquare(int rowIndex, int colIndex);
 
+	Square &getSquare(Position position);
+
 	std::vector<std::vector<Square>> getSquares();
 
 	void setupMove(Move move);
