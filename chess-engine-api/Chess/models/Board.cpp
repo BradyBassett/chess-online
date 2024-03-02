@@ -147,7 +147,6 @@ void Board::initializeStartingPosition(std::string fenPosition)
 void Board::initializeBitboards(std::string fenPosition)
 {
 	// initialize bitboards to 0
-	// TODO - set the actual bitboard values in the parseFenPosition method
 	for (int i = 0; i < 2; i++)
 	{
 		for (int j = 0; j < 6; j++)

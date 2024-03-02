@@ -32,7 +32,7 @@ int main()
 	// TODO - Add a way to play the engine against itself
 	// TODO - Add a way to play the engine against another engine
 	// TODO - Add a way to play the engine against its older versions
-	// TODO - Ad Checkmate, Stalemate, and Draw detection
+	// TODO - Add Checkmate, Stalemate, and Draw detection
 	// TODO - Add console arguments for undoing moves and specifying preferred color
 	// TODO - Implement a way to communicate with the web app
 	// TODO - Implement a way to communicate with UCI
