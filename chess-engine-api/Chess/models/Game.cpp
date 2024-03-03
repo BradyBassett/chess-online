@@ -423,3 +423,23 @@ void Game::incrementFullMoveNumber()
 {
 	fullMoveNumber++;
 }
+
+bool Game::getWhiteCanCastleKingside()
+{
+	return whiteCanCastleKingside;
+}
+
+bool Game::getWhiteCanCastleQueenside()
+{
+	return whiteCanCastleQueenside;
+}
+
+bool Game::getBlackCanCastleKingside()
+{
+	return blackCanCastleKingside;
+}
+
+bool Game::getBlackCanCastleQueenside()
+{
+	return blackCanCastleQueenside;
+}

@@ -87,6 +87,14 @@ public:
 	void resetHalfMoveClock();
 
 	void incrementFullMoveNumber();
+
+	bool getWhiteCanCastleKingside();
+
+	bool getWhiteCanCastleQueenside();
+
+	bool getBlackCanCastleKingside();
+
+	bool getBlackCanCastleQueenside();
 };
 
 #endif
