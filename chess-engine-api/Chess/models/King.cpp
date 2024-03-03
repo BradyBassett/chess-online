@@ -5,11 +5,17 @@
 
 const Position King::moves[8] = {{1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
 
-bool King::getIsValidCastle(Board &board, Position targetPosition, std::string &errorMessage) const
+bool King::getIsValidCastle(Game &game, Position targetPosition, std::string &errorMessage) const
 {
+	if (!(game.getWhiteCanCastleKingside() || game.getWhiteCanCastleQueenside() || game.getBlackCanCastleKingside() || game.getBlackCanCastleQueenside()))
+	{
+		errorMessage = "Invalid move - No castling rights";
+		return false;
+	}
+
 	// If king is trying to castle queen side get the rook on the queen side and vice versa
 	Side side = targetPosition.col == 2 ? Side::QueenSide : Side::KingSide;
-	std::shared_ptr<Rook> rook = board.getRook(pieceColor, side);
+	std::shared_ptr<Rook> rook = game.getBoard().getRook(pieceColor, side);
 
 	if (hasMoved)
 	{
@@ -31,13 +37,13 @@ bool King::getIsValidCastle(Board &board, Position targetPosition, std::string &
 	int direction = side == Side::QueenSide ? -1 : 1;
 	for (int i = currentPosition.col + direction; i != rook->getCurrentPosition().col; i + direction)
 	{
-		Square &square = board.getSquare(currentPosition.row, i);
+		Square &square = game.getBoard().getSquare(currentPosition.row, i);
 		// If there is a piece between the king and the rook then the king cannot castle
 		if (square.getPiece() != nullptr)
 		{
 			errorMessage = "Invalid move - King cannot castle through other pieces";
 			return false;
-		} // todo - check if the king passes through check
+		} // TODO - check if the king passes through check
 	}
 
 	return true;
@@ -59,7 +65,7 @@ bool King::isValidMove(Game &game, Position targetPosition, std::string &errorMe
 	if ((targetPosition.col == 2 && targetPosition.row == currentPosition.row) ||
 		(targetPosition.col == 6 && targetPosition.row == currentPosition.row))
 	{
-		return getIsValidCastle(game.getBoard(), targetPosition, errorMessage);
+		return getIsValidCastle(game, targetPosition, errorMessage);
 		// Otherwise, the king can only move one square in any direction
 	}
 	else

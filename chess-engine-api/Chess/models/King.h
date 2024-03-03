@@ -9,7 +9,7 @@ class King : virtual public Piece
 private:
 	bool isInCheck = false;
 
-	bool getIsValidCastle(Board &board, Position targetPosition, std::string &errorMessage) const;
+	bool getIsValidCastle(Game &game, Position targetPosition, std::string &errorMessage) const;
 
 	static const Position moves[8];
 
