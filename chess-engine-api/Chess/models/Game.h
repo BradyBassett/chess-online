@@ -98,6 +98,14 @@ public:
 
 	bool getBlackCanCastleQueenside();
 
+	void setWhiteCanCastleKingside(bool value);
+
+	void setWhiteCanCastleQueenside(bool value);
+
+	void setBlackCanCastleKingside(bool value);
+
+	void setBlackCanCastleQueenside(bool value);
+
 	bool getWhiteInCheck();
 
 	bool getBlackInCheck();
@@ -105,6 +113,8 @@ public:
 	void setWhiteInCheck(bool value);
 
 	void setBlackInCheck(bool value);
+
+	bool isKingInCheck(Color color);
 };
 
 #endif

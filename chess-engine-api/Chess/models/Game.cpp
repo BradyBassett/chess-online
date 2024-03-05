@@ -23,10 +23,10 @@ void Game::parseActiveColor(const std::string &color)
 
 void Game::parseCastlingAvailability(const std::string &castling)
 {
-	whiteCanCastleKingside = castling.find('K') != std::string::npos;
-	whiteCanCastleQueenside = castling.find('Q') != std::string::npos;
-	blackCanCastleKingside = castling.find('k') != std::string::npos;
-	blackCanCastleQueenside = castling.find('q') != std::string::npos;
+	setWhiteCanCastleKingside(castling.find('K') != std::string::npos);
+	setWhiteCanCastleQueenside(castling.find('Q') != std::string::npos);
+	setBlackCanCastleKingside(castling.find('k') != std::string::npos);
+	setBlackCanCastleQueenside(castling.find('q') != std::string::npos);
 }
 
 void Game::parseEnPassantTarget(const std::string &enPassant)
@@ -255,10 +255,17 @@ Move Game::attemptMove(Position from, Position to, char promotion)
 		resetHalfMoveClock();
 	}
 
-	// increment full move number if the move was made by black
 	if (activeColor == Color::Black)
 	{
+		// increment full move number if the move was made by black
 		incrementFullMoveNumber();
+		// check if the move put the white king in check
+		setWhiteInCheck(isKingInCheck(Color::White));
+	}
+	else
+	{
+		// check if the move put the black king in check
+		setWhiteInCheck(isKingInCheck(Color::Black));
 	}
 
 	// change turn
@@ -316,13 +323,13 @@ void Game::updateCastlingAvailability(Piece &fromPiece)
 		{
 			if (fromPiece.getPieceColor() == Color::White)
 			{
-				whiteCanCastleKingside = false;
-				whiteCanCastleQueenside = false;
+				setWhiteCanCastleKingside(false);
+				setWhiteCanCastleQueenside(false);
 			}
 			else
 			{
-				blackCanCastleKingside = false;
-				blackCanCastleQueenside = false;
+				setBlackCanCastleKingside(false);
+				setBlackCanCastleQueenside(false);
 			}
 		}
 		else if (fromPiece.getPieceType() == PieceType::Rook)
@@ -332,22 +339,22 @@ void Game::updateCastlingAvailability(Piece &fromPiece)
 			{
 				if (rook.getSide() == Side::KingSide)
 				{
-					whiteCanCastleKingside = false;
+					setWhiteCanCastleKingside(false);
 				}
 				else
 				{
-					whiteCanCastleQueenside = false;
+					setWhiteCanCastleQueenside(false);
 				}
 			}
 			else
 			{
 				if (rook.getSide() == Side::KingSide)
 				{
-					blackCanCastleKingside = false;
+					setBlackCanCastleKingside(false);
 				}
 				else
 				{
-					blackCanCastleQueenside = false;
+					setBlackCanCastleQueenside(false);
 				}
 			}
 		}
@@ -444,6 +451,26 @@ bool Game::getBlackCanCastleQueenside()
 	return blackCanCastleQueenside;
 }
 
+void Game::setWhiteCanCastleKingside(bool value)
+{
+	whiteCanCastleKingside = value;
+}
+
+void Game::setWhiteCanCastleQueenside(bool value)
+{
+	whiteCanCastleQueenside = value;
+}
+
+void Game::setBlackCanCastleKingside(bool value)
+{
+	blackCanCastleKingside = value;
+}
+
+void Game::setBlackCanCastleQueenside(bool value)
+{
+	blackCanCastleQueenside = value;
+}
+
 bool Game::getWhiteInCheck()
 {
 	return whiteInCheck;
@@ -462,4 +489,10 @@ void Game::setWhiteInCheck(bool value)
 void Game::setBlackInCheck(bool value)
 {
 	blackInCheck = value;
+}
+
+bool Game::isKingInCheck(Color color)
+{
+	// TODO - Implement isKingInCheck
+	return false;
 }
