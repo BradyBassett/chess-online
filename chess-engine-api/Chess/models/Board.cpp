@@ -112,6 +112,8 @@ std::vector<Square> Board::parseFenPosition(std::string &fenPosition)
 		{
 			Square square = Square({rowIndex, colIndex});
 			std::shared_ptr<Piece> piece = pieceTypes[c](square);
+			Bitboard &pieceBitboard = getBitboard(piece->getPieceColor(), piece->getPieceType());
+			pieceBitboard.setBit(square.getPosition());
 			square.setPiece(piece);
 			squares.push_back(square);
 			colIndex++;
@@ -158,11 +160,10 @@ void Board::initializeBitboards(std::string fenPosition)
 
 Board::Board(std::string fenPosition)
 {
-	initializeStartingPosition(fenPosition);
 	initializeBitboards(fenPosition);
+	initializeStartingPosition(fenPosition);
 }
 
-// TODO - Replace the parameters with a single Position object
 Square &Board::getSquare(int rowIndex, int colIndex)
 {
 	uint8_t boardSize = squares.size();
