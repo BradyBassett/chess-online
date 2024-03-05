@@ -26,6 +26,8 @@ private:
 	bool whiteCanCastleQueenside;
 	bool blackCanCastleKingside;
 	bool blackCanCastleQueenside;
+	bool whiteInCheck = false;
+	bool blackInCheck = false;
 
 	std::vector<std::string> splitFenString(const std::string &fenString);
 
@@ -95,6 +97,14 @@ public:
 	bool getBlackCanCastleKingside();
 
 	bool getBlackCanCastleQueenside();
+
+	bool getWhiteInCheck();
+
+	bool getBlackInCheck();
+
+	void setWhiteInCheck(bool value);
+
+	void setBlackInCheck(bool value);
 };
 
 #endif

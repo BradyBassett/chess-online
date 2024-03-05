@@ -443,3 +443,23 @@ bool Game::getBlackCanCastleQueenside()
 {
 	return blackCanCastleQueenside;
 }
+
+bool Game::getWhiteInCheck()
+{
+	return whiteInCheck;
+}
+
+bool Game::getBlackInCheck()
+{
+	return blackInCheck;
+}
+
+void Game::setWhiteInCheck(bool value)
+{
+	whiteInCheck = value;
+}
+
+void Game::setBlackInCheck(bool value)
+{
+	blackInCheck = value;
+}
