@@ -68,8 +68,8 @@ int main()
 			break;
 		}
 
-		Position fromPosition = game.convertStringToPosition(from);
-		Position toPosition = game.convertStringToPosition(to);
+		Position fromPosition = game.getBoard().convertStringToPosition(from);
+		Position toPosition = game.getBoard().convertStringToPosition(to);
 
 		try
 		{
