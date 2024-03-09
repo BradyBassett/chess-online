@@ -5,9 +5,9 @@
 
 const Position King::moves[8] = {{1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
 
-bool King::getIsValidCastle(Game &game, Position targetPosition, std::string &errorMessage) const
+bool King::getIsValidCastle(Board &board, Position targetPosition, std::string &errorMessage) const
 {
-	if (!(game.getWhiteCanCastleKingside() || game.getWhiteCanCastleQueenside() || game.getBlackCanCastleKingside() || game.getBlackCanCastleQueenside()))
+	if (!(board.getWhiteCanCastleKingside() || board.getWhiteCanCastleQueenside() || board.getBlackCanCastleKingside() || board.getBlackCanCastleQueenside()))
 	{
 		errorMessage = "Invalid move - No castling rights";
 		return false;
@@ -15,7 +15,7 @@ bool King::getIsValidCastle(Game &game, Position targetPosition, std::string &er
 
 	// If king is trying to castle queen side get the rook on the queen side and vice versa
 	Side side = targetPosition.col == 2 ? Side::QueenSide : Side::KingSide;
-	std::shared_ptr<Rook> rook = game.getBoard().getRook(pieceColor, side);
+	std::shared_ptr<Rook> rook = board.getRook(pieceColor, side);
 
 	if (hasMoved)
 	{
@@ -37,7 +37,7 @@ bool King::getIsValidCastle(Game &game, Position targetPosition, std::string &er
 	int direction = side == Side::QueenSide ? -1 : 1;
 	for (int i = currentPosition.col + direction; i != rook->getCurrentPosition().col; i + direction)
 	{
-		Square &square = game.getBoard().getSquare(currentPosition.row, i);
+		Square &square = board.getSquare(currentPosition.row, i);
 		// If there is a piece between the king and the rook then the king cannot castle
 		if (square.getPiece() != nullptr)
 		{
@@ -54,9 +54,9 @@ King::King(Color pieceColor, Position currentPosition) : Piece(pieceColor, curre
 	pieceType = PieceType::King;
 }
 
-bool King::isValidMove(Game &game, Position targetPosition, std::string &errorMessage) const
+bool King::isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const
 {
-	if (!Piece::isValidMove(game, targetPosition, errorMessage))
+	if (!Piece::isValidMove(board, targetPosition, errorMessage))
 	{
 		return false;
 	}
@@ -65,7 +65,7 @@ bool King::isValidMove(Game &game, Position targetPosition, std::string &errorMe
 	if ((targetPosition.col == 2 && targetPosition.row == currentPosition.row) ||
 		(targetPosition.col == 6 && targetPosition.row == currentPosition.row))
 	{
-		return getIsValidCastle(game, targetPosition, errorMessage);
+		return getIsValidCastle(board, targetPosition, errorMessage);
 		// Otherwise, the king can only move one square in any direction
 	}
 	else
@@ -84,7 +84,7 @@ bool King::isValidMove(Game &game, Position targetPosition, std::string &errorMe
 	}
 }
 
-Bitboard King::getValidMoves(Game &game) const
+Bitboard King::getValidMoves(Board &board) const
 {
 	Bitboard validMoves = 0x0;
 
@@ -95,7 +95,7 @@ Bitboard King::getValidMoves(Game &game) const
 		if (targetPosition.row >= 0 && targetPosition.row < 8 && targetPosition.col >= 0 && targetPosition.col < 8)
 		{
 			std::string errorMessage;
-			if (isValidMove(game, targetPosition, errorMessage))
+			if (isValidMove(board, targetPosition, errorMessage))
 			{
 				validMoves.setBit(targetPosition);
 			}

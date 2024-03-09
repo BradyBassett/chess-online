@@ -31,9 +31,9 @@ bool DiagonalPiece::targetSquareIsDiagonal(Position targetPosition) const
 		   abs(targetPosition.col - currentPosition.col);
 }
 
-bool DiagonalPiece::isValidMove(Game &game, Position targetPosition, std::string &errorMessage) const
+bool DiagonalPiece::isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const
 {
-	if (!Piece::isValidMove(game, targetPosition, errorMessage))
+	if (!Piece::isValidMove(board, targetPosition, errorMessage))
 	{
 		return false;
 	}
@@ -44,7 +44,7 @@ bool DiagonalPiece::isValidMove(Game &game, Position targetPosition, std::string
 		return false;
 	}
 
-	if (!isValidDiagonalMove(game.getBoard(), targetPosition))
+	if (!isValidDiagonalMove(board, targetPosition))
 	{
 		errorMessage = "Invalid move - Piece cannot jump over other pieces";
 		return false;
@@ -53,8 +53,8 @@ bool DiagonalPiece::isValidMove(Game &game, Position targetPosition, std::string
 	return true;
 }
 
-Bitboard DiagonalPiece::getValidMoves(Game &game) const
+Bitboard DiagonalPiece::getValidMoves(Board &board) const
 {
 	int directions[4][2] = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
-	return Piece::getValidMoves(game, directions);
+	return Piece::getValidMoves(board, directions);
 }

@@ -2,7 +2,7 @@
 #define KNIGHT_H
 
 #include "Piece.h"
-#include "Game.h"
+#include "Board.h"
 
 class Knight : virtual public Piece
 {
@@ -12,9 +12,9 @@ private:
 public:
 	Knight(Color pieceColor, Position currentPosition);
 
-	bool isValidMove(Game &game, Position targetPosition, std::string &errorMessage) const;
+	bool isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const;
 
-	Bitboard getValidMoves(Game &game) const;
+	Bitboard getValidMoves(Board &board) const;
 };
 
 #endif
