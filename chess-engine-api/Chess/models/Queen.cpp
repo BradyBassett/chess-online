@@ -6,14 +6,14 @@ Queen::Queen(Color pieceColor, Position currentPosition)
 	pieceType = PieceType::Queen;
 }
 
-bool Queen::isValidMove(Game &game, Position targetPosition, std::string &errorMessage) const
+bool Queen::isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const
 {
-	if (!Piece::isValidMove(game, targetPosition, errorMessage))
+	if (!Piece::isValidMove(board, targetPosition, errorMessage))
 	{
 		return false;
 	}
 
-	if (!DiagonalPiece::isValidMove(game, targetPosition, errorMessage) && !StraightPiece::isValidMove(game, targetPosition, errorMessage))
+	if (!DiagonalPiece::isValidMove(board, targetPosition, errorMessage) && !StraightPiece::isValidMove(board, targetPosition, errorMessage))
 	{
 		errorMessage = "Invalid move - Queen can only move diagonally or straight";
 		return false;
@@ -22,13 +22,13 @@ bool Queen::isValidMove(Game &game, Position targetPosition, std::string &errorM
 	return true;
 }
 
-Bitboard Queen::getValidMoves(Game &game) const
+Bitboard Queen::getValidMoves(Board &board) const
 {
 	Bitboard validMoves = 0x0;
 
 	// get valid moves for diagonal and straight moves
-	validMoves |= DiagonalPiece::getValidMoves(game);
-	validMoves |= StraightPiece::getValidMoves(game);
+	validMoves |= DiagonalPiece::getValidMoves(board);
+	validMoves |= StraightPiece::getValidMoves(board);
 
 	return validMoves;
 }

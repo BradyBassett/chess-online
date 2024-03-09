@@ -9,9 +9,9 @@ class Queen : virtual public DiagonalPiece, virtual public StraightPiece
 public:
 	Queen(Color pieceColor, Position currentPosition);
 
-	bool isValidMove(Game &game, Position targetPosition, std::string &errorMessage) const;
+	bool isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const;
 
-	Bitboard getValidMoves(Game &game) const;
+	Bitboard getValidMoves(Board &board) const;
 };
 
 #endif
