@@ -1,6 +1,5 @@
 #include "StraightPiece.h"
 #include "Square.h"
-#include "Board.h"
 
 bool StraightPiece::isValidStraightMove(Board &board, Position targetPosition) const
 {
@@ -39,9 +38,9 @@ bool StraightPiece::targetSquareIsStraight(Position targetPosition) const
 	return targetPosition.row == currentPosition.row || targetPosition.col == currentPosition.col;
 }
 
-bool StraightPiece::isValidMove(Game &game, Position targetPosition, std::string &errorMessage) const
+bool StraightPiece::isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const
 {
-	if (!Piece::isValidMove(game, targetPosition, errorMessage))
+	if (!Piece::isValidMove(board, targetPosition, errorMessage))
 	{
 		return false;
 	}
@@ -52,7 +51,7 @@ bool StraightPiece::isValidMove(Game &game, Position targetPosition, std::string
 		return false;
 	}
 
-	if (!isValidStraightMove(game.getBoard(), targetPosition))
+	if (!isValidStraightMove(board, targetPosition))
 	{
 		errorMessage = "Invalid move - Piece cannot jump over other pieces";
 		return false;
@@ -61,8 +60,8 @@ bool StraightPiece::isValidMove(Game &game, Position targetPosition, std::string
 	return true;
 }
 
-Bitboard StraightPiece::getValidMoves(Game &game) const
+Bitboard StraightPiece::getValidMoves(Board &board) const
 {
 	int directions[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-	return Piece::getValidMoves(game, directions);
+	return Piece::getValidMoves(board, directions);
 }
