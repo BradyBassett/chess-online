@@ -9,7 +9,7 @@
 class Bitboard
 {
 private:
-	uint64_t value;
+	uint64_t value = 0ULL;
 
 	int getSquareNumber(Position position);
 
