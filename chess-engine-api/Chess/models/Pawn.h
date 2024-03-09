@@ -2,7 +2,7 @@
 #define PAWN_H
 
 #include "Piece.h"
-#include "Game.h"
+#include "Board.h"
 
 class Pawn : virtual public Piece
 {
@@ -17,9 +17,9 @@ private:
 public:
 	Pawn(Color pieceColor, Position currentPosition);
 
-	bool isValidMove(Game &game, Position targetPosition, std::string &errorMessage) const;
+	bool isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const;
 
-	Bitboard getValidMoves(Game &game) const;
+	Bitboard getValidMoves(Board &board) const;
 
 	bool canPromote(Position targetPosition) const override;
 };
