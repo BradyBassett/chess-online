@@ -7,11 +7,9 @@
 #include "Bishop.h"
 #include "Knight.h"
 
-Game::Game(std::vector<std::string> fenParts) : board(fenParts[0])
+Game::Game(std::vector<std::string> fenParts) : board(fenParts[0], fenParts[2], fenParts[3])
 {
 	parseActiveColor(fenParts[1]);
-	parseCastlingAvailability(fenParts[2]);
-	parseEnPassantTarget(fenParts[3]);
 	parseHalfmoveClock(fenParts[4]);
 	parseFullmoveNumber(fenParts[5]);
 }
@@ -19,27 +17,6 @@ Game::Game(std::vector<std::string> fenParts) : board(fenParts[0])
 void Game::parseActiveColor(const std::string &color)
 {
 	activeColor = (color == "w") ? Color::White : Color::Black;
-}
-
-void Game::parseCastlingAvailability(const std::string &castling)
-{
-	setWhiteCanCastleKingside(castling.find('K') != std::string::npos);
-	setWhiteCanCastleQueenside(castling.find('Q') != std::string::npos);
-	setBlackCanCastleKingside(castling.find('k') != std::string::npos);
-	setBlackCanCastleQueenside(castling.find('q') != std::string::npos);
-}
-
-void Game::parseEnPassantTarget(const std::string &enPassant)
-{
-	if (enPassant == "-")
-	{
-		enPassantTargetSquare = nullptr;
-	}
-	else
-	{
-		Position pos = convertStringToPosition(enPassant);
-		enPassantTargetSquare = &board.getSquare(pos);
-	}
 }
 
 void Game::parseHalfmoveClock(const std::string &halfmove)
@@ -219,7 +196,7 @@ Move Game::attemptMove(Position from, Position to, char promotion)
 	}
 
 	// check if move is valid
-	if (!fromPiece.isValidMove(*this, to, errorMessage))
+	if (!fromPiece.isValidMove(board, to, errorMessage))
 	{
 		throw std::invalid_argument(errorMessage);
 	}
@@ -237,13 +214,13 @@ Move Game::attemptMove(Position from, Position to, char promotion)
 	addMove(move);
 
 	// update castling availability if the move was the first move of a rook or the king
-	updateCastlingAvailability(fromPiece);
+	board.updateCastlingAvailability(fromPiece);
 
 	// move the piece
 	board.setupMove(move);
 
 	// update en passant target square if the move was a double pawn push
-	updateEnPassantTargetSquare(fromPiece, from, to);
+	board.updateEnPassantTargetSquare(fromPiece, from, to);
 
 	// increment half move clock if the move is not a pawn move or a capture
 	if (fromPiece.getPieceType() != PieceType::Pawn && !capturedPiece.has_value())
@@ -314,71 +291,6 @@ std::optional<std::shared_ptr<Piece>> Game::getCapturedPiece(Square &toSquare, P
 	}
 }
 
-// TODO - Actually use the castling availability in the logic for checking a valid castle
-void Game::updateCastlingAvailability(Piece &fromPiece)
-{
-	if (!fromPiece.getHasMoved())
-	{
-		if (fromPiece.getPieceType() == PieceType::King)
-		{
-			if (fromPiece.getPieceColor() == Color::White)
-			{
-				setWhiteCanCastleKingside(false);
-				setWhiteCanCastleQueenside(false);
-			}
-			else
-			{
-				setBlackCanCastleKingside(false);
-				setBlackCanCastleQueenside(false);
-			}
-		}
-		else if (fromPiece.getPieceType() == PieceType::Rook)
-		{
-			Rook &rook = dynamic_cast<Rook &>(fromPiece);
-			if (fromPiece.getPieceColor() == Color::White)
-			{
-				if (rook.getSide() == Side::KingSide)
-				{
-					setWhiteCanCastleKingside(false);
-				}
-				else
-				{
-					setWhiteCanCastleQueenside(false);
-				}
-			}
-			else
-			{
-				if (rook.getSide() == Side::KingSide)
-				{
-					setBlackCanCastleKingside(false);
-				}
-				else
-				{
-					setBlackCanCastleQueenside(false);
-				}
-			}
-		}
-	}
-}
-
-// TODO - See if it is possible to use the enpassant target square in the logic for en passant to maybe make it more efficient idk
-void Game::updateEnPassantTargetSquare(Piece &fromPiece, Position from, Position to)
-{
-	if (fromPiece.getPieceType() == PieceType::Pawn && abs(from.row - to.row) == 2)
-	{
-		enPassantTargetSquare = &board.getSquare((from.row + to.row) / 2, from.col);
-	}
-	else
-	{
-		enPassantTargetSquare = nullptr;
-	}
-}
-
-Position Game::convertStringToPosition(std::string position)
-{
-	return Position{8 - (position[1] - '0'), position[0] - 'a'};
-}
-
 std::vector<Move> Game::getMoves()
 {
 	return moves;
@@ -429,46 +341,6 @@ void Game::resetHalfMoveClock()
 void Game::incrementFullMoveNumber()
 {
 	fullMoveNumber++;
-}
-
-bool Game::getWhiteCanCastleKingside()
-{
-	return whiteCanCastleKingside;
-}
-
-bool Game::getWhiteCanCastleQueenside()
-{
-	return whiteCanCastleQueenside;
-}
-
-bool Game::getBlackCanCastleKingside()
-{
-	return blackCanCastleKingside;
-}
-
-bool Game::getBlackCanCastleQueenside()
-{
-	return blackCanCastleQueenside;
-}
-
-void Game::setWhiteCanCastleKingside(bool value)
-{
-	whiteCanCastleKingside = value;
-}
-
-void Game::setWhiteCanCastleQueenside(bool value)
-{
-	whiteCanCastleQueenside = value;
-}
-
-void Game::setBlackCanCastleKingside(bool value)
-{
-	blackCanCastleKingside = value;
-}
-
-void Game::setBlackCanCastleQueenside(bool value)
-{
-	blackCanCastleQueenside = value;
 }
 
 bool Game::getWhiteInCheck()

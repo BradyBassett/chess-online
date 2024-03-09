@@ -21,11 +21,6 @@ private:
 	// TODO - Implement 50 move rule using halfMoveClock
 	uint8_t halfMoveClock;
 	uint8_t fullMoveNumber;
-	Square *enPassantTargetSquare;
-	bool whiteCanCastleKingside;
-	bool whiteCanCastleQueenside;
-	bool blackCanCastleKingside;
-	bool blackCanCastleQueenside;
 	bool whiteInCheck = false;
 	bool blackInCheck = false;
 
@@ -34,10 +29,6 @@ private:
 	void parsePiecePositions(const std::string &positions);
 
 	void parseActiveColor(const std::string &color);
-
-	void parseCastlingAvailability(const std::string &castling);
-
-	void parseEnPassantTarget(const std::string &enPassant);
 
 	void parseHalfmoveClock(const std::string &halfmove);
 
@@ -66,12 +57,6 @@ public:
 
 	std::optional<std::shared_ptr<Piece>> getCapturedPiece(Square &toSquare, Position from, Position to, Piece &fromPiece);
 
-	void updateCastlingAvailability(Piece &fromPiece);
-
-	void updateEnPassantTargetSquare(Piece &fromPiece, Position from, Position to);
-
-	Position convertStringToPosition(std::string position);
-
 	std::vector<Move> getMoves();
 
 	Move getLastMove();
@@ -89,22 +74,6 @@ public:
 	void resetHalfMoveClock();
 
 	void incrementFullMoveNumber();
-
-	bool getWhiteCanCastleKingside();
-
-	bool getWhiteCanCastleQueenside();
-
-	bool getBlackCanCastleKingside();
-
-	bool getBlackCanCastleQueenside();
-
-	void setWhiteCanCastleKingside(bool value);
-
-	void setWhiteCanCastleQueenside(bool value);
-
-	void setBlackCanCastleKingside(bool value);
-
-	void setBlackCanCastleQueenside(bool value);
 
 	bool getWhiteInCheck();
 
