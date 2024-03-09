@@ -123,6 +123,27 @@ std::vector<Square> Board::parseFenPosition(std::string &fenPosition)
 	return squares;
 }
 
+void Board::parseCastlingAvailability(const std::string &castling)
+{
+	setWhiteCanCastleKingside(castling.find('K') != std::string::npos);
+	setWhiteCanCastleQueenside(castling.find('Q') != std::string::npos);
+	setBlackCanCastleKingside(castling.find('k') != std::string::npos);
+	setBlackCanCastleQueenside(castling.find('q') != std::string::npos);
+}
+
+void Board::parseEnPassantTarget(const std::string &enPassant)
+{
+	if (enPassant == "-")
+	{
+		setEnPassantTargetSquare(nullptr);
+	}
+	else
+	{
+		Position pos = convertStringToPosition(enPassant);
+		setEnPassantTargetSquare(&getSquare(pos));
+	}
+}
+
 void Board::movePiece(Square &fromSquare, Square &toSquare, std::shared_ptr<Piece> piece)
 {
 	Bitboard &pieceBitboard = getBitboard(piece->getPieceColor(), piece->getPieceType());
@@ -146,7 +167,7 @@ void Board::initializeStartingPosition(std::string fenPosition)
 	}
 }
 
-void Board::initializeBitboards(std::string fenPosition)
+void Board::initializeBitboards()
 {
 	// initialize bitboards to 0
 	for (int i = 0; i < 2; i++)
@@ -158,10 +179,56 @@ void Board::initializeBitboards(std::string fenPosition)
 	}
 }
 
-Board::Board(std::string fenPosition)
+void Board::initializeAttackTables()
 {
-	initializeBitboards(fenPosition);
+	for (uint8_t i = 0; i < 64; i++)
+	{
+		std::shared_ptr<Piece> piece = squares[i / 8][i % 8].getPiece();
+
+		if (piece == nullptr)
+		{
+			continue;
+		}
+
+		if (piece->getPieceType() == PieceType::Pawn)
+		{
+			std::shared_ptr<Pawn> pawn = std::dynamic_pointer_cast<Pawn>(piece);
+			// White pawn
+			if (piece->getPieceColor() == Color::White)
+			{
+				pawnAttackTable[0][i] = pawn->getValidMoves(*this); // TODO - Change game parameter to board
+			}
+			// Black pawn
+			else
+			{
+				pawnAttackTable[1][i] = pawn->getValidMoves(*this);
+			}
+		}
+		else if (piece->getPieceType() == PieceType::Knight)
+		{
+		}
+		else if (piece->getPieceType() == PieceType::Bishop)
+		{
+		}
+		else if (piece->getPieceType() == PieceType::Rook)
+		{
+		}
+		else if (piece->getPieceType() == PieceType::Queen)
+		{
+		}
+		else if (piece->getPieceType() == PieceType::King)
+		{
+		}
+	}
+}
+
+Board::Board(std::string fenPosition, std::string castlingAvailability, std::string enPassantTarget)
+{
+	initializeBitboards();
 	initializeStartingPosition(fenPosition);
+	parseCastlingAvailability(castlingAvailability);
+	parseEnPassantTarget(enPassantTarget);
+	initializeAttackTables();
 }
 
 Square &Board::getSquare(int rowIndex, int colIndex)
@@ -245,6 +312,46 @@ Side Board::getRookSide(Square square)
 	return (square.getPosition().col == 0) ? Side::QueenSide : Side::KingSide;
 }
 
+bool Board::getWhiteCanCastleKingside()
+{
+	return whiteCanCastleKingside;
+}
+
+bool Board::getWhiteCanCastleQueenside()
+{
+	return whiteCanCastleQueenside;
+}
+
+bool Board::getBlackCanCastleKingside()
+{
+	return blackCanCastleKingside;
+}
+
+bool Board::getBlackCanCastleQueenside()
+{
+	return blackCanCastleQueenside;
+}
+
+void Board::setWhiteCanCastleKingside(bool value)
+{
+	whiteCanCastleKingside = value;
+}
+
+void Board::setWhiteCanCastleQueenside(bool value)
+{
+	whiteCanCastleQueenside = value;
+}
+
+void Board::setBlackCanCastleKingside(bool value)
+{
+	blackCanCastleKingside = value;
+}
+
+void Board::setBlackCanCastleQueenside(bool value)
+{
+	blackCanCastleQueenside = value;
+}
+
 Bitboard &Board::getBitboard(Color color, PieceType pieceType)
 {
 	return bitboards[static_cast<int>(color)][static_cast<int>(pieceType)];
@@ -263,4 +370,80 @@ Bitboard Board::getBlackPiecesBitboard()
 Bitboard Board::getAllPiecesBitboard()
 {
 	return getWhitePiecesBitboard() | getBlackPiecesBitboard();
+}
+
+// TODO - Actually use the castling availability in the logic for checking a valid castle
+void Board::updateCastlingAvailability(Piece &fromPiece)
+
+{
+	if (!fromPiece.getHasMoved())
+	{
+		if (fromPiece.getPieceType() == PieceType::King)
+		{
+			if (fromPiece.getPieceColor() == Color::White)
+			{
+				setWhiteCanCastleKingside(false);
+				setWhiteCanCastleQueenside(false);
+			}
+			else
+			{
+				setBlackCanCastleKingside(false);
+				setBlackCanCastleQueenside(false);
+			}
+		}
+		else if (fromPiece.getPieceType() == PieceType::Rook)
+		{
+			Rook &rook = dynamic_cast<Rook &>(fromPiece);
+			if (fromPiece.getPieceColor() == Color::White)
+			{
+				if (rook.getSide() == Side::KingSide)
+				{
+					setWhiteCanCastleKingside(false);
+				}
+				else
+				{
+					setWhiteCanCastleQueenside(false);
+				}
+			}
+			else
+			{
+				if (rook.getSide() == Side::KingSide)
+				{
+					setBlackCanCastleKingside(false);
+				}
+				else
+				{
+					setBlackCanCastleQueenside(false);
+				}
+			}
+		}
+	}
+}
+
+// TODO - See if it is possible to use the enpassant target square in the logic for en passant to maybe make it more efficient idk
+void Board::updateEnPassantTargetSquare(Piece &fromPiece, Position from, Position to)
+{
+	if (fromPiece.getPieceType() == PieceType::Pawn && abs(from.row - to.row) == 2)
+	{
+		setEnPassantTargetSquare(&getSquare((from.row + to.row) / 2, from.col));
+	}
+	else
+	{
+		setEnPassantTargetSquare(nullptr);
+	}
+}
+
+Square *Board::getEnPassantTargetSquare()
+{
+	return enPassantTargetSquare;
+}
+
+void Board::setEnPassantTargetSquare(Square *square)
+{
+	enPassantTargetSquare = square;
+}
+
+Position Board::convertStringToPosition(std::string position)
+{
+	return Position{8 - (position[1] - '0'), position[0] - 'a'};
 }
