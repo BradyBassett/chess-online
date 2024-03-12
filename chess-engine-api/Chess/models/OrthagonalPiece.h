@@ -4,12 +4,12 @@
 #include "Piece.h"
 #include "Board.h"
 
-class StraightPiece : virtual public Piece
+class OrthagonalPiece : virtual public Piece
 {
 private:
-	bool isValidStraightMove(Board &board, Position targetPosition) const;
+	bool isValidOrthagonalMove(Board &board, Position targetPosition) const;
 
-	bool targetSquareIsStraight(Position targetPosition) const;
+	bool targetSquareIsOrthagonal(Position targetPosition) const;
 
 public:
 	using Piece::Piece;

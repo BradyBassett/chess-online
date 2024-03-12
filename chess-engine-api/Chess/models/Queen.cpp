@@ -1,7 +1,7 @@
 #include "Queen.h"
 
 Queen::Queen(Color pieceColor, Position currentPosition)
-	: Piece(pieceColor, currentPosition), DiagonalPiece(pieceColor, currentPosition), StraightPiece(pieceColor, currentPosition)
+	: Piece(pieceColor, currentPosition), DiagonalPiece(pieceColor, currentPosition), OrthagonalPiece(pieceColor, currentPosition)
 {
 	pieceType = PieceType::Queen;
 }
@@ -13,9 +13,9 @@ bool Queen::isValidMove(Board &board, Position targetPosition, std::string &erro
 		return false;
 	}
 
-	if (!DiagonalPiece::isValidMove(board, targetPosition, errorMessage) && !StraightPiece::isValidMove(board, targetPosition, errorMessage))
+	if (!DiagonalPiece::isValidMove(board, targetPosition, errorMessage) && !OrthagonalPiece::isValidMove(board, targetPosition, errorMessage))
 	{
-		errorMessage = "Invalid move - Queen can only move diagonally or straight";
+		errorMessage = "Invalid move - Queen can only move diagonally or orthagonally";
 		return false;
 	}
 
@@ -26,9 +26,9 @@ Bitboard Queen::getValidMoves(Board &board) const
 {
 	Bitboard validMoves = 0x0;
 
-	// get valid moves for diagonal and straight moves
+	// get valid moves for diagonal and orthagonal moves
 	validMoves |= DiagonalPiece::getValidMoves(board);
-	validMoves |= StraightPiece::getValidMoves(board);
+	validMoves |= OrthagonalPiece::getValidMoves(board);
 
 	return validMoves;
 }

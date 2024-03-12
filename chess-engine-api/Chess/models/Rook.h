@@ -1,9 +1,9 @@
 #ifndef ROOK_H
 #define ROOK_H
 
-#include "StraightPiece.h"
+#include "OrthagonalPiece.h"
 
-class Rook : public StraightPiece
+class Rook : public OrthagonalPiece
 {
 private:
 	Side side;

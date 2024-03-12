@@ -2,7 +2,7 @@
 
 Rook::Rook(Color pieceColor, Position currentPosition, Side side)
 	: Piece(pieceColor, currentPosition),
-	  StraightPiece(pieceColor, currentPosition),
+	  OrthagonalPiece(pieceColor, currentPosition),
 	  side(side)
 {
 	pieceType = PieceType::Rook;

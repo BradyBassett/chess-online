@@ -62,7 +62,7 @@ bool Pawn::isValidMove(Board &board, Position targetPosition, std::string &error
 			}
 		}
 	}
-	// Straight move
+	// Orthagonal move
 	else
 	{
 		if (hasMoved)
@@ -86,7 +86,7 @@ bool Pawn::isValidMove(Board &board, Position targetPosition, std::string &error
 	return true;
 }
 
-Bitboard Pawn::getValidMoves(Board &game) const
+Bitboard Pawn::getValidMoves(Board &board) const
 {
 	Bitboard validMoves = 0x0;
 
@@ -96,7 +96,7 @@ Bitboard Pawn::getValidMoves(Board &game) const
 		if (targetPosition.row >= 0 && targetPosition.row < 8 && targetPosition.col >= 0 && targetPosition.col < 8)
 		{
 			std::string errorMessage;
-			if (isValidMove(game, targetPosition, errorMessage))
+			if (isValidMove(board, targetPosition, errorMessage))
 			{
 				validMoves.setBit(targetPosition);
 			}
@@ -111,7 +111,7 @@ Bitboard Pawn::getValidMoves(Board &game) const
 			if (targetPosition.row >= 0 && targetPosition.row < 8 && targetPosition.col >= 0 && targetPosition.col < 8)
 			{
 				std::string errorMessage;
-				if (isValidMove(game, targetPosition, errorMessage))
+				if (isValidMove(board, targetPosition, errorMessage))
 				{
 					validMoves.setBit(targetPosition);
 				}

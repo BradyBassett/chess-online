@@ -1,7 +1,7 @@
-#include "StraightPiece.h"
+#include "OrthagonalPiece.h"
 #include "Square.h"
 
-bool StraightPiece::isValidStraightMove(Board &board, Position targetPosition) const
+bool OrthagonalPiece::isValidOrthagonalMove(Board &board, Position targetPosition) const
 {
 	if (targetPosition.row == currentPosition.row)
 	{
@@ -33,25 +33,25 @@ bool StraightPiece::isValidStraightMove(Board &board, Position targetPosition) c
 	return true;
 }
 
-bool StraightPiece::targetSquareIsStraight(Position targetPosition) const
+bool OrthagonalPiece::targetSquareIsOrthagonal(Position targetPosition) const
 {
 	return targetPosition.row == currentPosition.row || targetPosition.col == currentPosition.col;
 }
 
-bool StraightPiece::isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const
+bool OrthagonalPiece::isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const
 {
 	if (!Piece::isValidMove(board, targetPosition, errorMessage))
 	{
 		return false;
 	}
 
-	if (!targetSquareIsStraight(targetPosition))
+	if (!targetSquareIsOrthagonal(targetPosition))
 	{
-		errorMessage = "Invalid move - Piece must move straight";
+		errorMessage = "Invalid move - Piece must move orthagonally";
 		return false;
 	}
 
-	if (!isValidStraightMove(board, targetPosition))
+	if (!isValidOrthagonalMove(board, targetPosition))
 	{
 		errorMessage = "Invalid move - Piece cannot jump over other pieces";
 		return false;
@@ -60,7 +60,7 @@ bool StraightPiece::isValidMove(Board &board, Position targetPosition, std::stri
 	return true;
 }
 
-Bitboard StraightPiece::getValidMoves(Board &board) const
+Bitboard OrthagonalPiece::getValidMoves(Board &board) const
 {
 	int directions[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 	return Piece::getValidMoves(board, directions);
