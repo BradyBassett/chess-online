@@ -190,13 +190,13 @@ void Board::initializeAttackTables()
 	{
 		Position pos = Position{i / 8, i % 8};
 
-		whitePawn.setPosition(pos);
-		blackPawn.setPosition(pos);
-		knight.setPosition(pos);
-		bishop.setPosition(pos);
-		rook.setPosition(pos);
-		queen.setPosition(pos);
-		king.setPosition(pos);
+		whitePawn.setCurrentPosition(pos);
+		blackPawn.setCurrentPosition(pos);
+		knight.setCurrentPosition(pos);
+		bishop.setCurrentPosition(pos);
+		rook.setCurrentPosition(pos);
+		queen.setCurrentPosition(pos);
+		king.setCurrentPosition(pos);
 
 		pawnAttackTable[0][i] = whitePawn.getValidMoves(*this);
 		pawnAttackTable[1][i] = blackPawn.getValidMoves(*this);
@@ -206,46 +206,6 @@ void Board::initializeAttackTables()
 		queenAttackTable[i] = queen.getValidMoves(*this);
 		kingAttackTable[i] = king.getValidMoves(*this);
 	}
-
-	// for (uint8_t i = 0; i < 64; i++)
-	// {
-	// 	std::shared_ptr<Piece> piece = squares[i / 8][i % 8].getPiece();
-
-	// 	if (piece == nullptr)
-	// 	{
-	// 		continue;
-	// 	}
-
-	// 	if (piece->getPieceType() == PieceType::Pawn)
-	// 	{
-	// 		std::shared_ptr<Pawn> pawn = std::dynamic_pointer_cast<Pawn>(piece);
-	// 		// White pawn
-	// 		if (piece->getPieceColor() == Color::White)
-	// 		{
-	// 			pawnAttackTable[0][i] = pawn->getValidMoves(*this);
-	// 		}
-	// 		// Black pawn
-	// 		else
-	// 		{
-	// 			pawnAttackTable[1][i] = pawn->getValidMoves(*this);
-	// 		}
-	// 	}
-	// 	else if (piece->getPieceType() == PieceType::Knight)
-	// 	{
-	// 	}
-	// 	else if (piece->getPieceType() == PieceType::Bishop)
-	// 	{
-	// 	}
-	// 	else if (piece->getPieceType() == PieceType::Rook)
-	// 	{
-	// 	}
-	// 	else if (piece->getPieceType() == PieceType::Queen)
-	// 	{
-	// 	}
-	// 	else if (piece->getPieceType() == PieceType::King)
-	// 	{
-	// 	}
-	// }
 }
 
 Board::Board(std::string fenPosition, std::string castlingAvailability, std::string enPassantTarget)
