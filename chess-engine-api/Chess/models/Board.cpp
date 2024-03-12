@@ -17,9 +17,6 @@ bool Board::isDigitFrom1To8(char c)
 	return std::regex_match(s, pattern);
 }
 
-// TODO - I need to dynamically set the bits for each piece's bitboard when parsing the pieces from the fen position
-// Whenever a piece appears I determine its color and type enums, from that I can access the specific bitboard by using the enum values as the indexes
-
 std::vector<Square> Board::parseFenPosition(std::string &fenPosition)
 {
 	std::vector<Square> squares;
@@ -181,45 +178,74 @@ void Board::initializeBitboards()
 
 void Board::initializeAttackTables()
 {
+	Pawn whitePawn = Pawn(Color::White, Position{0, 0});
+	Pawn blackPawn = Pawn(Color::Black, Position{0, 0});
+	Knight knight = Knight(Color::White, Position{0, 0});
+	Bishop bishop = Bishop(Color::White, Position{0, 0});
+	Rook rook = Rook(Color::White, Position{0, 0});
+	Queen queen = Queen(Color::White, Position{0, 0});
+	King king = King(Color::White, Position{0, 0});
+
 	for (uint8_t i = 0; i < 64; i++)
 	{
-		std::shared_ptr<Piece> piece = squares[i / 8][i % 8].getPiece();
+		Position pos = Position{i / 8, i % 8};
 
-		if (piece == nullptr)
-		{
-			continue;
-		}
+		whitePawn.setPosition(pos);
+		blackPawn.setPosition(pos);
+		knight.setPosition(pos);
+		bishop.setPosition(pos);
+		rook.setPosition(pos);
+		queen.setPosition(pos);
+		king.setPosition(pos);
 
-		if (piece->getPieceType() == PieceType::Pawn)
-		{
-			std::shared_ptr<Pawn> pawn = std::dynamic_pointer_cast<Pawn>(piece);
-			// White pawn
-			if (piece->getPieceColor() == Color::White)
-			{
-				pawnAttackTable[0][i] = pawn->getValidMoves(*this); // TODO - Change game parameter to board
-			}
-			// Black pawn
-			else
-			{
-				pawnAttackTable[1][i] = pawn->getValidMoves(*this);
-			}
-		}
-		else if (piece->getPieceType() == PieceType::Knight)
-		{
-		}
-		else if (piece->getPieceType() == PieceType::Bishop)
-		{
-		}
-		else if (piece->getPieceType() == PieceType::Rook)
-		{
-		}
-		else if (piece->getPieceType() == PieceType::Queen)
-		{
-		}
-		else if (piece->getPieceType() == PieceType::King)
-		{
-		}
+		pawnAttackTable[0][i] = whitePawn.getValidMoves(*this);
+		pawnAttackTable[1][i] = blackPawn.getValidMoves(*this);
+		knightAttackTable[i] = knight.getValidMoves(*this);
+		bishopAttackTable[i] = bishop.getValidMoves(*this);
+		rookAttackTable[i] = rook.getValidMoves(*this);
+		queenAttackTable[i] = queen.getValidMoves(*this);
+		kingAttackTable[i] = king.getValidMoves(*this);
 	}
+
+	// for (uint8_t i = 0; i < 64; i++)
+	// {
+	// 	std::shared_ptr<Piece> piece = squares[i / 8][i % 8].getPiece();
+
+	// 	if (piece == nullptr)
+	// 	{
+	// 		continue;
+	// 	}
+
+	// 	if (piece->getPieceType() == PieceType::Pawn)
+	// 	{
+	// 		std::shared_ptr<Pawn> pawn = std::dynamic_pointer_cast<Pawn>(piece);
+	// 		// White pawn
+	// 		if (piece->getPieceColor() == Color::White)
+	// 		{
+	// 			pawnAttackTable[0][i] = pawn->getValidMoves(*this);
+	// 		}
+	// 		// Black pawn
+	// 		else
+	// 		{
+	// 			pawnAttackTable[1][i] = pawn->getValidMoves(*this);
+	// 		}
+	// 	}
+	// 	else if (piece->getPieceType() == PieceType::Knight)
+	// 	{
+	// 	}
+	// 	else if (piece->getPieceType() == PieceType::Bishop)
+	// 	{
+	// 	}
+	// 	else if (piece->getPieceType() == PieceType::Rook)
+	// 	{
+	// 	}
+	// 	else if (piece->getPieceType() == PieceType::Queen)
+	// 	{
+	// 	}
+	// 	else if (piece->getPieceType() == PieceType::King)
+	// 	{
+	// 	}
+	// }
 }
 
 Board::Board(std::string fenPosition, std::string castlingAvailability, std::string enPassantTarget)
@@ -420,7 +446,6 @@ void Board::updateCastlingAvailability(Piece &fromPiece)
 	}
 }
 
-// TODO - See if it is possible to use the enpassant target square in the logic for en passant to maybe make it more efficient idk
 void Board::updateEnPassantTargetSquare(Piece &fromPiece, Position from, Position to)
 {
 	if (fromPiece.getPieceType() == PieceType::Pawn && abs(from.row - to.row) == 2)
@@ -446,4 +471,23 @@ void Board::setEnPassantTargetSquare(Square *square)
 Position Board::convertStringToPosition(std::string position)
 {
 	return Position{8 - (position[1] - '0'), position[0] - 'a'};
+}
+
+Bitboard (&Board::getAttackTable(Color color, PieceType pieceType))[64]
+{
+	switch (pieceType)
+	{
+	case PieceType::Pawn:
+		return pawnAttackTable[static_cast<int>(color)];
+	case PieceType::Knight:
+		return knightAttackTable;
+	case PieceType::Bishop:
+		return bishopAttackTable;
+	case PieceType::Rook:
+		return rookAttackTable;
+	case PieceType::Queen:
+		return queenAttackTable;
+	case PieceType::King:
+		return kingAttackTable;
+	}
 }

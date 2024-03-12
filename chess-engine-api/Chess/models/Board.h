@@ -26,9 +26,6 @@ private:
 	Bitboard rookAttackTable[64];
 	Bitboard queenAttackTable[64];
 	Bitboard kingAttackTable[64];
-	// TODO - Add methods to generate attack tables for each piece using something called incremental updates after the following
-	// TODO - Conditions are met: 1. A piece is moved 2. A piece is captured 3. A piece is Promoted 4. On initialization 5. On castling
-	// TODO - 6. on en passant (Research incremental updates)
 
 	bool isDigitFrom1To8(char c);
 
@@ -94,6 +91,8 @@ public:
 	void updateEnPassantTargetSquare(Piece &fromPiece, Position from, Position to);
 
 	Position convertStringToPosition(std::string position);
+
+	Bitboard (&getAttackTable(Color color, PieceType pieceType))[64];
 };
 
 #endif
