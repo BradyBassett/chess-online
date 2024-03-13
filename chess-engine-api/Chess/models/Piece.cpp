@@ -103,3 +103,18 @@ bool Piece::canPromote(Position targetPosition) const
 {
 	return false;
 }
+
+Bitboard Piece::generateAttacks(const Position (&directions)[4]) const
+{
+	Bitboard attacks = 0x0;
+
+	for (const Position &direction : directions)
+	{
+		for (int i = currentPosition.row + direction.row, j = currentPosition.col + direction.col; i >= 0 && i < 8 && j >= 0 && j < 8; i += direction.row, j += direction.col)
+		{
+			attacks.setBit({i, j});
+		}
+	}
+
+	return attacks;
+}

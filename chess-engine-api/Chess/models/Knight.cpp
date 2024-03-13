@@ -49,3 +49,20 @@ Bitboard Knight::getValidMoves(Board &board) const
 
 	return validMoves;
 }
+
+Bitboard Knight::generateAttacks() const
+{
+	Bitboard attacks = 0x0;
+
+	for (const Position &move : moves)
+	{
+		Position targetPosition = {currentPosition.row + move.row, currentPosition.col + move.col};
+
+		if (targetPosition.row >= 0 && targetPosition.row < 8 && targetPosition.col >= 0 && targetPosition.col < 8)
+		{
+			attacks.setBit(targetPosition);
+		}
+	}
+
+	return attacks;
+}

@@ -32,3 +32,14 @@ Bitboard Queen::getValidMoves(Board &board) const
 
 	return validMoves;
 }
+
+Bitboard Queen::generateAttacks() const
+{
+	Bitboard attacks = 0x0;
+
+	// get attacks for diagonal and orthagonal moves
+	attacks |= DiagonalPiece::generateAttacks();
+	attacks |= OrthagonalPiece::generateAttacks();
+
+	return attacks;
+}

@@ -126,3 +126,23 @@ bool Pawn::canPromote(Position targetPosition) const
 {
 	return (pieceColor == Color::White && targetPosition.row == 0) || (pieceColor == Color::Black && targetPosition.row == 7);
 }
+
+Bitboard Pawn::generateAttacks() const
+{
+	Bitboard attacks = 0x0;
+
+	int direction = pieceColor == Color::White ? -1 : 1;
+
+	Position targetPositions[2] = {{currentPosition.row + direction, currentPosition.col - 1},
+								   {currentPosition.row + direction, currentPosition.col + 1}};
+
+	for (const Position &targetPosition : targetPositions)
+	{
+		if (targetPosition.row >= 0 && targetPosition.row < 8 && targetPosition.col >= 0 && targetPosition.col < 8)
+		{
+			attacks.setBit(targetPosition);
+		}
+	}
+
+	return attacks;
+}

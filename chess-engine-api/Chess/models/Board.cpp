@@ -198,13 +198,13 @@ void Board::initializeAttackTables()
 		queen.setCurrentPosition(pos);
 		king.setCurrentPosition(pos);
 
-		pawnAttackTable[0][i] = whitePawn.getValidMoves(*this);
-		pawnAttackTable[1][i] = blackPawn.getValidMoves(*this);
-		knightAttackTable[i] = knight.getValidMoves(*this);
-		bishopAttackTable[i] = bishop.getValidMoves(*this);
-		rookAttackTable[i] = rook.getValidMoves(*this);
-		queenAttackTable[i] = queen.getValidMoves(*this);
-		kingAttackTable[i] = king.getValidMoves(*this);
+		pawnAttackTable[0][i] = whitePawn.generateAttacks();
+		pawnAttackTable[1][i] = blackPawn.generateAttacks();
+		knightAttackTable[i] = knight.generateAttacks();
+		bishopAttackTable[i] = bishop.generateAttacks();
+		rookAttackTable[i] = rook.generateAttacks();
+		queenAttackTable[i] = queen.generateAttacks();
+		kingAttackTable[i] = king.generateAttacks();
 	}
 }
 

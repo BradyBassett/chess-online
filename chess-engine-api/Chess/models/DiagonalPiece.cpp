@@ -58,3 +58,9 @@ Bitboard DiagonalPiece::getValidMoves(Board &board) const
 	int directions[4][2] = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
 	return Piece::getValidMoves(board, directions);
 }
+
+Bitboard DiagonalPiece::generateAttacks() const
+{
+	Position directions[4] = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+	return Piece::generateAttacks(directions);
+}

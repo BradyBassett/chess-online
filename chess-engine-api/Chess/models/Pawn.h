@@ -22,6 +22,8 @@ public:
 	Bitboard getValidMoves(Board &board) const;
 
 	bool canPromote(Position targetPosition) const override;
+
+	Bitboard generateAttacks() const;
 };
 
 #endif

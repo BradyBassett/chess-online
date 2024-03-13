@@ -15,6 +15,8 @@ public:
 	bool isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const;
 
 	Bitboard getValidMoves(Board &board) const;
+
+	Bitboard generateAttacks() const;
 };
 
 #endif

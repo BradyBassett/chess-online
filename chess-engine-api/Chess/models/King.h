@@ -23,6 +23,8 @@ public:
 	bool getIsInCheck() const;
 
 	void setIsInCheck(bool value);
+
+	Bitboard generateAttacks() const;
 };
 
 #endif

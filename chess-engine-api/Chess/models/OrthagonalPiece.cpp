@@ -65,3 +65,9 @@ Bitboard OrthagonalPiece::getValidMoves(Board &board) const
 	int directions[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 	return Piece::getValidMoves(board, directions);
 }
+
+Bitboard OrthagonalPiece::generateAttacks() const
+{
+	Position directions[4] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+	return Piece::generateAttacks(directions);
+}

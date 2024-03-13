@@ -42,6 +42,8 @@ public:
 	void setCurrentPosition(Position newPosition);
 
 	virtual bool canPromote(Position targetPosition) const;
+
+	Bitboard generateAttacks(const Position (&directions)[4]) const;
 };
 
 #include "Board.h"
