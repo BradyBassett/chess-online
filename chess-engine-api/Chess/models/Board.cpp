@@ -360,7 +360,6 @@ Bitboard Board::getAllPiecesBitboard()
 
 // TODO - Actually use the castling availability in the logic for checking a valid castle
 void Board::updateCastlingAvailability(Piece &fromPiece)
-
 {
 	if (!fromPiece.getHasMoved())
 	{
@@ -449,5 +448,7 @@ Bitboard (&Board::getAttackTable(Color color, PieceType pieceType))[64]
 		return queenAttackTable;
 	case PieceType::King:
 		return kingAttackTable;
+	default:
+		throw std::invalid_argument("Invalid piece type");
 	}
 }
