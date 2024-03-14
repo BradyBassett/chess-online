@@ -40,6 +40,12 @@ private:
 
 	Move composeMoveStruct(Position from, Position to, char promotion, std::optional<std::shared_ptr<Piece>> capturedPiece);
 
+	Move prepareMove(Position from, Position to, char promotion);
+
+	void executeMove(Move move);
+
+	void postMoveChecks();
+
 public:
 	Game(std::vector<std::string> fenParts);
 
@@ -51,7 +57,7 @@ public:
 
 	std::string ascii();
 
-	Move attemptMove(Position from, Position to, char promotion = '\0');
+	void attemptMove(Position from, Position to, char promotion = '\0');
 
 	void handlePawnPromotion(Piece &fromPiece, Square &fromSquare, Position to, Position from, char promotion);
 

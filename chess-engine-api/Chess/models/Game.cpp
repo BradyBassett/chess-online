@@ -176,7 +176,7 @@ Move Game::composeMoveStruct(Position from, Position to, char promotion, std::op
 	return move;
 }
 
-Move Game::attemptMove(Position from, Position to, char promotion)
+Move Game::prepareMove(Position from, Position to, char promotion)
 {
 	std::string errorMessage = "Invalid Move";
 	Square &fromSquare = board.getSquare(from);
@@ -210,6 +210,13 @@ Move Game::attemptMove(Position from, Position to, char promotion)
 	// compose the move struct
 	Move move = composeMoveStruct(from, to, promotion, capturedPiece);
 
+	return move;
+}
+
+void Game::executeMove(Move move)
+{
+	Piece &fromPiece = *board.getSquare(move.from).getPiece();
+
 	// add the move to the list of moves
 	addMove(move);
 
@@ -220,10 +227,10 @@ Move Game::attemptMove(Position from, Position to, char promotion)
 	board.setupMove(move);
 
 	// update en passant target square if the move was a double pawn push
-	board.updateEnPassantTargetSquare(fromPiece, from, to);
+	board.updateEnPassantTargetSquare(fromPiece, move.from, move.to);
 
 	// increment half move clock if the move is not a pawn move or a capture
-	if (fromPiece.getPieceType() != PieceType::Pawn && !capturedPiece.has_value())
+	if (fromPiece.getPieceType() != PieceType::Pawn && !move.capturedPiece.has_value())
 	{
 		incrementHalfMoveClock();
 	}
@@ -231,7 +238,10 @@ Move Game::attemptMove(Position from, Position to, char promotion)
 	{
 		resetHalfMoveClock();
 	}
+}
 
+void Game::postMoveChecks()
+{
 	if (activeColor == Color::Black)
 	{
 		// increment full move number if the move was made by black
@@ -247,8 +257,13 @@ Move Game::attemptMove(Position from, Position to, char promotion)
 
 	// change turn
 	switchActiveColor();
+}
 
-	return move;
+void Game::attemptMove(Position from, Position to, char promotion)
+{
+	Move move = prepareMove(from, to, promotion);
+	executeMove(move);
+	postMoveChecks();
 }
 
 void Game::handlePawnPromotion(Piece &fromPiece, Square &fromSquare, Position to, Position from, char promotion)
