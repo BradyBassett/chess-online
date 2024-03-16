@@ -9,6 +9,11 @@ Bitboard::Bitboard(uint64_t value) : value(value)
 {
 }
 
+Bitboard::Bitboard(Position position)
+{
+	setBit(position);
+}
+
 Bitboard Bitboard::operator|(const Bitboard &other) const
 {
 	return Bitboard(value | other.value);
@@ -69,6 +74,21 @@ Bitboard &Bitboard::operator>>=(uint64_t shift)
 	return *this;
 }
 
+bool Bitboard::operator==(const Bitboard &other) const
+{
+	return value == other.value;
+}
+
+bool Bitboard::operator!=(const Bitboard &other) const
+{
+	return value != other.value;
+}
+
+bool Bitboard::operator!=(uint64_t other) const
+{
+	return value != other;
+}
+
 uint64_t Bitboard::getValue()
 {
 	return value;
@@ -84,7 +104,17 @@ void Bitboard::setBit(Position position)
 	value |= 1ULL << getSquareNumber(position);
 }
 
+void Bitboard::setBit(int row, int col)
+{
+	value |= 1ULL << getSquareNumber({row, col});
+}
+
 void Bitboard::clearBit(Position position)
 {
 	value ^= (1ULL << getSquareNumber(position));
+}
+
+void Bitboard::clearBit(int row, int col)
+{
+	value ^= (1ULL << getSquareNumber({row, col}));
 }
