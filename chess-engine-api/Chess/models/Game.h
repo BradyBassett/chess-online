@@ -9,6 +9,7 @@
 #include <string>
 #include <optional>
 #include <vector>
+#include "King.h"
 
 class Board;
 
@@ -90,6 +91,8 @@ public:
 	void setBlackInCheck(bool value);
 
 	bool isKingInCheck(Color color);
+
+	bool isValidCastle(Position from, Position to, King &king, std::string &errorMessage);
 };
 
 #endif

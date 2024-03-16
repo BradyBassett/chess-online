@@ -43,6 +43,16 @@ private:
 
 	void initializeAttackTables();
 
+	Bitboard calculatePath(Position from, Position to, std::shared_ptr<Piece> piece);
+
+	Bitboard calculateDiagonalPath(Position from, Position to);
+
+	bool isDiagonal(Position from, Position to) const;
+
+	Bitboard calculateOrthagonalPath(Position from, Position to);
+
+	bool isOrthagonal(Position from, Position to) const;
+
 public:
 	Board(std::string fenPosition, std::string castlingAvailability, std::string enPassantTarget);
 
@@ -93,6 +103,8 @@ public:
 	Position convertStringToPosition(std::string position);
 
 	Bitboard (&getAttackTable(Color color, PieceType pieceType))[64];
+
+	bool isPathClear(Position from, Position to, std::shared_ptr<Piece> piece);
 };
 
 #endif

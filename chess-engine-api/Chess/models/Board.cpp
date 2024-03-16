@@ -208,6 +208,132 @@ void Board::initializeAttackTables()
 	}
 }
 
+bool Board::isPathClear(Position from, Position to, std::shared_ptr<Piece> piece)
+{
+	Bitboard path = calculatePath(from, to, piece);
+	Bitboard allPieces = getAllPiecesBitboard();
+
+	return (path & allPieces) == 0;
+}
+
+Bitboard Board::calculatePath(Position from, Position to, std::shared_ptr<Piece> piece)
+{
+	// Use the piece's move generation to calculate the path, excluding the target square because it can contain a piece to be captured
+	Bitboard path;
+	switch (piece->getPieceType())
+	{
+	case PieceType::Pawn:
+	{
+		if (piece->getHasMoved())
+		{
+			break;
+		}
+
+		int direction = (piece->getPieceColor() == Color::White) ? -1 : 1;
+		if (from.row + (direction * 2) == to.row && from.col == to.col)
+		{
+			path.setBit(from.row + direction, from.col);
+		}
+		break;
+	}
+	case PieceType::Bishop:
+	{
+		if (!isDiagonal(from, to))
+		{
+			throw std::invalid_argument("Invalid move - Bishops can only move diagonally");
+		}
+
+		path = calculateDiagonalPath(from, to);
+		break;
+	}
+	case PieceType::Rook:
+	{
+		if (!isOrthagonal(from, to))
+		{
+			throw std::invalid_argument("Invalid move - Rooks can only move orthagonally");
+		}
+
+		path = calculateOrthagonalPath(from, to);
+		break;
+	}
+	case PieceType::Queen:
+	{
+		if (isDiagonal(from, to))
+		{
+			path = calculateDiagonalPath(from, to);
+		}
+		else if (isOrthagonal(from, to))
+		{
+			path = calculateOrthagonalPath(from, to);
+		}
+		else
+		{
+			throw std::invalid_argument("Invalid move - Queens can only move orthagonally or diagonally");
+		}
+		break;
+	}
+	}
+
+	return path;
+}
+
+Bitboard Board::calculateDiagonalPath(Position from, Position to)
+{
+	Bitboard path;
+	int rowStep = (to.row - from.row) > 0 ? 1 : -1;
+	int colStep = (to.col - from.col) > 0 ? 1 : -1;
+
+	uint8_t i = from.row + rowStep;
+	uint8_t j = from.col + colStep;
+
+	while ((rowStep > 0 ? i < to.row : i > to.row) &&
+		   (colStep > 0 ? j < to.col : j > to.col))
+	{
+		path.setBit(i, j);
+		i += rowStep;
+		j += colStep;
+	}
+
+	return path;
+}
+
+bool Board::isDiagonal(Position from, Position to) const
+{
+	return abs(to.row - from.row) == abs(to.col - from.col);
+}
+
+Bitboard Board::calculateOrthagonalPath(Position from, Position to)
+{
+	Bitboard path;
+	if (to.row == from.row)
+	{
+		uint8_t rowStart = std::min(to.col, from.col);
+		uint8_t rowEnd = std::max(to.col, from.col);
+
+		for (int i = rowStart + 1; i < rowEnd - 1; i++)
+		{
+			path.setBit(from.row, i);
+		}
+	}
+	else if (to.col == from.col)
+	{
+		uint8_t colStart = std::min(to.row, from.row);
+		uint8_t colEnd = std::max(to.row, from.row);
+
+		for (int i = colStart + 1; i < colEnd - 1; i++)
+		{
+			path.setBit(i, from.col);
+		}
+	}
+
+	return path;
+}
+
+bool Board::isOrthagonal(Position from, Position to) const
+{
+	return to.row == from.row || to.col == from.col;
+}
+
 Board::Board(std::string fenPosition, std::string castlingAvailability, std::string enPassantTarget)
 {
 	initializeBitboards();

@@ -6,6 +6,8 @@
 #include "Rook.h"
 #include "Bishop.h"
 #include "Knight.h"
+#include "King.h"
+#include "Pawn.h"
 
 Game::Game(std::vector<std::string> fenParts) : board(fenParts[0], fenParts[2], fenParts[3])
 {
@@ -178,7 +180,6 @@ Move Game::composeMoveStruct(Position from, Position to, char promotion, std::op
 
 Move Game::prepareMove(Position from, Position to, char promotion)
 {
-	std::string errorMessage = "Invalid Move";
 	Square &fromSquare = board.getSquare(from);
 	Square &toSquare = board.getSquare(to);
 
@@ -195,14 +196,98 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 		throw std::invalid_argument("Invalid move - You can only move your own pieces");
 	}
 
-	// check if move is valid
-	if (!fromPiece.isValidMove(board, to, errorMessage))
+	// Check if target square is the same as the current square
+	if (to == from)
 	{
-		throw std::invalid_argument(errorMessage);
+		throw std::invalid_argument("Invalid move - Piece must move to a different square");
 	}
 
-	// check if move is a promotion
-	handlePawnPromotion(fromPiece, fromSquare, to, from, promotion);
+	// Check if target square contains a piece of the same color
+	if (toSquare.getPiece() != nullptr && toSquare.getPiece()->getPieceColor() == fromPiece.getPieceColor())
+	{
+		throw std::invalid_argument("Invalid move - Piece cannot capture a piece of the same color");
+	}
+
+	// Check if the move is going through another piece
+	if (board.isPathClear(from, to, std::make_shared<Piece>(fromPiece)))
+	{
+		throw std::invalid_argument("Invalid move - Path is not clear");
+	}
+
+	// Pawn specific checks
+	if (fromPiece.getPieceType() == PieceType::Pawn)
+	{
+		Pawn &pawn = dynamic_cast<Pawn &>(fromPiece);
+
+		// check if the pawn is moving diagonally
+		if (abs(to.col - from.col) == 1 && abs(to.row - from.row) == 1)
+		{
+			if (toSquare.getPiece() == nullptr)
+			{
+				int enPassantEligibleRow = pawn.getPieceColor() == Color::White ? 3 : 4;
+				if (from.row == enPassantEligibleRow)
+				{
+					Square *enPassantTargetSquare = board.getEnPassantTargetSquare();
+					if (enPassantTargetSquare == nullptr || to != board.getEnPassantTargetSquare()->getPosition())
+					{
+						throw std::invalid_argument("Invalid move - Pawn can only capture en passant if the opponents move was a pawn move of 2 squares that landed next to this pawn");
+					}
+				}
+				else
+				{
+					throw std::invalid_argument("Invalid move - Pawn cannot move diagonally unless it is capturing an opponent's piece");
+				}
+			}
+		}
+		// check if the pawn is moving orthogonally
+		else
+		{
+			if (pawn.getHasMoved())
+			{
+				if (!pawn.canMoveOneSquare(to))
+				{
+					throw std::invalid_argument("Invalid move - Pawn can only move one square forward after its first move");
+				}
+			}
+			else
+			{
+				if (!pawn.canMoveOneSquare(to) && !pawn.canMoveTwoSquares(to))
+				{
+					throw std::invalid_argument("Invalid move - Pawn can only move two squares forward if the square in front of it is empty and it is its first move");
+				}
+			}
+		}
+
+		// check if move is a promotion
+		handlePawnPromotion(fromPiece, fromSquare, to, from, promotion);
+	}
+
+	// King specific checks
+	// TODO - check for the following, moving into check, is in check, if in check can only move out of check or be protected
+	if (fromPiece.getPieceType() == PieceType::King)
+	{
+		King &king = dynamic_cast<King &>(fromPiece);
+
+		// If the target position is two squares away from the king then it is a castle
+		if ((to.col == 2 && to.row == from.row) ||
+			(to.col == 6 && to.row == from.row))
+		{
+			std::string errorMessage;
+
+			if (!isValidCastle(from, to, king, errorMessage))
+			{
+				throw std::invalid_argument(errorMessage);
+			}
+		}
+		// Otherwise, the king can only move one square in any direction
+		else
+		{
+			if (abs(to.row - from.row) > 1 || abs(to.col - from.col) > 1)
+			{
+				throw std::invalid_argument("Invalid move - King can only move one square in any direction");
+			}
+		}
+	}
 
 	// If the move is a capture, store the captured piece
 	std::optional<std::shared_ptr<Piece>> capturedPiece = getCapturedPiece(toSquare, from, to, fromPiece);
@@ -268,7 +353,9 @@ void Game::attemptMove(Position from, Position to, char promotion)
 
 void Game::handlePawnPromotion(Piece &fromPiece, Square &fromSquare, Position to, Position from, char promotion)
 {
-	if (fromPiece.getPieceType() == PieceType::Pawn && fromPiece.canPromote(to))
+	// TODO - Also be sure to update the appropriate bitboards
+
+	if (fromPiece.canPromote(to))
 	{
 		switch (promotion)
 		{
@@ -292,14 +379,17 @@ void Game::handlePawnPromotion(Piece &fromPiece, Square &fromSquare, Position to
 
 std::optional<std::shared_ptr<Piece>> Game::getCapturedPiece(Square &toSquare, Position from, Position to, Piece &fromPiece)
 {
+	// regular capture
 	if (toSquare.getPiece())
 	{
 		return toSquare.getPiece();
 	}
+	// en passant capture
 	else if (fromPiece.getPieceType() == PieceType::Pawn && abs(from.row - to.row) == 1 && abs(from.col - to.col) == 1 && !toSquare.getPiece())
 	{
 		return board.getSquare(to.row + (fromPiece.getPieceColor() == Color::White ? 1 : -1), to.col).getPiece();
 	}
+	// no capture
 	else
 	{
 		return std::nullopt;
@@ -382,4 +472,48 @@ bool Game::isKingInCheck(Color color)
 {
 	// TODO - Implement isKingInCheck
 	return false;
+}
+
+bool Game::isValidCastle(Position from, Position to, King &king, std::string &errorMessage)
+{
+	if (!(board.getWhiteCanCastleKingside() || board.getWhiteCanCastleQueenside() || board.getBlackCanCastleKingside() || board.getBlackCanCastleQueenside()))
+	{
+		errorMessage = "Invalid move - No castling rights";
+		return false;
+	}
+
+	// If king is trying to castle queen side get the rook on the queen side and vice versa
+	Side side = to.col == 2 ? Side::QueenSide : Side::KingSide;
+	std::shared_ptr<Rook> rook = board.getRook(king.getPieceColor(), side);
+
+	if (king.getHasMoved())
+	{
+		errorMessage = "Invalid move - King has already moved";
+		return false;
+	}
+	else if (rook->getHasMoved())
+	{
+		std::string rookSide = side == Side::QueenSide ? "Queenside " : "Kingside ";
+		errorMessage = "Invalid move - " + rookSide + "Rook has already moved";
+		return false;
+	}
+	else if (king.getIsInCheck())
+	{
+		errorMessage = "Invalid move - King is in check";
+		return false;
+	}
+
+	int direction = side == Side::QueenSide ? -1 : 1;
+	for (int i = from.col + direction; i != rook->getCurrentPosition().col; i + direction)
+	{
+		Square &square = board.getSquare(from.row, i);
+		// If there is a piece between the king and the rook then the king cannot castle
+		if (square.getPiece() != nullptr)
+		{
+			errorMessage = "Invalid move - King cannot castle through other pieces";
+			return false;
+		} // TODO - check if the king passes through check - maybe add a check in square to see if it is attacked by the opponent could use attack tables
+	}
+
+	return true;
 }
