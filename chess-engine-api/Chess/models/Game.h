@@ -93,6 +93,12 @@ public:
 	bool isKingInCheck(Color color);
 
 	bool isValidCastle(Position from, Position to, King &king, std::string &errorMessage);
+
+	void validateGenericMove(Position from, Position to, Piece &fromPiece, Square &toSquare);
+
+	void validatePawnMove(Position from, Position to, Piece &fromPiece, Square &toSquare);
+
+	void validateKingMove(Position from, Position to, Piece &fromPiece);
 };
 
 #endif

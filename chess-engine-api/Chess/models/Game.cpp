@@ -178,18 +178,8 @@ Move Game::composeMoveStruct(Position from, Position to, char promotion, std::op
 	return move;
 }
 
-Move Game::prepareMove(Position from, Position to, char promotion)
+void Game::validateGenericMove(Position from, Position to, Piece &fromPiece, Square &toSquare)
 {
-	Square &fromSquare = board.getSquare(from);
-	Square &toSquare = board.getSquare(to);
-
-	if (!fromSquare.getPiece())
-	{
-		throw std::invalid_argument("No piece at from position");
-	}
-
-	Piece &fromPiece = *fromSquare.getPiece();
-
 	// check if it's the right turn
 	if (fromPiece.getPieceColor() != activeColor)
 	{
@@ -213,8 +203,10 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 	{
 		throw std::invalid_argument("Invalid move - Path is not clear");
 	}
+}
 
-	// Pawn specific checks
+void Game::validatePawnMove(Position from, Position to, Piece &fromPiece, Square &toSquare)
+{
 	if (fromPiece.getPieceType() == PieceType::Pawn)
 	{
 		Pawn &pawn = dynamic_cast<Pawn &>(fromPiece);
@@ -257,12 +249,11 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 				}
 			}
 		}
-
-		// check if move is a promotion
-		handlePawnPromotion(fromPiece, fromSquare, to, from, promotion);
 	}
+}
 
-	// King specific checks
+void Game::validateKingMove(Position from, Position to, Piece &fromPiece)
+{
 	// TODO - check for the following, moving into check, is in check, if in check can only move out of check or be protected
 	if (fromPiece.getPieceType() == PieceType::King)
 	{
@@ -288,6 +279,29 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 			}
 		}
 	}
+}
+
+Move Game::prepareMove(Position from, Position to, char promotion)
+{
+	Square &fromSquare = board.getSquare(from);
+	Square &toSquare = board.getSquare(to);
+
+	if (!fromSquare.getPiece())
+	{
+		throw std::invalid_argument("No piece at from position");
+	}
+
+	Piece &fromPiece = *fromSquare.getPiece();
+
+	// Generic move checks
+	validateGenericMove(from, to, fromPiece, toSquare);
+	// Pawn specific checks
+	validatePawnMove(from, to, fromPiece, toSquare);
+	// check if move is a promotion
+	handlePawnPromotion(fromPiece, fromSquare, to, from, promotion);
+
+	// King specific checks
+	validateKingMove(from, to, fromPiece);
 
 	// If the move is a capture, store the captured piece
 	std::optional<std::shared_ptr<Piece>> capturedPiece = getCapturedPiece(toSquare, from, to, fromPiece);
