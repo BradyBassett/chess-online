@@ -23,10 +23,6 @@ public:
 
 	Piece(const Piece &piece) noexcept;
 
-	virtual bool isValidMove(Board &board, Position targetPosition, std::string &errorMessage) const;
-
-	virtual Bitboard getValidMoves(Board &board, int (&directions)[4][2]) const;
-
 	bool getHasMoved() const;
 
 	void setHasMoved();
@@ -42,6 +38,10 @@ public:
 	void setCurrentPosition(Position newPosition);
 
 	virtual bool canPromote(Position targetPosition) const;
+
+	Bitboard generateAttacks(const Position (&directions)[4]) const;
+
+	bool canMoveTo(const Position &targetPosition, Bitboard attackTable) const;
 };
 
 #include "Board.h"
