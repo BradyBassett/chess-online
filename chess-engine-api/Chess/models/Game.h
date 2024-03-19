@@ -82,15 +82,11 @@ public:
 
 	void incrementFullMoveNumber();
 
-	bool getWhiteInCheck();
+	bool getInCheck(Color color);
 
-	bool getBlackInCheck();
+	void setInCheck(Color color, bool value);
 
-	void setWhiteInCheck(bool value);
-
-	void setBlackInCheck(bool value);
-
-	bool isKingInCheck(Color color);
+	bool isInCheck(Color color, Position position);
 
 	bool isValidCastle(Position from, Position to, King &king, std::string &errorMessage);
 
