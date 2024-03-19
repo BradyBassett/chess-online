@@ -9,11 +9,14 @@
 #include "../structs/Move.h"
 
 class Rook;
+class King;
+
 class Board
 {
 private:
 	std::vector<std::vector<Square>> squares;
 	std::vector<std::shared_ptr<Rook>> rooks;
+	std::vector<std::shared_ptr<King>> kings;
 	bool whiteCanCastleKingside;
 	bool whiteCanCastleQueenside;
 	bool blackCanCastleKingside;
@@ -60,11 +63,15 @@ public:
 
 	Square &getSquare(Position position);
 
+	Square &getSquare(int squareNumber);
+
 	std::vector<std::vector<Square>> getSquares();
 
 	void setupMove(Move move);
 
 	std::shared_ptr<Rook> getRook(Color color, Side side);
+
+	std::shared_ptr<King> getKing(Color color);
 
 	Side getRookSide(Square square);
 

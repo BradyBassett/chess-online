@@ -43,9 +43,11 @@ std::vector<Square> Board::parseFenPosition(std::string &fenPosition)
 		 {
 			 return std::make_shared<Queen>(Color::Black, square.getPosition());
 		 }},
-		{'k', [](Square square)
+		{'k', [this](Square square)
 		 {
-			 return std::make_shared<King>(Color::Black, square.getPosition());
+			 std::shared_ptr<King> king = std::make_shared<King>(Color::Black, square.getPosition());
+			 kings.push_back(king);
+			 return king;
 		 }},
 		{'p', [](Square square)
 		 {
@@ -69,9 +71,11 @@ std::vector<Square> Board::parseFenPosition(std::string &fenPosition)
 		 {
 			 return std::make_shared<Queen>(Color::White, square.getPosition());
 		 }},
-		{'K', [](Square square)
+		{'K', [this](Square square)
 		 {
-			 return std::make_shared<King>(Color::White, square.getPosition());
+			 std::shared_ptr<King> king = std::make_shared<King>(Color::White, square.getPosition());
+			 kings.push_back(king);
+			 return king;
 		 }},
 		{'P', [](Square square)
 		 {
@@ -212,6 +216,8 @@ bool Board::isPathClear(Position from, Position to, std::shared_ptr<Piece> piece
 {
 	Bitboard path = calculatePath(from, to, piece);
 	Bitboard allPieces = getAllPiecesBitboard();
+
+	Bitboard x = path & allPieces;
 
 	return (path & allPieces) == 0;
 }
@@ -363,6 +369,16 @@ Square &Board::getSquare(Position position)
 	return squares[position.row][position.col];
 }
 
+Square &Board::getSquare(int squareNumber)
+{
+	uint8_t boardSize = squares.size();
+	if (squareNumber < 0 || squareNumber >= boardSize * boardSize)
+	{
+		throw std::out_of_range("Square number is out of range");
+	}
+	return squares[squareNumber / boardSize][squareNumber % boardSize];
+}
+
 std::vector<std::vector<Square>> Board::getSquares()
 {
 	return squares;
@@ -417,6 +433,19 @@ std::shared_ptr<Rook> Board::getRook(Color color, Side side)
 	}
 
 	throw std::invalid_argument("No rook found");
+}
+
+std::shared_ptr<King> Board::getKing(Color color)
+{
+	for (std::shared_ptr<King> king : kings)
+	{
+		if (king->getPieceColor() == color)
+		{
+			return king;
+		}
+	}
+
+	throw std::invalid_argument("No king found");
 }
 
 Side Board::getRookSide(Square square)
