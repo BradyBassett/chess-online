@@ -40,8 +40,6 @@ public:
 	virtual bool canPromote(Position targetPosition) const;
 
 	Bitboard generateAttacks(const Position (&directions)[4]) const;
-
-	bool canMoveTo(const Position &targetPosition, Bitboard attackTable) const;
 };
 
 #include "Board.h"
