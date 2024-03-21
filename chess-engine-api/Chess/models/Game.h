@@ -82,17 +82,21 @@ public:
 
 	void incrementFullMoveNumber();
 
-	bool getWhiteInCheck();
+	bool getInCheck(Color color);
 
-	bool getBlackInCheck();
+	void setInCheck(Color color, bool value);
 
-	void setWhiteInCheck(bool value);
+	bool isInCheck(Color color, Position position);
 
-	void setBlackInCheck(bool value);
-
-	bool isKingInCheck(Color color);
+	bool isCheckmate(Color color);
 
 	bool isValidCastle(Position from, Position to, King &king, std::string &errorMessage);
+
+	void validateGenericMove(Position from, Position to, Piece &fromPiece, Square &toSquare);
+
+	void validatePawnMove(Position from, Position to, Piece &fromPiece, Square &toSquare);
+
+	void validateKingMove(Position from, Position to, Piece &fromPiece);
 };
 
 #endif

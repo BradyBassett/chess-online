@@ -48,6 +48,10 @@ public:
 
 	uint64_t getValue();
 
+	bool getBit(int index);
+
+	bool getBit(Position position);
+
 	void setValue(uint64_t value);
 
 	void setBit(Position position);

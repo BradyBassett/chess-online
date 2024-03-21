@@ -9,6 +9,8 @@ public:
 	Knight(Color pieceColor, Position currentPosition);
 
 	Bitboard generateAttacks() const;
+
+	Bitboard getPotentialMoves() const;
 };
 
 #endif

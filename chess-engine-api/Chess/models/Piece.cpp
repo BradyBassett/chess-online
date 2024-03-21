@@ -73,10 +73,7 @@ Bitboard Piece::generateAttacks(const Position (&directions)[4]) const
 	return attacks;
 }
 
-// The attack table parameter is going to be the bitboard at the pieces current position, determined by the piece's type and color when the function is called
-bool Piece::canMoveTo(const Position &targetPosition, Bitboard attackTable) const
+Bitboard Piece::getPotentialMoves() const
 {
-	Bitboard target = Bitboard(targetPosition);
-
-	return (attackTable & target) != 0;
+	return 0x0;
 }

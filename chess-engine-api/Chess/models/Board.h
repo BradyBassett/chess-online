@@ -3,21 +3,24 @@
 
 #include <string>
 #include <vector>
+#include <tuple>
+#include <map>
 #include "Square.h"
 #include "Bitboard.h"
 #include "../enums/Side.h"
 #include "../structs/Move.h"
 
 class Rook;
+class King;
+
 class Board
 {
 private:
 	std::vector<std::vector<Square>> squares;
 	std::vector<std::shared_ptr<Rook>> rooks;
-	bool whiteCanCastleKingside;
-	bool whiteCanCastleQueenside;
-	bool blackCanCastleKingside;
-	bool blackCanCastleQueenside;
+	std::vector<std::shared_ptr<King>> kings;
+	bool canCastleKingside[2];
+	bool canCastleQueenside[2];
 	Square *enPassantTargetSquare;
 	Bitboard bitboards[2][6];		 // [color][pieceType] = [white, black][pawns, knights, bishops, rooks, queens, king]
 	Bitboard pawnAttackTable[2][64]; // [white, black]
@@ -60,11 +63,15 @@ public:
 
 	Square &getSquare(Position position);
 
+	Square &getSquare(int squareNumber);
+
 	std::vector<std::vector<Square>> getSquares();
 
 	void setupMove(Move move);
 
 	std::shared_ptr<Rook> getRook(Color color, Side side);
+
+	std::shared_ptr<King> getKing(Color color);
 
 	Side getRookSide(Square square);
 
@@ -76,21 +83,13 @@ public:
 
 	Bitboard getAllPiecesBitboard();
 
-	bool getWhiteCanCastleKingside();
+	bool getCanCastleKingside(Color color);
 
-	bool getWhiteCanCastleQueenside();
+	bool getCanCastleQueenside(Color color);
 
-	bool getBlackCanCastleKingside();
+	void setCanCastleKingside(bool value, Color color);
 
-	bool getBlackCanCastleQueenside();
-
-	void setWhiteCanCastleKingside(bool value);
-
-	void setWhiteCanCastleQueenside(bool value);
-
-	void setBlackCanCastleKingside(bool value);
-
-	void setBlackCanCastleQueenside(bool value);
+	void setCanCastleQueenside(bool value, Color color);
 
 	void updateCastlingAvailability(Piece &fromPiece);
 

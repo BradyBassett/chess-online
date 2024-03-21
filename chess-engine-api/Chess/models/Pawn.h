@@ -19,6 +19,8 @@ public:
 	bool canPromote(Position targetPosition) const override;
 
 	Bitboard generateAttacks() const;
+
+	Bitboard getPotentialMoves() const;
 };
 
 #endif

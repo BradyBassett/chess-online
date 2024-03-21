@@ -178,18 +178,8 @@ Move Game::composeMoveStruct(Position from, Position to, char promotion, std::op
 	return move;
 }
 
-Move Game::prepareMove(Position from, Position to, char promotion)
+void Game::validateGenericMove(Position from, Position to, Piece &fromPiece, Square &toSquare)
 {
-	Square &fromSquare = board.getSquare(from);
-	Square &toSquare = board.getSquare(to);
-
-	if (!fromSquare.getPiece())
-	{
-		throw std::invalid_argument("No piece at from position");
-	}
-
-	Piece &fromPiece = *fromSquare.getPiece();
-
 	// check if it's the right turn
 	if (fromPiece.getPieceColor() != activeColor)
 	{
@@ -209,12 +199,14 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 	}
 
 	// Check if the move is going through another piece
-	if (board.isPathClear(from, to, std::make_shared<Piece>(fromPiece)))
+	if (!board.isPathClear(from, to, std::make_shared<Piece>(fromPiece)))
 	{
 		throw std::invalid_argument("Invalid move - Path is not clear");
 	}
+}
 
-	// Pawn specific checks
+void Game::validatePawnMove(Position from, Position to, Piece &fromPiece, Square &toSquare)
+{
 	if (fromPiece.getPieceType() == PieceType::Pawn)
 	{
 		Pawn &pawn = dynamic_cast<Pawn &>(fromPiece);
@@ -257,12 +249,11 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 				}
 			}
 		}
-
-		// check if move is a promotion
-		handlePawnPromotion(fromPiece, fromSquare, to, from, promotion);
 	}
+}
 
-	// King specific checks
+void Game::validateKingMove(Position from, Position to, Piece &fromPiece)
+{
 	// TODO - check for the following, moving into check, is in check, if in check can only move out of check or be protected
 	if (fromPiece.getPieceType() == PieceType::King)
 	{
@@ -288,12 +279,60 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 			}
 		}
 	}
+}
+
+// HERE IS HOW I WANT CHECK TO WORK
+// AFTER A VALID MOVE IS MADE, CHECK IF THE OPPOSING KING IS IN CHECK
+// ALSO, CHECK IF THE MOVE PUTS THE CURRENT KING IN CHECK
+// UPDATE THE KING'S IN CHECK STATUS ONLY IN THE FIRST SCENARIO
+// THE SECOND SCENARIO SHOULD THROW AND EXCEPTION
+
+// before move validation, check if the king is in check, if it is, then the move must be to get out of check
+// if the move is not to get out of check, then throw an exception
+// also check if the move puts the current king in check, if it does, then throw an exception
+// After the move is made, check if the opposing king is in check
+// if it is, then update the king's in check status
+
+Move Game::prepareMove(Position from, Position to, char promotion)
+{
+	Square &fromSquare = board.getSquare(from);
+	Square &toSquare = board.getSquare(to);
+
+	if (!fromSquare.getPiece())
+	{
+		throw std::invalid_argument("No piece at from position");
+	}
+
+	Piece &fromPiece = *fromSquare.getPiece();
+
+	// Generic move checks
+	validateGenericMove(from, to, fromPiece, toSquare);
+
+	// Pawn specific checks
+	validatePawnMove(from, to, fromPiece, toSquare);
+	// check if move is a promotion
+	handlePawnPromotion(fromPiece, fromSquare, to, from, promotion);
+
+	// King specific checks
+	validateKingMove(from, to, fromPiece);
 
 	// If the move is a capture, store the captured piece
 	std::optional<std::shared_ptr<Piece>> capturedPiece = getCapturedPiece(toSquare, from, to, fromPiece);
 
 	// compose the move struct
 	Move move = composeMoveStruct(from, to, promotion, capturedPiece);
+
+	if (getInCheck(getActiveColor()))
+	{
+		// TODO - SIMULATE MOVE AND CHECK IF KING IS STILL IN CHECK - EVENTUALLY USE THE UNDO MOVE FUNCTION
+		Board tempBoard = board;
+		tempBoard.setupMove(move);
+
+		if (isInCheck(getActiveColor(), tempBoard.getKing(getActiveColor())->getCurrentPosition()))
+		{
+			throw std::invalid_argument("Invalid move - King is still in check");
+		}
+	}
 
 	return move;
 }
@@ -308,9 +347,6 @@ void Game::executeMove(Move move)
 	// update castling availability if the move was the first move of a rook or the king
 	board.updateCastlingAvailability(fromPiece);
 
-	// move the piece
-	board.setupMove(move);
-
 	// update en passant target square if the move was a double pawn push
 	board.updateEnPassantTargetSquare(fromPiece, move.from, move.to);
 
@@ -323,22 +359,24 @@ void Game::executeMove(Move move)
 	{
 		resetHalfMoveClock();
 	}
+
+	// move the piece
+	board.setupMove(move);
 }
 
 void Game::postMoveChecks()
 {
-	if (activeColor == Color::Black)
+	// Determine the color of the other player
+	Color otherColor = (getActiveColor() == Color::Black) ? Color::White : Color::Black;
+
+	// Increment full move number if the move was made by black
+	if (getActiveColor() == Color::Black)
 	{
-		// increment full move number if the move was made by black
 		incrementFullMoveNumber();
-		// check if the move put the white king in check
-		setWhiteInCheck(isKingInCheck(Color::White));
 	}
-	else
-	{
-		// check if the move put the black king in check
-		setWhiteInCheck(isKingInCheck(Color::Black));
-	}
+
+	// Check if the move put the other king in check
+	setInCheck(otherColor, isInCheck(otherColor, board.getKing(otherColor)->getCurrentPosition()));
 
 	// change turn
 	switchActiveColor();
@@ -419,7 +457,51 @@ void Game::undoPreviousMove()
 	}
 	else
 	{
-		// TODO - Implement undo move
+		// TODO - Also be sure to update the appropriate bitboards
+		Move lastMove = moves.back();
+		moves.pop_back();
+
+		// get the piece that was moved
+		std::shared_ptr<Piece> piece = board.getSquare(lastMove.to).getPiece();
+
+		// if the move was a capture, restore the captured piece
+		if (lastMove.hasFlag(MoveFlag::StandardCapture))
+		{
+			// recreate the captured piece and place it on the target square
+			// board.getSquare(lastMove.to).setPiece(lastMove.capturedPiece.value());
+		}
+		else if (lastMove.hasFlag(MoveFlag::EnPassant))
+		{
+			// recreate the captured piece and place it on the target square
+			// board.getSquare(lastMove.to.row + (piece->getPieceColor() == Color::White ? -1 : 1), lastMove.to.col).setPiece(lastMove.capturedPiece.value());
+		}
+
+		// check if the move was a castle and restore the rook
+		if (lastMove.hasFlag(MoveFlag::KingsideCastling))
+		{
+			board.getSquare(lastMove.to.row, 7).setPiece(board.getSquare(lastMove.to.row, 5).getPiece());
+			board.getSquare(lastMove.to.row, 5).setPiece(nullptr);
+		}
+		else if (lastMove.hasFlag(MoveFlag::QueensideCastling))
+		{
+			board.getSquare(lastMove.to.row, 0).setPiece(board.getSquare(lastMove.to.row, 3).getPiece());
+			board.getSquare(lastMove.to.row, 3).setPiece(nullptr);
+		}
+
+		// if the move was a promotion, remove the promoted piece
+		if (lastMove.hasFlag(MoveFlag::Promotion))
+		{
+			board.getSquare(lastMove.to).setPiece(nullptr);
+		}
+
+		// if the move was a double pawn push, update the en passant target square, and reset pawn has moved
+		if (lastMove.hasFlag(MoveFlag::PawnPush))
+		{
+			// TODO - update en passant target square
+			// TODO - reset pawn has moved
+		}
+
+		// Move the piece back to its original position
 	}
 }
 
@@ -448,35 +530,102 @@ void Game::incrementFullMoveNumber()
 	fullMoveNumber++;
 }
 
-bool Game::getWhiteInCheck()
+bool Game::getInCheck(Color color)
 {
-	return whiteInCheck;
+	return color == Color::White ? whiteInCheck : blackInCheck;
 }
 
-bool Game::getBlackInCheck()
+void Game::setInCheck(Color color, bool value)
 {
-	return blackInCheck;
+	if (color == Color::White)
+	{
+		whiteInCheck = value;
+	}
+	else
+	{
+		blackInCheck = value;
+	}
 }
 
-void Game::setWhiteInCheck(bool value)
+bool Game::isInCheck(Color color, Position position)
 {
-	whiteInCheck = value;
-}
+	Bitboard opposingPieces = color == Color::White ? board.getBlackPiecesBitboard() : board.getWhitePiecesBitboard();
 
-void Game::setBlackInCheck(bool value)
-{
-	blackInCheck = value;
-}
+	for (int square = 0; square < 64; square++)
+	{
+		if (opposingPieces.getBit(square))
+		{
+			std::shared_ptr<Piece> piece = board.getSquare(square).getPiece();
+			Bitboard attackTable = board.getAttackTable(piece->getPieceColor(), piece->getPieceType())[square];
+			if (attackTable.getBit(position))
+			{
+				return true;
+			}
+		}
+	}
 
-bool Game::isKingInCheck(Color color)
-{
-	// TODO - Implement isKingInCheck
 	return false;
+}
+
+bool Game::isCheckmate(Color color)
+{
+	// get the king
+	std::shared_ptr<King> king = board.getKing(color);
+	// get the potential moves of the king
+	Bitboard kingMoves = king->getPotentialMoves();
+
+	// for each set bit in the bitboard, simulate the move and check if the king is still in check
+	for (int i = 0; i < 64; i++)
+	{
+		if (kingMoves.getBit(i))
+		{
+			Position to = {i / 8, i % 8};
+			Move move = composeMoveStruct(king->getCurrentPosition(), to, '\0', std::nullopt);
+			Board tempBoard = board;
+			tempBoard.setupMove(move);
+			if (!isInCheck(color, to))
+			{
+				// If there is any move that the king can make that would not result in check, return false
+				return false;
+			}
+		}
+	}
+
+	// If no such move is found, check if any other piece of the same color can block the check
+	// First loop through all the squares and when a piece is found, get the potential moves of that piece
+	for (int square = 0; square < 64; square++)
+	{
+		if (board.getAllPiecesBitboard().getBit(square))
+		{
+			std::shared_ptr<Piece> piece = board.getSquare(square).getPiece();
+			Bitboard pieceMoves = piece->getPotentialMoves();
+
+			// For each set bit in the bitboard, simulate the move and check if the king is still in check
+			for (int i = 0; i < 64; i++)
+			{
+				if (pieceMoves.getBit(i))
+				{
+					Position from = piece->getCurrentPosition();
+					Position to = {i / 8, i % 8};
+					Move move = composeMoveStruct(from, to, '\0', std::nullopt);
+					Board tempBoard = board;
+					tempBoard.setupMove(move);
+					if (!isInCheck(color, king->getCurrentPosition()))
+					{
+						// If there is any move that the piece can make that would not result in check, return false
+						return false;
+					}
+				}
+			}
+		}
+	}
+
+	return true;
 }
 
 bool Game::isValidCastle(Position from, Position to, King &king, std::string &errorMessage)
 {
-	if (!(board.getWhiteCanCastleKingside() || board.getWhiteCanCastleQueenside() || board.getBlackCanCastleKingside() || board.getBlackCanCastleQueenside()))
+	if (!(board.getCanCastleKingside(king.getPieceColor()) || board.getCanCastleQueenside(king.getPieceColor())))
 	{
 		errorMessage = "Invalid move - No castling rights";
 		return false;
@@ -512,7 +661,13 @@ bool Game::isValidCastle(Position from, Position to, King &king, std::string &er
 		{
 			errorMessage = "Invalid move - King cannot castle through other pieces";
 			return false;
-		} // TODO - check if the king passes through check - maybe add a check in square to see if it is attacked by the opponent could use attack tables
+		}
+
+		if (isInCheck(king.getPieceColor(), {from.row, i}))
+		{
+			errorMessage = "Invalid move - King cannot castle through check";
+			return false;
+		}
 	}
 
 	return true;
