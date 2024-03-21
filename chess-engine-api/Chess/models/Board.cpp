@@ -126,10 +126,18 @@ std::vector<Square> Board::parseFenPosition(std::string &fenPosition)
 
 void Board::parseCastlingAvailability(const std::string &castling)
 {
-	setWhiteCanCastleKingside(castling.find('K') != std::string::npos);
-	setWhiteCanCastleQueenside(castling.find('Q') != std::string::npos);
-	setBlackCanCastleKingside(castling.find('k') != std::string::npos);
-	setBlackCanCastleQueenside(castling.find('q') != std::string::npos);
+	setCanCastleKingside(castling.find('K') != std::string::npos, Color::White);
+	setCanCastleQueenside(castling.find('Q') != std::string::npos, Color::White);
+	setCanCastleKingside(castling.find('k') != std::string::npos, Color::Black);
+	setCanCastleQueenside(castling.find('q') != std::string::npos, Color::Black);
+
+	std::shared_ptr<King> whiteKing = getKing(Color::White);
+	std::shared_ptr<King> blackKing = getKing(Color::Black);
+
+	whiteKing->setCanCastleKingside(getCanCastleKingside(Color::White));
+	whiteKing->setCanCastleQueenside(getCanCastleQueenside(Color::White));
+	blackKing->setCanCastleKingside(getCanCastleKingside(Color::Black));
+	blackKing->setCanCastleQueenside(getCanCastleQueenside(Color::Black));
 }
 
 void Board::parseEnPassantTarget(const std::string &enPassant)
@@ -453,44 +461,24 @@ Side Board::getRookSide(Square square)
 	return (square.getPosition().col == 0) ? Side::QueenSide : Side::KingSide;
 }
 
-bool Board::getWhiteCanCastleKingside()
+bool Board::getCanCastleKingside(Color color)
 {
-	return whiteCanCastleKingside;
+	return canCastleKingside[static_cast<int>(color)];
 }
 
-bool Board::getWhiteCanCastleQueenside()
+bool Board::getCanCastleQueenside(Color color)
 {
-	return whiteCanCastleQueenside;
+	return canCastleQueenside[static_cast<int>(color)];
 }
 
-bool Board::getBlackCanCastleKingside()
+void Board::setCanCastleKingside(bool value, Color color)
 {
-	return blackCanCastleKingside;
+	canCastleKingside[static_cast<int>(color)] = value;
 }
 
-bool Board::getBlackCanCastleQueenside()
+void Board::setCanCastleQueenside(bool value, Color color)
 {
-	return blackCanCastleQueenside;
-}
-
-void Board::setWhiteCanCastleKingside(bool value)
-{
-	whiteCanCastleKingside = value;
-}
-
-void Board::setWhiteCanCastleQueenside(bool value)
-{
-	whiteCanCastleQueenside = value;
-}
-
-void Board::setBlackCanCastleKingside(bool value)
-{
-	blackCanCastleKingside = value;
-}
-
-void Board::setBlackCanCastleQueenside(bool value)
-{
-	blackCanCastleQueenside = value;
+	canCastleQueenside[static_cast<int>(color)] = value;
 }
 
 Bitboard &Board::getBitboard(Color color, PieceType pieceType)
@@ -520,41 +508,24 @@ void Board::updateCastlingAvailability(Piece &fromPiece)
 	{
 		if (fromPiece.getPieceType() == PieceType::King)
 		{
-			if (fromPiece.getPieceColor() == Color::White)
-			{
-				setWhiteCanCastleKingside(false);
-				setWhiteCanCastleQueenside(false);
-			}
-			else
-			{
-				setBlackCanCastleKingside(false);
-				setBlackCanCastleQueenside(false);
-			}
+			King king = dynamic_cast<King &>(fromPiece);
+			setCanCastleKingside(false, fromPiece.getPieceColor());
+			setCanCastleQueenside(false, fromPiece.getPieceColor());
+			king.setCanCastleKingside(false);
+			king.setCanCastleQueenside(false);
 		}
 		else if (fromPiece.getPieceType() == PieceType::Rook)
 		{
 			Rook &rook = dynamic_cast<Rook &>(fromPiece);
-			if (fromPiece.getPieceColor() == Color::White)
+			if (rook.getSide() == Side::KingSide)
 			{
-				if (rook.getSide() == Side::KingSide)
-				{
-					setWhiteCanCastleKingside(false);
-				}
-				else
-				{
-					setWhiteCanCastleQueenside(false);
-				}
+				setCanCastleKingside(false, fromPiece.getPieceColor());
+				getKing(fromPiece.getPieceColor())->setCanCastleKingside(false);
 			}
 			else
 			{
-				if (rook.getSide() == Side::KingSide)
-				{
-					setBlackCanCastleKingside(false);
-				}
-				else
-				{
-					setBlackCanCastleQueenside(false);
-				}
+				setCanCastleQueenside(false, fromPiece.getPieceColor());
+				getKing(fromPiece.getPieceColor())->setCanCastleQueenside(false);
 			}
 		}
 	}

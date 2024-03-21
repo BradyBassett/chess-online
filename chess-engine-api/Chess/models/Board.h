@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include <tuple>
+#include <map>
 #include "Square.h"
 #include "Bitboard.h"
 #include "../enums/Side.h"
@@ -17,10 +19,8 @@ private:
 	std::vector<std::vector<Square>> squares;
 	std::vector<std::shared_ptr<Rook>> rooks;
 	std::vector<std::shared_ptr<King>> kings;
-	bool whiteCanCastleKingside;
-	bool whiteCanCastleQueenside;
-	bool blackCanCastleKingside;
-	bool blackCanCastleQueenside;
+	bool canCastleKingside[2];
+	bool canCastleQueenside[2];
 	Square *enPassantTargetSquare;
 	Bitboard bitboards[2][6];		 // [color][pieceType] = [white, black][pawns, knights, bishops, rooks, queens, king]
 	Bitboard pawnAttackTable[2][64]; // [white, black]
@@ -83,21 +83,13 @@ public:
 
 	Bitboard getAllPiecesBitboard();
 
-	bool getWhiteCanCastleKingside();
+	bool getCanCastleKingside(Color color);
 
-	bool getWhiteCanCastleQueenside();
+	bool getCanCastleQueenside(Color color);
 
-	bool getBlackCanCastleKingside();
+	void setCanCastleKingside(bool value, Color color);
 
-	bool getBlackCanCastleQueenside();
-
-	void setWhiteCanCastleKingside(bool value);
-
-	void setWhiteCanCastleQueenside(bool value);
-
-	void setBlackCanCastleKingside(bool value);
-
-	void setBlackCanCastleQueenside(bool value);
+	void setCanCastleQueenside(bool value, Color color);
 
 	void updateCastlingAvailability(Piece &fromPiece);
 
