@@ -40,3 +40,24 @@ Bitboard Pawn::generateAttacks() const
 
 	return attacks;
 }
+
+Bitboard Pawn::getPotentialMoves() const
+{
+	Bitboard moves = generateAttacks();
+
+	int direction = pieceColor == Color::White ? -1 : 1;
+
+	Position singleStep = {currentPosition.row + direction, currentPosition.col};
+	Position doubleStep = {currentPosition.row + 2 * direction, currentPosition.col};
+
+	if (singleStep.row >= 0 && singleStep.row < 8 && singleStep.col >= 0 && singleStep.col < 8)
+	{
+		moves.setBit(singleStep);
+		if (!hasMoved && doubleStep.row >= 0 && doubleStep.row < 8 && doubleStep.col >= 0 && doubleStep.col < 8)
+		{
+			moves.setBit(doubleStep);
+		}
+	}
+
+	return moves;
+}
