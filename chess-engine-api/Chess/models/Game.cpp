@@ -553,11 +553,11 @@ bool Game::isInCheck(Color color, Position position)
 
 	for (int square = 0; square < 64; square++)
 	{
-		if (opposingPieces.getValue() & (1ULL << square))
+		if (opposingPieces.getBit(square))
 		{
 			std::shared_ptr<Piece> piece = board.getSquare(square).getPiece();
 			Bitboard attackTable = board.getAttackTable(piece->getPieceColor(), piece->getPieceType())[square];
-			if (attackTable.getValue() & (1ULL << position.row * 8 + position.col))
+			if (attackTable.getBit(position))
 			{
 				return true;
 			}
@@ -567,9 +567,65 @@ bool Game::isInCheck(Color color, Position position)
 	return false;
 }
 
+bool Game::isCheckmate(Color color)
+{
+	// get the king
+	std::shared_ptr<King> king = board.getKing(color);
+	// get the potential moves of the king
+	Bitboard kingMoves = king->getPotentialMoves();
+
+	// for each set bit in the bitboard, simulate the move and check if the king is still in check
+	for (int i = 0; i < 64; i++)
+	{
+		if (kingMoves.getBit(i))
+		{
+			Position to = {i / 8, i % 8};
+			Move move = composeMoveStruct(king->getCurrentPosition(), to, '\0', std::nullopt);
+			Board tempBoard = board;
+			tempBoard.setupMove(move);
+			if (!isInCheck(color, to))
+			{
+				// If there is any move that the king can make that would not result in check, return false
+				return false;
+			}
+		}
+	}
+
+	// If no such move is found, check if any other piece of the same color can block the check
+	// First loop through all the squares and when a piece is found, get the potential moves of that piece
+	for (int square = 0; square < 64; square++)
+	{
+		if (board.getAllPiecesBitboard().getBit(square))
+		{
+			std::shared_ptr<Piece> piece = board.getSquare(square).getPiece();
+			Bitboard pieceMoves = piece->getPotentialMoves();
+
+			// For each set bit in the bitboard, simulate the move and check if the king is still in check
+			for (int i = 0; i < 64; i++)
+			{
+				if (pieceMoves.getBit(i))
+				{
+					Position from = piece->getCurrentPosition();
+					Position to = {i / 8, i % 8};
+					Move move = composeMoveStruct(from, to, '\0', std::nullopt);
+					Board tempBoard = board;
+					tempBoard.setupMove(move);
+					if (!isInCheck(color, king->getCurrentPosition()))
+					{
+						// If there is any move that the piece can make that would not result in check, return false
+						return false;
+					}
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
 bool Game::isValidCastle(Position from, Position to, King &king, std::string &errorMessage)
 {
-	if (!(board.getWhiteCanCastleKingside() || board.getWhiteCanCastleQueenside() || board.getBlackCanCastleKingside() || board.getBlackCanCastleQueenside()))
+	if (!(board.getCanCastleKingside(king.getPieceColor()) || board.getCanCastleQueenside(king.getPieceColor())))
 	{
 		errorMessage = "Invalid move - No castling rights";
 		return false;
