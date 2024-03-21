@@ -91,6 +91,20 @@ public:
 
 	bool isCheckmate(Color color);
 
+	bool isStalemate(Color color);
+
+	bool isDraw();
+
+	bool isFiftyMoveRule();
+
+	bool isThreefoldRepetition();
+
+	bool isInsufficientMaterial();
+
+	bool isResignation();
+
+	bool isTimeout();
+
 	GameEndState isGameOver();
 
 	bool isValidCastle(Position from, Position to, King &king, std::string &errorMessage);
