@@ -9,6 +9,8 @@ public:
 	using Piece::Piece;
 
 	Bitboard generateAttacks() const;
+
+	Bitboard getPotentialMoves() const;
 };
 
 #endif
