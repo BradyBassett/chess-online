@@ -20,7 +20,6 @@ private:
 	Color activeColor;
 	Board board;
 	std::vector<Move> moves;
-	// TODO - Implement 50 move rule using halfMoveClock
 	uint8_t halfMoveClock;
 	uint8_t fullMoveNumber;
 	bool whiteInCheck = false;

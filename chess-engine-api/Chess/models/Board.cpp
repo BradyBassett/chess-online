@@ -501,7 +501,6 @@ Bitboard Board::getAllPiecesBitboard()
 	return getWhitePiecesBitboard() | getBlackPiecesBitboard();
 }
 
-// TODO - Actually use the castling availability in the logic for checking a valid castle
 void Board::updateCastlingAvailability(Piece &fromPiece)
 {
 	if (!fromPiece.getHasMoved())

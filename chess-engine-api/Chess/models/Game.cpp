@@ -391,9 +391,10 @@ void Game::attemptMove(Position from, Position to, char promotion)
 
 void Game::handlePawnPromotion(Piece &fromPiece, Square &fromSquare, Position to, Position from, char promotion)
 {
-	// TODO - Also be sure to update the appropriate bitboards
+	// ! - Also be sure to update the appropriate bitboards
+	// remove the pawn from the pawn bitboard and add the promoted piece to the appropriate bitboard
 
-	if (fromPiece.canPromote(to))
+		if (fromPiece.canPromote(to))
 	{
 		switch (promotion)
 		{
@@ -449,6 +450,7 @@ void Game::addMove(Move move)
 	moves.push_back(move);
 }
 
+// TODO - Implement undo move
 void Game::undoPreviousMove()
 {
 	if (moves.size() == 0)
@@ -457,7 +459,7 @@ void Game::undoPreviousMove()
 	}
 	else
 	{
-		// TODO - Also be sure to update the appropriate bitboards
+		// ! - Also be sure to update the appropriate bitboards
 		Move lastMove = moves.back();
 		moves.pop_back();
 
@@ -497,8 +499,8 @@ void Game::undoPreviousMove()
 		// if the move was a double pawn push, update the en passant target square, and reset pawn has moved
 		if (lastMove.hasFlag(MoveFlag::PawnPush))
 		{
-			// TODO - update en passant target square
-			// TODO - reset pawn has moved
+			// ! - update en passant target square
+			// ! - reset pawn has moved
 		}
 
 		// Move the piece back to its original position
