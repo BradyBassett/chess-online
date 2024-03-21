@@ -32,7 +32,7 @@ int main()
 	// TODO - Add a way to play the engine against itself
 	// TODO - Add a way to play the engine against another engine
 	// TODO - Add a way to play the engine against its older versions
-	// TODO - Add Checkmate, Stalemate, and Draw detection
+	// TODO - Add Stalemate and Draw detection
 	// TODO - Add console arguments for undoing moves and specifying preferred color
 	// TODO - Implement a way to communicate with the web app
 	// TODO - Implement a way to communicate with UCI
@@ -79,6 +79,22 @@ int main()
 		catch (const std::exception &e)
 		{
 			std::cerr << e.what() << "\n\n";
+		}
+
+		if (game.isGameOver() != GameEndState::IN_PROGRESS)
+		{
+			if (game.getActiveColor() == Color::White)
+			{
+				std::cout << "Black wins!" << std::endl;
+				std::cout << game.ascii() << std::endl;
+			}
+			else
+			{
+				std::cout << "White wins!" << std::endl;
+				std::cout << game.ascii() << std::endl;
+			}
+
+			break;
 		}
 	}
 
