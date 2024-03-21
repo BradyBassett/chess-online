@@ -378,6 +378,12 @@ void Game::postMoveChecks()
 	// Check if the move put the other king in check
 	setInCheck(otherColor, isInCheck(otherColor, board.getKing(otherColor)->getCurrentPosition()));
 
+	// Check if the current player is in checkmate
+	if (isCheckmate(getActiveColor()))
+	{
+		// TODO - end the game
+	}
+
 	// change turn
 	switchActiveColor();
 }
@@ -621,6 +627,16 @@ bool Game::isCheckmate(Color color)
 	}
 
 	return true;
+}
+
+GameEndState Game::isGameOver()
+{
+	if (isCheckmate(Color::White) || isCheckmate(Color::Black))
+	{
+		return GameEndState::CHECKMATE;
+	}
+	// TODO - Implement stalemate and draw detection
+	return GameEndState::IN_PROGRESS;
 }
 
 bool Game::isValidCastle(Position from, Position to, King &king, std::string &errorMessage)

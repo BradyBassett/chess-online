@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "../enums/Color.h"
+#include "../enums/GameEndState.h"
 #include "../structs/Position.h"
 #include "../structs/Move.h"
 #include "Piece.h"
@@ -89,6 +90,8 @@ public:
 	bool isInCheck(Color color, Position position);
 
 	bool isCheckmate(Color color);
+
+	GameEndState isGameOver();
 
 	bool isValidCastle(Position from, Position to, King &king, std::string &errorMessage);
 
