@@ -23,3 +23,8 @@ Bitboard Knight::generateAttacks() const
 
 	return attacks;
 }
+
+Bitboard Knight::getPotentialMoves() const
+{
+	return generateAttacks();
+}
