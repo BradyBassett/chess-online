@@ -17,6 +17,26 @@ void King::setIsInCheck(bool value)
 	isInCheck = value;
 }
 
+bool King::getCanCastleKingside() const
+{
+	return canCastleKingside;
+}
+
+void King::setCanCastleKingside(bool value)
+{
+	canCastleKingside = value;
+}
+
+bool King::getCanCastleQueenside() const
+{
+	return canCastleQueenside;
+}
+
+void King::setCanCastleQueenside(bool value)
+{
+	canCastleQueenside = value;
+}
+
 Bitboard King::generateAttacks() const
 {
 	const Position moves[8] = {{1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
@@ -33,4 +53,20 @@ Bitboard King::generateAttacks() const
 	}
 
 	return attacks;
+}
+
+Bitboard King::getPotentialMoves() const
+{
+	Bitboard moves = generateAttacks();
+
+	if (canCastleKingside)
+	{
+		moves.setBit({currentPosition.row, currentPosition.col + 2});
+	}
+	if (canCastleQueenside)
+	{
+		moves.setBit({currentPosition.row, currentPosition.col - 2});
+	}
+
+	return moves;
 }

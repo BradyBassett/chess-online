@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "../enums/Color.h"
+#include "../enums/GameEndState.h"
 #include "../structs/Position.h"
 #include "../structs/Move.h"
 #include "Piece.h"
@@ -19,7 +20,6 @@ private:
 	Color activeColor;
 	Board board;
 	std::vector<Move> moves;
-	// TODO - Implement 50 move rule using halfMoveClock
 	uint8_t halfMoveClock;
 	uint8_t fullMoveNumber;
 	bool whiteInCheck = false;
@@ -82,17 +82,37 @@ public:
 
 	void incrementFullMoveNumber();
 
-	bool getWhiteInCheck();
+	bool getInCheck(Color color);
 
-	bool getBlackInCheck();
+	void setInCheck(Color color, bool value);
 
-	void setWhiteInCheck(bool value);
+	bool isInCheck(Color color, Position position);
 
-	void setBlackInCheck(bool value);
+	bool isCheckmate(Color color);
 
-	bool isKingInCheck(Color color);
+	bool isStalemate(Color color);
+
+	bool isDraw();
+
+	bool isFiftyMoveRule();
+
+	bool isThreefoldRepetition();
+
+	bool isInsufficientMaterial();
+
+	bool isResignation();
+
+	bool isTimeout();
+
+	GameEndState isGameOver();
 
 	bool isValidCastle(Position from, Position to, King &king, std::string &errorMessage);
+
+	void validateGenericMove(Position from, Position to, Piece &fromPiece, Square &toSquare);
+
+	void validatePawnMove(Position from, Position to, Piece &fromPiece, Square &toSquare);
+
+	void validateKingMove(Position from, Position to, Piece &fromPiece);
 };
 
 #endif
