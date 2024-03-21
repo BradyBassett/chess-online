@@ -259,7 +259,7 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 		}
 
 		// check if move is a promotion
-		handlePawnPromotion(fromPiece, fromSquare, to, from, promotion);
+		handlePawnPromotion(pawn, to, from, promotion);
 	}
 
 	// King specific checks
@@ -351,25 +351,37 @@ void Game::attemptMove(Position from, Position to, char promotion)
 	postMoveChecks();
 }
 
-void Game::handlePawnPromotion(Piece &fromPiece, Square &fromSquare, Position to, Position from, char promotion)
+void Game::handlePawnPromotion(Pawn &pawn, Position to, Position from, char promotion)
 {
-	// TODO - Also be sure to update the appropriate bitboards
+	Square &toSquare = board.getSquare(to);
+	Bitboard &pawnBitboard = board.getBitboard(getActiveColor(), PieceType::Pawn);
 
-	if (fromPiece.canPromote(to))
+	if (pawn.canPromote(to))
 	{
+		board.getSquare(from).setPiece(nullptr);
+		pawnBitboard.clearBit(from);
+
 		switch (promotion)
 		{
 		case 'q':
-			fromSquare.setPiece(std::make_shared<Queen>(fromPiece.getPieceColor(), from));
+			toSquare.setPiece(std::make_shared<Queen>(getActiveColor(), to));
+			Bitboard &queenBitboard = board.getBitboard(getActiveColor(), PieceType::Queen);
+			queenBitboard.setBit(to);
 			break;
 		case 'r':
-			fromSquare.setPiece(std::make_shared<Rook>(fromPiece.getPieceColor(), from));
+			toSquare.setPiece(std::make_shared<Rook>(getActiveColor(), to));
+			Bitboard &rookBitboard = board.getBitboard(getActiveColor(), PieceType::Rook);
+			rookBitboard.setBit(to);
 			break;
 		case 'b':
-			fromSquare.setPiece(std::make_shared<Bishop>(fromPiece.getPieceColor(), from));
+			toSquare.setPiece(std::make_shared<Bishop>(getActiveColor(), to));
+			Bitboard &bishopBitboard = board.getBitboard(getActiveColor(), PieceType::Bishop);
+			bishopBitboard.setBit(to);
 			break;
 		case 'n':
-			fromSquare.setPiece(std::make_shared<Knight>(fromPiece.getPieceColor(), from));
+			toSquare.setPiece(std::make_shared<Knight>(getActiveColor(), to));
+			Bitboard &knightBitboard = board.getBitboard(getActiveColor(), PieceType::Knight);
+			knightBitboard.setBit(to);
 			break;
 		default:
 			throw std::invalid_argument("Invalid move - Promotion required");

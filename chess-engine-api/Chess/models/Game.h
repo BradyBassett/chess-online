@@ -60,7 +60,7 @@ public:
 
 	void attemptMove(Position from, Position to, char promotion = '\0');
 
-	void handlePawnPromotion(Piece &fromPiece, Square &fromSquare, Position to, Position from, char promotion);
+	void handlePawnPromotion(Pawn &pawn, Position to, Position from, char promotion);
 
 	std::optional<std::shared_ptr<Piece>> getCapturedPiece(Square &toSquare, Position from, Position to, Piece &fromPiece);
 
