@@ -378,12 +378,6 @@ void Game::postMoveChecks()
 	// Check if the move put the other king in check
 	setInCheck(otherColor, isInCheck(otherColor, board.getKing(otherColor)->getCurrentPosition()));
 
-	// Check if the current player is in checkmate
-	if (isCheckmate(getActiveColor()))
-	{
-		// TODO - end the game
-	}
-
 	// change turn
 	switchActiveColor();
 }
@@ -629,11 +623,61 @@ bool Game::isCheckmate(Color color)
 	return true;
 }
 
+bool Game::isStalemate(Color color)
+{
+	// TODO - Implement stalemate detection
+	return false;
+}
+
+bool Game::isDraw()
+{
+	// TODO - Implement draw detection
+	return false;
+}
+
+bool Game::isFiftyMoveRule()
+{
+	if (halfMoveClock >= 100)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Game::isThreefoldRepetition()
+{
+	// TODO - Implement threefold repetition detection
+	return false;
+}
+
+bool Game::isInsufficientMaterial()
+{
+	// TODO - Implement insufficient material detection
+	return false;
+}
+
+bool Game::isResignation()
+{
+	// TODO - Implement resignation detection
+	return false;
+}
+
+bool Game::isTimeout()
+{
+	// TODO - Implement timeout detection
+	return false;
+}
+
 GameEndState Game::isGameOver()
 {
 	if (isCheckmate(Color::White) || isCheckmate(Color::Black))
 	{
 		return GameEndState::CHECKMATE;
+	}
+	if (isFiftyMoveRule())
+	{
+		return GameEndState::FIFTY_MOVE_RULE;
 	}
 	// TODO - Implement stalemate and draw detection
 	return GameEndState::IN_PROGRESS;
