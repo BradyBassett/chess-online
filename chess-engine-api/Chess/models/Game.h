@@ -11,6 +11,7 @@
 #include <optional>
 #include <vector>
 #include "King.h"
+#include "Pawn.h"
 
 class Board;
 
@@ -110,7 +111,7 @@ public:
 
 	void validateGenericMove(Position from, Position to, Piece &fromPiece, Square &toSquare);
 
-	void validatePawnMove(Position from, Position to, Piece &fromPiece, Square &toSquare);
+	void validatePawnMove(Position from, Position to, Piece &fromPiece, Square &toSquare, char promotion);
 
 	void validateKingMove(Position from, Position to, Piece &fromPiece);
 };
