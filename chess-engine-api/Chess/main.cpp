@@ -51,7 +51,8 @@ int main()
 
 	Game game = Game(fenParts);
 
-	while (true)
+	bool isGameOver = false;
+	while (isGameOver)
 	{
 		std::cout << game.ascii() << std::endl;
 
@@ -81,19 +82,56 @@ int main()
 			std::cerr << e.what() << "\n\n";
 		}
 
-		if (game.isGameOver() != GameEndState::IN_PROGRESS)
+		switch (GameEndState::CHECKMATE)
 		{
+		case GameEndState::CHECKMATE:
 			if (game.getActiveColor() == Color::White)
 			{
-				std::cout << "Black wins!" << std::endl;
+				std::cout << "Checkmate - Black wins!" << std::endl;
 				std::cout << game.ascii() << std::endl;
 			}
 			else
 			{
-				std::cout << "White wins!" << std::endl;
+				std::cout << "Checkmate - White wins!" << std::endl;
 				std::cout << game.ascii() << std::endl;
 			}
 
+			isGameOver = true;
+			break;
+		case GameEndState::STALEMATE:
+			std::cout << "Stalemate!" << std::endl;
+
+			isGameOver = true;
+			break;
+		case GameEndState::DRAW:
+			std::cout << "Draw!" << std::endl;
+
+			isGameOver = true;
+			break;
+		case GameEndState::RESIGNATION:
+			std::cout << "Resignation!" << std::endl;
+
+			isGameOver = true;
+			break;
+		case GameEndState::TIMEOUT:
+			std::cout << "Timeout!" << std::endl;
+
+			isGameOver = true;
+			break;
+		case GameEndState::THREEFOLD_REPETITION:
+			std::cout << "Threefold Repetition!" << std::endl;
+
+			isGameOver = true;
+			break;
+		case GameEndState::FIFTY_MOVE_RULE:
+			std::cout << "Fifty Move Rule!" << std::endl;
+
+			isGameOver = true;
+			break;
+		case GameEndState::INSUFFICIENT_MATERIAL:
+			std::cout << "Insufficient Material!" << std::endl;
+
+			isGameOver = true;
 			break;
 		}
 	}
