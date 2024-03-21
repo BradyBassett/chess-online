@@ -52,7 +52,7 @@ int main()
 	Game game = Game(fenParts);
 
 	bool isGameOver = false;
-	while (isGameOver)
+	while (!isGameOver)
 	{
 		std::cout << game.ascii() << std::endl;
 
@@ -82,7 +82,7 @@ int main()
 			std::cerr << e.what() << "\n\n";
 		}
 
-		switch (GameEndState::CHECKMATE)
+		switch (game.isGameOver())
 		{
 		case GameEndState::CHECKMATE:
 			if (game.getActiveColor() == Color::White)

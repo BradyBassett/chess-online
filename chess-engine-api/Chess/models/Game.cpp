@@ -205,7 +205,7 @@ void Game::validateGenericMove(Position from, Position to, Piece &fromPiece, Squ
 	}
 }
 
-void Game::validatePawnMove(Position from, Position to, Piece &fromPiece, Square &toSquare)
+void Game::validatePawnMove(Position from, Position to, Piece &fromPiece, Square &toSquare, char promotion)
 {
 	if (fromPiece.getPieceType() == PieceType::Pawn)
 	{
@@ -249,12 +249,9 @@ void Game::validatePawnMove(Position from, Position to, Piece &fromPiece, Square
 				}
 			}
 		}
-<<<<<<< HEAD
 
 		// check if move is a promotion
 		handlePawnPromotion(pawn, to, from, promotion);
-=======
->>>>>>> 68dc9c88c545087eea7dc254557d12aee38bd90c
 	}
 }
 
@@ -315,9 +312,7 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 	validateGenericMove(from, to, fromPiece, toSquare);
 
 	// Pawn specific checks
-	validatePawnMove(from, to, fromPiece, toSquare);
-	// check if move is a promotion
-	handlePawnPromotion(fromPiece, fromSquare, to, from, promotion);
+	validatePawnMove(from, to, fromPiece, toSquare, promotion);
 
 	// King specific checks
 	validateKingMove(from, to, fromPiece);
@@ -397,17 +392,11 @@ void Game::attemptMove(Position from, Position to, char promotion)
 
 void Game::handlePawnPromotion(Pawn &pawn, Position to, Position from, char promotion)
 {
-<<<<<<< HEAD
 	Square &toSquare = board.getSquare(to);
 	Bitboard &pawnBitboard = board.getBitboard(getActiveColor(), PieceType::Pawn);
+	Bitboard *pieceBitboard;
 
 	if (pawn.canPromote(to))
-=======
-	// ! - Also be sure to update the appropriate bitboards
-	// remove the pawn from the pawn bitboard and add the promoted piece to the appropriate bitboard
-
-		if (fromPiece.canPromote(to))
->>>>>>> 68dc9c88c545087eea7dc254557d12aee38bd90c
 	{
 		board.getSquare(from).setPiece(nullptr);
 		pawnBitboard.clearBit(from);
@@ -416,23 +405,23 @@ void Game::handlePawnPromotion(Pawn &pawn, Position to, Position from, char prom
 		{
 		case 'q':
 			toSquare.setPiece(std::make_shared<Queen>(getActiveColor(), to));
-			Bitboard &queenBitboard = board.getBitboard(getActiveColor(), PieceType::Queen);
-			queenBitboard.setBit(to);
+			pieceBitboard = &board.getBitboard(getActiveColor(), PieceType::Queen);
+			pieceBitboard->setBit(to);
 			break;
 		case 'r':
 			toSquare.setPiece(std::make_shared<Rook>(getActiveColor(), to));
-			Bitboard &rookBitboard = board.getBitboard(getActiveColor(), PieceType::Rook);
-			rookBitboard.setBit(to);
+			pieceBitboard = &board.getBitboard(getActiveColor(), PieceType::Rook);
+			pieceBitboard->setBit(to);
 			break;
 		case 'b':
 			toSquare.setPiece(std::make_shared<Bishop>(getActiveColor(), to));
-			Bitboard &bishopBitboard = board.getBitboard(getActiveColor(), PieceType::Bishop);
-			bishopBitboard.setBit(to);
+			pieceBitboard = &board.getBitboard(getActiveColor(), PieceType::Bishop);
+			pieceBitboard->setBit(to);
 			break;
 		case 'n':
 			toSquare.setPiece(std::make_shared<Knight>(getActiveColor(), to));
-			Bitboard &knightBitboard = board.getBitboard(getActiveColor(), PieceType::Knight);
-			knightBitboard.setBit(to);
+			pieceBitboard = &board.getBitboard(getActiveColor(), PieceType::Knight);
+			pieceBitboard->setBit(to);
 			break;
 		default:
 			throw std::invalid_argument("Invalid move - Promotion required");
