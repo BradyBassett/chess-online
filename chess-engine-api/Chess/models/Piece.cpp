@@ -72,3 +72,8 @@ Bitboard Piece::generateAttacks(const Position (&directions)[4]) const
 
 	return attacks;
 }
+
+Bitboard Piece::getPotentialMoves() const
+{
+	return 0x0;
+}

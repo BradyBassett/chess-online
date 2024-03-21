@@ -7,8 +7,6 @@
 #include "../structs/Position.h"
 #include "Bitboard.h"
 
-class Board;
-
 class Piece
 {
 protected:
@@ -40,6 +38,8 @@ public:
 	virtual bool canPromote(Position targetPosition) const;
 
 	Bitboard generateAttacks(const Position (&directions)[4]) const;
+
+	virtual Bitboard getPotentialMoves() const;
 };
 
 #include "Board.h"
