@@ -16,3 +16,8 @@ Bitboard Queen::generateAttacks() const
 
 	return attacks;
 }
+
+Bitboard Queen::getPotentialMoves() const
+{
+	return generateAttacks();
+}
