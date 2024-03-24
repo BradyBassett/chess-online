@@ -101,6 +101,8 @@ public:
 
 	Position convertStringToPosition(std::string position);
 
+	std::string convertPositionToString(Position position);
+
 	Bitboard (&getAttackTable(Color color, PieceType pieceType))[64];
 
 	bool isPathClear(Position from, Position to, std::shared_ptr<Piece> piece);

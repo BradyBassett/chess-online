@@ -557,6 +557,11 @@ Position Board::convertStringToPosition(std::string position)
 	return Position{8 - (position[1] - '0'), position[0] - 'a'};
 }
 
+std::string Board::convertPositionToString(Position position)
+{
+	return std::string(1, position.col + 'a') + std::to_string(8 - position.row);
+}
+
 Bitboard (&Board::getAttackTable(Color color, PieceType pieceType))[64]
 {
 	switch (pieceType)
