@@ -10,6 +10,7 @@
 #include <string>
 #include <optional>
 #include <vector>
+#include <unordered_map>
 #include "King.h"
 #include "Pawn.h"
 
@@ -21,14 +22,14 @@ private:
 	Color activeColor;
 	Board board;
 	std::vector<Move> moves;
+	// ? If performance becomes an issue, consider hashing the board state using Zobrist hashing
+	std::unordered_map<std::string, int> gameStateHistory;
 	uint8_t halfMoveClock;
 	uint8_t fullMoveNumber;
 	bool whiteInCheck = false;
 	bool blackInCheck = false;
 
 	std::vector<std::string> splitFenString(const std::string &fenString);
-
-	void parsePiecePositions(const std::string &positions);
 
 	void parseActiveColor(const std::string &color);
 
@@ -93,8 +94,6 @@ public:
 
 	bool isStalemate(Color color);
 
-	bool isDraw();
-
 	bool isFiftyMoveRule();
 
 	bool isThreefoldRepetition();
@@ -114,6 +113,10 @@ public:
 	void validatePawnMove(Position from, Position to, Piece &fromPiece, Square &toSquare, char promotion);
 
 	void validateKingMove(Position from, Position to, Piece &fromPiece);
+
+	void validateMove(Position from, Position to, Piece &fromPiece, Square &toSquare, char promotion);
+
+	std::string getFen();
 };
 
 #endif

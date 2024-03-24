@@ -284,6 +284,16 @@ void Game::validateKingMove(Position from, Position to, Piece &fromPiece)
 	}
 }
 
+void Game::validateMove(Position from, Position to, Piece &fromPiece, Square &toSquare, char promotion)
+{
+	// Generic move checks
+	validateGenericMove(from, to, fromPiece, toSquare);
+	// Pawn specific checks
+	validatePawnMove(from, to, fromPiece, toSquare, promotion);
+	// King specific checks
+	validateKingMove(from, to, fromPiece);
+}
+
 // HERE IS HOW I WANT CHECK TO WORK
 // AFTER A VALID MOVE IS MADE, CHECK IF THE OPPOSING KING IS IN CHECK
 // ALSO, CHECK IF THE MOVE PUTS THE CURRENT KING IN CHECK
@@ -308,14 +318,8 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 
 	Piece &fromPiece = *fromSquare.getPiece();
 
-	// Generic move checks
-	validateGenericMove(from, to, fromPiece, toSquare);
-
-	// Pawn specific checks
-	validatePawnMove(from, to, fromPiece, toSquare, promotion);
-
-	// King specific checks
-	validateKingMove(from, to, fromPiece);
+	// Move validation
+	validateMove(from, to, fromPiece, toSquare, promotion);
 
 	// If the move is a capture, store the captured piece
 	std::optional<std::shared_ptr<Piece>> capturedPiece = getCapturedPiece(toSquare, from, to, fromPiece);
@@ -590,11 +594,11 @@ bool Game::isCheckmate(Color color)
 	Bitboard kingMoves = king->getPotentialMoves();
 
 	// for each set bit in the bitboard, simulate the move and check if the king is still in check
-	for (int i = 0; i < 64; i++)
+	for (int square = 0; square < 64; square++)
 	{
-		if (kingMoves.getBit(i))
+		if (kingMoves.getBit(square))
 		{
-			Position to = {i / 8, i % 8};
+			Position to = {square / 8, square % 8};
 			Move move = composeMoveStruct(king->getCurrentPosition(), to, '\0', std::nullopt);
 			Board tempBoard = board;
 			tempBoard.setupMove(move);
@@ -640,14 +644,48 @@ bool Game::isCheckmate(Color color)
 
 bool Game::isStalemate(Color color)
 {
-	// TODO - Implement stalemate detection
-	return false;
-}
+	// check if the king is in check
+	if ((color == Color::White && whiteInCheck) || (color == Color::Black && blackInCheck))
+	{
+		return false;
+	}
 
-bool Game::isDraw()
-{
-	// TODO - Implement draw detection
-	return false;
+	// check if the the current player has any legal moves
+	Bitboard playerPieces = color == Color::White ? board.getWhitePiecesBitboard() : board.getBlackPiecesBitboard();
+
+	for (int square = 0; square < 64; square++)
+	{
+		// If the square contains a piece of the current player then get the potential moves of that piece
+		if (playerPieces.getBit(square))
+		{
+			std::shared_ptr<Piece> piece = board.getSquare(square).getPiece();
+			Bitboard pieceMoves = piece->getPotentialMoves();
+
+			for (int i = 0; i < 64; i++)
+			{
+				// For each set bit in the bitboard, check if the move is valid
+				if (pieceMoves.getBit(i))
+				{
+					Position from = piece->getCurrentPosition();
+					Position to = {i / 8, i % 8};
+
+					// If the move is valid then the player is not in stalemate
+					try
+					{
+						validateMove(from, to, *piece, board.getSquare(to), '\0');
+						return false;
+					}
+					// If the move is invalid then continue to the next move
+					catch (const std::exception &e)
+					{
+						continue;
+					}
+				}
+			}
+		}
+	}
+
+	return true;
 }
 
 bool Game::isFiftyMoveRule()
@@ -690,11 +728,31 @@ GameEndState Game::isGameOver()
 	{
 		return GameEndState::CHECKMATE;
 	}
-	if (isFiftyMoveRule())
+	else if (isStalemate(Color::White) || isStalemate(Color::Black))
+	{
+		return GameEndState::STALEMATE;
+	}
+	else if (isResignation())
+	{
+		return GameEndState::RESIGNATION;
+	}
+	else if (isTimeout())
+	{
+		return GameEndState::TIMEOUT;
+	}
+	else if (isThreefoldRepetition())
+	{
+		return GameEndState::THREEFOLD_REPETITION;
+	}
+	else if (isInsufficientMaterial())
+	{
+		return GameEndState::INSUFFICIENT_MATERIAL;
+	}
+	else if (isFiftyMoveRule())
 	{
 		return GameEndState::FIFTY_MOVE_RULE;
 	}
-	// TODO - Implement stalemate and draw detection
+	// TODO - Implement all other game end states
 	return GameEndState::IN_PROGRESS;
 }
 
@@ -746,4 +804,75 @@ bool Game::isValidCastle(Position from, Position to, King &king, std::string &er
 	}
 
 	return true;
+}
+
+std::string Game::getFen()
+{
+	std::string fen = "";
+	int emptySquares = 0;
+
+	// Piece placement
+	for (int i = 0; i < board.getSquares().size(); i++)
+	{
+		std::vector<Square> row = board.getSquares()[i];
+		emptySquares = 0;
+
+		for (Square square : row)
+		{
+			if (square.getPiece() != nullptr)
+			{
+				if (emptySquares > 0)
+				{
+					fen += std::to_string(emptySquares);
+					emptySquares = 0;
+				}
+
+				fen += pieceToAscii(square.getPiece());
+			}
+			else
+			{
+				emptySquares++;
+			}
+		}
+
+		if (emptySquares > 0)
+		{
+			fen += std::to_string(emptySquares);
+		}
+
+		if (i < board.getSquares().size() - 1)
+		{
+			fen += "/";
+		}
+	}
+
+	// Active color
+	fen += " " + std::string(activeColor == Color::White ? "w" : "b");
+
+	// Castling availability
+	std::string castling = "";
+	castling += (board.getCanCastleKingside(Color::White) ? std::string("K") : std::string(""));
+	castling += (board.getCanCastleQueenside(Color::White) ? std::string("Q") : std::string(""));
+	castling += (board.getCanCastleKingside(Color::Black) ? std::string("k") : std::string(""));
+	castling += (board.getCanCastleQueenside(Color::Black) ? std::string("q") : std::string(""));
+	fen += " " + (castling.empty() ? "-" : castling);
+
+	// En passant target square
+	Square *enPassantTargetSquare = board.getEnPassantTargetSquare();
+	if (enPassantTargetSquare != nullptr)
+	{
+		fen += " " + board.convertPositionToString(enPassantTargetSquare->getPosition());
+	}
+	else
+	{
+		fen += " -";
+	}
+
+	// Halfmove clock
+	fen += " " + std::to_string(halfMoveClock);
+
+	// Fullmove number
+	fen += " " + std::to_string(fullMoveNumber);
+
+	return fen;
 }
