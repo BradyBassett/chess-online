@@ -327,6 +327,12 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 	// If the move is a capture, store the captured piece
 	std::optional<std::shared_ptr<Piece>> capturedPiece = getCapturedPiece(toSquare, from, to, fromPiece);
 
+	// if a piece was captured, decrement the piece count
+	if (capturedPiece.has_value())
+	{
+		board.decrementPieceCount(capturedPiece.value()->getPieceColor(), capturedPiece.value()->getPieceType());
+	}
+
 	// compose the move struct
 	Move move = composeMoveStruct(from, to, promotion, capturedPiece);
 
@@ -417,21 +423,25 @@ void Game::handlePawnPromotion(Pawn &pawn, Position to, Position from, char prom
 			toSquare.setPiece(std::make_shared<Queen>(getActiveColor(), to));
 			pieceBitboard = &board.getBitboard(getActiveColor(), PieceType::Queen);
 			pieceBitboard->setBit(to);
+			board.incrementPieceCount(getActiveColor(), PieceType::Queen);
 			break;
 		case 'r':
 			toSquare.setPiece(std::make_shared<Rook>(getActiveColor(), to));
 			pieceBitboard = &board.getBitboard(getActiveColor(), PieceType::Rook);
 			pieceBitboard->setBit(to);
+			board.incrementPieceCount(getActiveColor(), PieceType::Rook);
 			break;
 		case 'b':
 			toSquare.setPiece(std::make_shared<Bishop>(getActiveColor(), to));
 			pieceBitboard = &board.getBitboard(getActiveColor(), PieceType::Bishop);
 			pieceBitboard->setBit(to);
+			board.incrementPieceCount(getActiveColor(), PieceType::Bishop);
 			break;
 		case 'n':
 			toSquare.setPiece(std::make_shared<Knight>(getActiveColor(), to));
 			pieceBitboard = &board.getBitboard(getActiveColor(), PieceType::Knight);
 			pieceBitboard->setBit(to);
+			board.incrementPieceCount(getActiveColor(), PieceType::Knight);
 			break;
 		default:
 			throw std::invalid_argument("Invalid move - Promotion required");
@@ -716,8 +726,25 @@ bool Game::isThreefoldRepetition()
 
 bool Game::isInsufficientMaterial()
 {
-	// TODO - Implement insufficient material detection
-	return true;
+	// Check for insufficient material conditions.
+	if (board.getPieceCount(Color::White, PieceType::King) == 1 && board.getPieceCount(Color::Black, PieceType::King) == 1)
+	{
+		// Only kings left.
+		if (board.getPieceCount(Color::White, PieceType::Pawn) == 0 && board.getPieceCount(Color::Black, PieceType::Pawn) == 0 &&
+			board.getPieceCount(Color::White, PieceType::Rook) == 0 && board.getPieceCount(Color::Black, PieceType::Rook) == 0 &&
+			board.getPieceCount(Color::White, PieceType::Queen) == 0 && board.getPieceCount(Color::Black, PieceType::Queen) == 0)
+		{
+			// Only kings and possibly bishops or knights left.
+			if (board.getPieceCount(Color::White, PieceType::Bishop) <= 1 && board.getPieceCount(Color::Black, PieceType::Bishop) <= 1 &&
+				board.getPieceCount(Color::White, PieceType::Knight) <= 1 && board.getPieceCount(Color::Black, PieceType::Knight) <= 1)
+			{
+				return true;
+			}
+		}
+	}
+
+	// There is sufficient material for a checkmate.
+	return false;
 }
 
 bool Game::isResignation()

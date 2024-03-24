@@ -582,3 +582,18 @@ Bitboard (&Board::getAttackTable(Color color, PieceType pieceType))[64]
 		throw std::invalid_argument("Invalid piece type");
 	}
 }
+
+int Board::getPieceCount(Color color, PieceType pieceType)
+{
+	return pieceCount[static_cast<int>(color)][static_cast<int>(pieceType)];
+}
+
+void Board::incrementPieceCount(Color color, PieceType pieceType)
+{
+	pieceCount[static_cast<int>(color)][static_cast<int>(pieceType)]++;
+}
+
+void Board::decrementPieceCount(Color color, PieceType pieceType)
+{
+	pieceCount[static_cast<int>(color)][static_cast<int>(pieceType)]--;
+}

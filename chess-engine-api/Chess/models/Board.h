@@ -22,6 +22,7 @@ private:
 	bool canCastleKingside[2];
 	bool canCastleQueenside[2];
 	Square *enPassantTargetSquare;
+	int pieceCount[2][6];			 // [color][pieceType] = [white, black][pawns, knights, bishops, rooks, queens, king]
 	Bitboard bitboards[2][6];		 // [color][pieceType] = [white, black][pawns, knights, bishops, rooks, queens, king]
 	Bitboard pawnAttackTable[2][64]; // [white, black]
 	Bitboard knightAttackTable[64];
@@ -106,6 +107,12 @@ public:
 	Bitboard (&getAttackTable(Color color, PieceType pieceType))[64];
 
 	bool isPathClear(Position from, Position to, std::shared_ptr<Piece> piece);
+
+	int getPieceCount(Color color, PieceType pieceType);
+
+	void incrementPieceCount(Color color, PieceType pieceType);
+
+	void decrementPieceCount(Color color, PieceType pieceType);
 };
 
 #endif
