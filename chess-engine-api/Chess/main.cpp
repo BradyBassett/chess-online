@@ -88,23 +88,16 @@ int main()
 			if (game.getActiveColor() == Color::White)
 			{
 				std::cout << "Checkmate - Black wins!" << std::endl;
-				std::cout << game.ascii() << std::endl;
 			}
 			else
 			{
 				std::cout << "Checkmate - White wins!" << std::endl;
-				std::cout << game.ascii() << std::endl;
 			}
 
 			isGameOver = true;
 			break;
 		case GameEndState::STALEMATE:
 			std::cout << "Stalemate!" << std::endl;
-
-			isGameOver = true;
-			break;
-		case GameEndState::DRAW:
-			std::cout << "Draw!" << std::endl;
 
 			isGameOver = true;
 			break;
@@ -135,6 +128,8 @@ int main()
 			break;
 		}
 	}
+
+	std::cout << game.ascii() << std::endl;
 
 	return 0;
 }
