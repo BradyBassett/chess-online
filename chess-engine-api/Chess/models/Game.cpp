@@ -14,6 +14,9 @@ Game::Game(std::vector<std::string> fenParts) : board(fenParts[0], fenParts[2], 
 	parseActiveColor(fenParts[1]);
 	parseHalfmoveClock(fenParts[4]);
 	parseFullmoveNumber(fenParts[5]);
+
+	// Add the starting position to the game state history
+	gameStateHistory[getFen()] = 1;
 }
 
 void Game::parseActiveColor(const std::string &color)
@@ -383,6 +386,9 @@ void Game::postMoveChecks()
 	// Check if the move put the other king in check
 	setInCheck(otherColor, isInCheck(otherColor, board.getKing(otherColor)->getCurrentPosition()));
 
+	// Add the new position to the game state history, incrementing the count if it already exists
+	gameStateHistory[getFen()]++;
+
 	// change turn
 	switchActiveColor();
 }
@@ -700,26 +706,30 @@ bool Game::isFiftyMoveRule()
 
 bool Game::isThreefoldRepetition()
 {
-	// TODO - Implement threefold repetition detection
+	if (gameStateHistory[getFen()] >= 3)
+	{
+		return true;
+	}
+
 	return false;
 }
 
 bool Game::isInsufficientMaterial()
 {
 	// TODO - Implement insufficient material detection
-	return false;
+	return true;
 }
 
 bool Game::isResignation()
 {
 	// TODO - Implement resignation detection
-	return false;
+	return true;
 }
 
 bool Game::isTimeout()
 {
 	// TODO - Implement timeout detection
-	return false;
+	return true;
 }
 
 GameEndState Game::isGameOver()
