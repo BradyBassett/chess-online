@@ -9,14 +9,31 @@
 #include "King.h"
 #include "Pawn.h"
 
-Game::Game(std::vector<std::string> fenParts) : board(fenParts[0], fenParts[2], fenParts[3])
+Game::Game(std::string fenString)
 {
+	std::vector<std::string> fenParts = splitFenString(fenString);
+
+	board = Board(fenParts[0], fenParts[2], fenParts[3]);
+
 	parseActiveColor(fenParts[1]);
 	parseHalfmoveClock(fenParts[4]);
 	parseFullmoveNumber(fenParts[5]);
 
 	// Add the starting position to the game state history
 	gameStateHistory[getFen()] = 1;
+}
+
+std::vector<std::string> Game::splitFenString(const std::string &fenString)
+{
+	std::vector<std::string> parts;
+	std::istringstream iss(fenString);
+	std::string part;
+	while (std::getline(iss, part, ' '))
+	{
+		parts.push_back(part);
+	}
+
+	return parts;
 }
 
 void Game::parseActiveColor(const std::string &color)
@@ -297,18 +314,6 @@ void Game::validateMove(Position from, Position to, Piece &fromPiece, Square &to
 	validateKingMove(from, to, fromPiece);
 }
 
-// HERE IS HOW I WANT CHECK TO WORK
-// AFTER A VALID MOVE IS MADE, CHECK IF THE OPPOSING KING IS IN CHECK
-// ALSO, CHECK IF THE MOVE PUTS THE CURRENT KING IN CHECK
-// UPDATE THE KING'S IN CHECK STATUS ONLY IN THE FIRST SCENARIO
-// THE SECOND SCENARIO SHOULD THROW AND EXCEPTION
-
-// before move validation, check if the king is in check, if it is, then the move must be to get out of check
-// if the move is not to get out of check, then throw an exception
-// also check if the move puts the current king in check, if it does, then throw an exception
-// After the move is made, check if the opposing king is in check
-// if it is, then update the king's in check status
-
 Move Game::prepareMove(Position from, Position to, char promotion)
 {
 	Square &fromSquare = board.getSquare(from);
@@ -338,7 +343,7 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 
 	if (getInCheck(getActiveColor()))
 	{
-		// TODO - SIMULATE MOVE AND CHECK IF KING IS STILL IN CHECK - EVENTUALLY USE THE UNDO MOVE FUNCTION
+		// TODO - EVENTUALLY USE THE UNDO MOVE FUNCTION INSTEAD OF SIMULATING THE MOVE
 		Board tempBoard = board;
 		tempBoard.setupMove(move);
 
@@ -394,6 +399,10 @@ void Game::postMoveChecks()
 
 	// Add the new position to the game state history, incrementing the count if it already exists
 	gameStateHistory[getFen()]++;
+
+	// Set full move number and half move clock on the move struct
+	getLastMove().fullMoveNumber = getFullMoveNumber();
+	getLastMove().halfMoveClock = getHalfMoveClock();
 
 	// change turn
 	switchActiveColor();
@@ -473,7 +482,7 @@ std::vector<Move> Game::getMoves()
 	return moves;
 }
 
-Move Game::getLastMove()
+Move &Game::getLastMove()
 {
 	return moves.back();
 }
@@ -483,61 +492,139 @@ void Game::addMove(Move move)
 	moves.push_back(move);
 }
 
-// TODO - Implement undo move
 void Game::undoPreviousMove()
 {
-	if (moves.size() == 0)
+	if (moves.empty())
 	{
 		throw std::invalid_argument("No moves found");
 	}
-	else
+
+	Move lastMove = moves.back();
+	moves.pop_back();
+
+	// if the move was a promotion, replace the promoted piece with a pawn
+	if (lastMove.hasFlag(MoveFlag::Promotion))
 	{
-		// ! - Also be sure to update the appropriate bitboards
-		Move lastMove = moves.back();
-		moves.pop_back();
+		// update the bitboard to remove the promoted piece and add a pawn
+		board.getBitboard(lastMove.color, lastMove.promotion.value()).clearBit(lastMove.to);
+		board.getBitboard(lastMove.color, PieceType::Pawn).setBit(lastMove.to);
 
-		// get the piece that was moved
-		std::shared_ptr<Piece> piece = board.getSquare(lastMove.to).getPiece();
+		// create a pawn piece and place it on the board in the position of the promoted piece
+		std::shared_ptr<Piece> pawn = std::make_shared<Piece>(lastMove.color, lastMove.to, PieceType::Pawn);
+		board.getSquare(lastMove.to).setPiece(pawn);
 
-		// if the move was a capture, restore the captured piece
-		if (lastMove.hasFlag(MoveFlag::StandardCapture))
-		{
-			// recreate the captured piece and place it on the target square
-			// board.getSquare(lastMove.to).setPiece(lastMove.capturedPiece.value());
-		}
-		else if (lastMove.hasFlag(MoveFlag::EnPassant))
-		{
-			// recreate the captured piece and place it on the target square
-			// board.getSquare(lastMove.to.row + (piece->getPieceColor() == Color::White ? -1 : 1), lastMove.to.col).setPiece(lastMove.capturedPiece.value());
-		}
-
-		// check if the move was a castle and restore the rook
-		if (lastMove.hasFlag(MoveFlag::KingsideCastling))
-		{
-			board.getSquare(lastMove.to.row, 7).setPiece(board.getSquare(lastMove.to.row, 5).getPiece());
-			board.getSquare(lastMove.to.row, 5).setPiece(nullptr);
-		}
-		else if (lastMove.hasFlag(MoveFlag::QueensideCastling))
-		{
-			board.getSquare(lastMove.to.row, 0).setPiece(board.getSquare(lastMove.to.row, 3).getPiece());
-			board.getSquare(lastMove.to.row, 3).setPiece(nullptr);
-		}
-
-		// if the move was a promotion, remove the promoted piece
-		if (lastMove.hasFlag(MoveFlag::Promotion))
-		{
-			board.getSquare(lastMove.to).setPiece(nullptr);
-		}
-
-		// if the move was a double pawn push, update the en passant target square, and reset pawn has moved
-		if (lastMove.hasFlag(MoveFlag::PawnPush))
-		{
-			// ! - update en passant target square
-			// ! - reset pawn has moved
-		}
-
-		// Move the piece back to its original position
+		// decrement the piece count of the promoted piece and increment the piece count of the pawn
+		board.decrementPieceCount(lastMove.color, lastMove.promotion.value());
+		board.incrementPieceCount(lastMove.color, PieceType::Pawn);
 	}
+
+	// get the piece that was moved
+	std::shared_ptr<Piece> piece = board.getSquare(lastMove.to).getPiece();
+	Color color = piece->getPieceColor();
+
+	// Restore piece to its original position
+	board.getSquare(lastMove.from).setPiece(piece);
+	board.getSquare(lastMove.to).setPiece(nullptr);
+	piece->setCurrentPosition(lastMove.from);
+
+	// Update the bitboard to show the piece in its original position
+	board.getBitboard(color, piece->getPieceType()).clearBit(lastMove.to);
+	board.getBitboard(color, piece->getPieceType()).setBit(lastMove.from);
+
+	// if the move was a capture, restore the captured piece
+	PieceType capturedPieceType = lastMove.capturedPiece.value();
+	Color capturedPieceColor = color == Color::White ? Color::Black : Color::White;
+	// Depending on the type of capture, place the captured piece back on the board
+	if (lastMove.hasFlag(MoveFlag::StandardCapture))
+	{
+		std::shared_ptr<Piece> capturedPiece = std::make_shared<Piece>(capturedPieceColor, lastMove.to, capturedPieceType);
+		board.getSquare(lastMove.to).setPiece(capturedPiece);
+
+		// increment the piece count of the captured piece
+		board.incrementPieceCount(capturedPieceColor, capturedPieceType);
+
+		// update the bitboard to show the captured piece
+		board.getBitboard(capturedPieceColor, capturedPieceType).setBit(lastMove.to);
+	}
+	else if (lastMove.hasFlag(MoveFlag::EnPassant))
+	{
+		Position capturePosition = {lastMove.to.row + (color == Color::White ? 1 : -1), lastMove.to.col};
+		std::shared_ptr<Piece> capturedPiece = std::make_shared<Piece>(capturedPieceColor, capturePosition, capturedPieceType);
+		board.getSquare(capturePosition).setPiece(capturedPiece);
+
+		// increment the piece count of the captured piece
+		board.incrementPieceCount(capturedPieceColor, capturedPieceType);
+
+		// update the bitboard to show the captured piece
+		board.getBitboard(capturedPieceColor, capturedPieceType).setBit(capturePosition);
+	}
+
+	// check if the move was a castle and restore the rook and reset any castling rights
+	if (lastMove.hasFlag(MoveFlag::KingsideCastling))
+	{
+		board.getSquare(lastMove.to.row, 7).setPiece(board.getSquare(lastMove.to.row, 5).getPiece());
+		board.getSquare(lastMove.to.row, 5).setPiece(nullptr);
+
+		// update the bitboard to show the rook in its original position
+		board.getBitboard(color, PieceType::Rook).clearBit({lastMove.to.row, 7});
+		board.getBitboard(color, PieceType::Rook).setBit({lastMove.to.row, 5});
+
+		// reset castling rights
+		board.setCanCastleKingside(true, color);
+		board.getKing(color)->setHasMoved(false);
+		board.getRook(color, Side::KingSide)->setHasMoved(false);
+	}
+	else if (lastMove.hasFlag(MoveFlag::QueensideCastling))
+	{
+		board.getSquare(lastMove.to.row, 0).setPiece(board.getSquare(lastMove.to.row, 3).getPiece());
+		board.getSquare(lastMove.to.row, 3).setPiece(nullptr);
+
+		// update the bitboard to show the rook in its original position
+		board.getBitboard(color, PieceType::Rook).clearBit({lastMove.to.row, 0});
+		board.getBitboard(color, PieceType::Rook).setBit({lastMove.to.row, 3});
+
+		// reset castling rights
+		board.setCanCastleQueenside(true, color);
+		board.getKing(color)->setHasMoved(false);
+		board.getRook(color, Side::QueenSide)->setHasMoved(false);
+	}
+
+	// if the move was a double pawn push, update the en passant target square, and reset pawn has moved
+	if (lastMove.hasFlag(MoveFlag::PawnPush))
+	{
+		// Check if the move prior to the last move was a pawn double push
+		if (moves.back().hasFlag(MoveFlag::PawnPush))
+		{
+			// if it was, then the en passant target square should be the square that the pawn moved to
+			board.setEnPassantTargetSquare(&board.getSquare((moves.back().from.row + moves.back().to.row) / 2, moves.back().from.col));
+		}
+		else
+		{
+			// if it wasn't, then the en passant target square should be null
+			board.setEnPassantTargetSquare(nullptr);
+		}
+
+		// reset the has moved flag of the pawn
+		piece->setHasMoved(false);
+	}
+
+	// Restore half move clock to its previous value if the move was a pawn move or a capture
+	if (lastMove.hasFlag(MoveFlag::NonCapture) || lastMove.hasFlag(MoveFlag::PawnPush))
+	{
+		setHalfMoveClock(lastMove.halfMoveClock);
+	}
+
+	// Restore full move number to its previous value if the move was made by black
+	if (lastMove.color == Color::Black)
+	{
+		setFullMoveNumber(lastMove.fullMoveNumber);
+	}
+
+	// if the last move put the other king in check, then the other king is no longer in check
+	setInCheck(color, false);
+
+	// switch the active color
+	switchActiveColor();
 }
 
 uint8_t Game::getHalfMoveClock()
@@ -563,6 +650,16 @@ void Game::resetHalfMoveClock()
 void Game::incrementFullMoveNumber()
 {
 	fullMoveNumber++;
+}
+
+void Game::setHalfMoveClock(uint8_t value)
+{
+	halfMoveClock = value;
+}
+
+void Game::setFullMoveNumber(uint8_t value)
+{
+	fullMoveNumber = value;
 }
 
 bool Game::getInCheck(Color color)
@@ -912,4 +1009,68 @@ std::string Game::getFen()
 	fen += " " + std::to_string(fullMoveNumber);
 
 	return fen;
+}
+
+std::vector<Move> Game::generateLegalMoves()
+{
+	std::vector<Move> legalMoves;
+
+	// Loop through all the squares on the board
+	for (int i = 0; i < 64; i++)
+	{
+		Square &square = board.getSquare(i);
+
+		// If the square is empty or the piece is not the active color then continue
+		if (!square.getPiece() || square.getPiece()->getPieceColor() != activeColor)
+		{
+			continue;
+		}
+
+		// Get the potential moves of the piece
+		Bitboard potentialMoves = square.getPiece()->getPotentialMoves();
+
+		// convert the bitboard into a vector of moves
+		for (int j = 0; j < 64; j++)
+		{
+			if (potentialMoves.getBit(j))
+			{
+				Position from = square.getPosition();
+				Position to = {j / 8, j % 8};
+				Move move = composeMoveStruct(from, to, '\0', std::nullopt);
+
+				// If the move is valid then add it to the list of legal moves
+				try
+				{
+					validateMove(from, to, *square.getPiece(), board.getSquare(to), '\0');
+					legalMoves.push_back(move);
+				}
+				// If the move is invalid then continue to the next move
+				catch (const std::exception &e)
+				{
+					continue;
+				}
+			}
+		}
+	}
+
+	return legalMoves;
+}
+
+uint64_t Game::Perft(int depth)
+{
+	if (depth == 0)
+	{
+		return 1;
+	}
+
+	uint64_t nodes = 0;
+	std::vector<Move> moves = generateLegalMoves();
+	for (Move move : moves)
+	{
+		executeMove(move);
+		nodes += Perft(depth - 1);
+		undoPreviousMove();
+	}
+
+	return nodes;
 }

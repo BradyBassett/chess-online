@@ -50,7 +50,7 @@ private:
 	void postMoveChecks();
 
 public:
-	Game(std::vector<std::string> fenParts);
+	Game(std::string fenString);
 
 	Color getActiveColor();
 
@@ -68,7 +68,7 @@ public:
 
 	std::vector<Move> getMoves();
 
-	Move getLastMove();
+	Move &getLastMove();
 
 	void addMove(Move move);
 
@@ -83,6 +83,10 @@ public:
 	void resetHalfMoveClock();
 
 	void incrementFullMoveNumber();
+
+	void setHalfMoveClock(uint8_t value);
+
+	void setFullMoveNumber(uint8_t value);
 
 	bool getInCheck(Color color);
 
@@ -117,6 +121,10 @@ public:
 	void validateMove(Position from, Position to, Piece &fromPiece, Square &toSquare, char promotion);
 
 	std::string getFen();
+
+	std::vector<Move> generateLegalMoves();
+
+	uint64_t Perft(int depth);
 };
 
 #endif
