@@ -58,6 +58,8 @@ private:
 	bool isOrthagonal(Position from, Position to) const;
 
 public:
+	Board();
+
 	Board(std::string fenPosition, std::string castlingAvailability, std::string enPassantTarget);
 
 	Square &getSquare(int rowIndex, int colIndex);

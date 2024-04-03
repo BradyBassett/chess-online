@@ -348,6 +348,8 @@ bool Board::isOrthagonal(Position from, Position to) const
 	return to.row == from.row || to.col == from.col;
 }
 
+Board::Board() : Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "KQkq", "-") {}
+
 Board::Board(std::string fenPosition, std::string castlingAvailability, std::string enPassantTarget)
 {
 	initializeBitboards();
