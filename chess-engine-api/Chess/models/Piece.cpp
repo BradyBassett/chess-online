@@ -23,9 +23,9 @@ bool Piece::getHasMoved() const
 	return hasMoved;
 }
 
-void Piece::setHasMoved()
+void Piece::setHasMoved(bool value)
 {
-	hasMoved = true;
+	hasMoved = value;
 }
 
 bool Piece::getIsCaptured() const

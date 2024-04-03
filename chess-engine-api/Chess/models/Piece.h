@@ -23,7 +23,7 @@ public:
 
 	bool getHasMoved() const;
 
-	void setHasMoved();
+	void setHasMoved(bool value = true);
 
 	bool getIsCaptured() const;
 
