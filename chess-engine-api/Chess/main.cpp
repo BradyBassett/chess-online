@@ -6,19 +6,6 @@
 
 int main();
 
-std::vector<std::string> splitFenString(const std::string &fenString)
-{
-	std::vector<std::string> parts;
-	std::istringstream iss(fenString);
-	std::string part;
-	while (std::getline(iss, part, ' '))
-	{
-		parts.push_back(part);
-	}
-
-	return parts;
-}
-
 int main()
 {
 	// TODO - Add a way to load a game from a PGN file and eventually save games to PGN
@@ -46,10 +33,7 @@ int main()
 		fenString = input;
 	}
 
-	// split the fen string into its parts
-	std::vector<std::string> fenParts = splitFenString(fenString);
-
-	Game game = Game(fenParts);
+	Game game = Game(fenString);
 
 	bool isGameOver = false;
 	while (!isGameOver)
