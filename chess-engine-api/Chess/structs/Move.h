@@ -29,6 +29,8 @@ struct Move
 	PieceType piece;
 	std::optional<PieceType> capturedPiece;
 	std::optional<PieceType> promotion;
+	uint8_t halfMoveClock;
+	uint8_t fullMoveNumber;
 };
 
 #endif
