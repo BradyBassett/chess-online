@@ -94,9 +94,9 @@ uint64_t Bitboard::getValue()
 	return value;
 }
 
-bool Bitboard::getBit(int index)
+bool Bitboard::getBit(int squareNumber)
 {
-	return (value & (1ULL << index)) != 0;
+	return (value & (1ULL << squareNumber)) != 0;
 }
 
 bool Bitboard::getBit(Position position)
@@ -111,12 +111,12 @@ void Bitboard::setValue(uint64_t bitboard)
 
 void Bitboard::setBit(Position position)
 {
-	value |= getBit(position);
+	value |= 1ULL << getSquareNumber(position);
 }
 
 void Bitboard::setBit(int row, int col)
 {
-	value |= getBit({row, col});
+	value |= 1ULL << getSquareNumber({row, col});
 }
 
 void Bitboard::clearBit(Position position)
