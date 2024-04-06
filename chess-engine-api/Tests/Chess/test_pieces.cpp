@@ -6,12 +6,12 @@
 #include "../../Chess/models/Queen.h"
 #include "../../Chess/models/Rook.h"
 
-/*
-! BISHOP TESTS
-*/
+// ! BISHOP TESTS
 TEST(BishopTest, generateAttacks_Center_Black)
 {
-	Bishop bishop(Color::Black, {3, 3});
+	Position currentPosition = {3, 3};
+	Bishop bishop(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x8041221400142241);
 	Bitboard actualAttacks = bishop.generateAttacks();
 
@@ -20,8 +20,10 @@ TEST(BishopTest, generateAttacks_Center_Black)
 
 TEST(BishopTest, generateAttacks_Center_White)
 {
-	Bishop bishop(Color::White, {4, 4});
-	Bitboard expectedAttacks = Bitboard(0x8444280028448201);
+	Position currentPosition = {4, 4};
+	Bishop bishop(Color::White, currentPosition);
+
+	Bitboard expectedAttacks = Bitboard(0x8244280028448201);
 	Bitboard actualAttacks = bishop.generateAttacks();
 
 	ASSERT_EQ(actualAttacks, expectedAttacks);
@@ -29,7 +31,9 @@ TEST(BishopTest, generateAttacks_Center_White)
 
 TEST(BishopTest, generateAttacks_Corner_Black)
 {
-	Bishop bishop(Color::Black, {0, 0});
+	Position currentPosition = {0, 0};
+	Bishop bishop(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x8040201008040200);
 	Bitboard actualAttacks = bishop.generateAttacks();
 
@@ -38,7 +42,9 @@ TEST(BishopTest, generateAttacks_Corner_Black)
 
 TEST(BishopTest, generateAttacks_Corner_White)
 {
-	Bishop bishop(Color::Black, {7, 7});
+	Position currentPosition = {7, 7};
+	Bishop bishop(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x40201008040201);
 	Bitboard actualAttacks = bishop.generateAttacks();
 
@@ -47,7 +53,9 @@ TEST(BishopTest, generateAttacks_Corner_White)
 
 TEST(BishopTest, generateAttacks_Edge_Black)
 {
-	Bishop bishop(Color::Black, {0, 3});
+	Position currentPosition = {0, 3};
+	Bishop bishop(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x8041221400);
 	Bitboard actualAttacks = bishop.generateAttacks();
 
@@ -56,19 +64,21 @@ TEST(BishopTest, generateAttacks_Edge_Black)
 
 TEST(BishopTest, generateAttacks_Edge_White)
 {
-	Bishop bishop(Color::White, {3, 0});
+	Position currentPosition = {3, 0};
+	Bishop bishop(Color::White, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x1008040200020408);
 	Bitboard actualAttacks = bishop.generateAttacks();
 
 	ASSERT_EQ(actualAttacks, expectedAttacks);
 }
 
-/*
-! KING TESTS
-*/
+// ! KING TESTS
 TEST(KingTest, generateAttacks_Center_Black)
 {
-	King king(Color::Black, {3, 3});
+	Position currentPosition = {3, 3};
+	King king(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x1c141c0000);
 	Bitboard actualAttacks = king.generateAttacks();
 
@@ -77,7 +87,9 @@ TEST(KingTest, generateAttacks_Center_Black)
 
 TEST(KingTest, generateAttacks_Center_White)
 {
-	King king(Color::White, {4, 4});
+	Position currentPosition = {4, 4};
+	King king(Color::White, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x382838000000);
 	Bitboard actualAttacks = king.generateAttacks();
 
@@ -86,7 +98,9 @@ TEST(KingTest, generateAttacks_Center_White)
 
 TEST(KingTest, generateAttacks_Corner_Black)
 {
-	King king(Color::Black, {0, 0});
+	Position currentPosition = {0, 0};
+	King king(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x302);
 	Bitboard actualAttacks = king.generateAttacks();
 
@@ -95,7 +109,9 @@ TEST(KingTest, generateAttacks_Corner_Black)
 
 TEST(KingTest, generateAttacks_Corner_White)
 {
-	King king(Color::White, {7, 7});
+	Position currentPosition = {7, 7};
+	King king(Color::White, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x40c0000000000000);
 	Bitboard actualAttacks = king.generateAttacks();
 
@@ -104,7 +120,9 @@ TEST(KingTest, generateAttacks_Corner_White)
 
 TEST(KingTest, generateAttacks_Edge_Black)
 {
-	King king(Color::Black, {0, 3});
+	Position currentPosition = {0, 3};
+	King king(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x1c14);
 	Bitboard actualAttacks = king.generateAttacks();
 
@@ -113,7 +131,9 @@ TEST(KingTest, generateAttacks_Edge_Black)
 
 TEST(KingTest, generateAttacks_Edge_White)
 {
-	King king(Color::White, {3, 0});
+	Position currentPosition = {3, 0};
+	King king(Color::White, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x302030000);
 	Bitboard actualAttacks = king.generateAttacks();
 
@@ -122,7 +142,9 @@ TEST(KingTest, generateAttacks_Edge_White)
 
 TEST(KingTest, getPotentialMoves_Center_CanNotCastle)
 {
-	King king(Color::White, {4, 4});
+	Position currentPosition = {4, 4};
+	King king(Color::White, currentPosition);
+
 	king.setCanCastleKingside(false);
 	king.setCanCastleQueenside(false);
 
@@ -134,7 +156,9 @@ TEST(KingTest, getPotentialMoves_Center_CanNotCastle)
 
 TEST(KingTest, getPotentialMoves_White_Starting_Position_CanCastleKingside)
 {
-	King king(Color::White, {7, 4});
+	Position currentPosition = {7, 4};
+	King king(Color::White, currentPosition);
+
 	king.setCanCastleKingside(true);
 	king.setCanCastleQueenside(false);
 
@@ -146,7 +170,9 @@ TEST(KingTest, getPotentialMoves_White_Starting_Position_CanCastleKingside)
 
 TEST(KingTest, getPotentialMoves_White_Starting_Position_CanCastleKingside_CanCastleQueenSide)
 {
-	King king(Color::White, {7, 4});
+	Position currentPosition = {7, 4};
+	King king(Color::White, currentPosition);
+
 	king.setCanCastleKingside(true);
 	king.setCanCastleQueenside(true);
 
@@ -158,7 +184,9 @@ TEST(KingTest, getPotentialMoves_White_Starting_Position_CanCastleKingside_CanCa
 
 TEST(KingTest, getPotentialMoves_Black_Starting_Position_CanCastleQueenSide)
 {
-	King king(Color::White, {0, 4});
+	Position currentPosition = {0, 4};
+	King king(Color::White, currentPosition);
+
 	king.setCanCastleKingside(false);
 	king.setCanCastleQueenside(true);
 
@@ -170,7 +198,9 @@ TEST(KingTest, getPotentialMoves_Black_Starting_Position_CanCastleQueenSide)
 
 TEST(KingTest, getPotentialMoves_Black_Starting_Position_CanCastleKingside_CanCastleQueenSide)
 {
-	King king(Color::White, {0, 4});
+	Position currentPosition = {0, 4};
+	King king(Color::White, currentPosition);
+
 	king.setCanCastleKingside(true);
 	king.setCanCastleQueenside(true);
 
@@ -180,12 +210,12 @@ TEST(KingTest, getPotentialMoves_Black_Starting_Position_CanCastleKingside_CanCa
 	ASSERT_EQ(actualMoves, expectedMoves);
 }
 
-/*
-! KNIGHT TESTS
-*/
+// ! KNIGHT TESTS
 TEST(KnightTest, generateAttacks_Center_Black)
 {
-	Knight knight(Color::Black, {3, 3});
+	Position currentPosition = {3, 3};
+	Knight knight(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x142200221400);
 	Bitboard actualAttacks = knight.generateAttacks();
 
@@ -194,7 +224,8 @@ TEST(KnightTest, generateAttacks_Center_Black)
 
 TEST(KnightTest, generateAttacks_Center_White)
 {
-	Knight knight(Color::White, {4, 4});
+	Position currentPosition = {4, 4};
+	Knight knight(Color::White, currentPosition);
 	Bitboard expectedAttacks = Bitboard(0x28440044280000);
 	Bitboard actualAttacks = knight.generateAttacks();
 
@@ -203,7 +234,9 @@ TEST(KnightTest, generateAttacks_Center_White)
 
 TEST(KnightTest, generateAttacks_Corner_Black)
 {
-	Knight knight(Color::Black, {0, 0});
+	Position currentPosition = {0, 0};
+	Knight knight(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x20400);
 	Bitboard actualAttacks = knight.generateAttacks();
 
@@ -212,7 +245,9 @@ TEST(KnightTest, generateAttacks_Corner_Black)
 
 TEST(KnightTest, generateAttacks_Corner_White)
 {
-	Knight knight(Color::White, {7, 7});
+	Position currentPosition = {7, 7};
+	Knight knight(Color::White, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x20400000000000);
 	Bitboard actualAttacks = knight.generateAttacks();
 
@@ -221,7 +256,9 @@ TEST(KnightTest, generateAttacks_Corner_White)
 
 TEST(KnightTest, generateAttacks_Edge_Black)
 {
-	Knight knight(Color::Black, {0, 3});
+	Position currentPosition = {0, 3};
+	Knight knight(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x142200);
 	Bitboard actualAttacks = knight.generateAttacks();
 
@@ -230,16 +267,16 @@ TEST(KnightTest, generateAttacks_Edge_Black)
 
 TEST(KnightTest, generateAttacks_Edge_White)
 {
-	Knight knight(Color::White, {3, 0});
+	Position currentPosition = {3, 0};
+	Knight knight(Color::White, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x20400040200);
 	Bitboard actualAttacks = knight.generateAttacks();
 
 	ASSERT_EQ(actualAttacks, expectedAttacks);
 }
 
-/*
-! PAWN TESTS
-*/
+// ! PAWN TESTS
 TEST(PawnTest, CanMoveOneSquare_ValidMove_White)
 {
 	Position currentPosition = {2, 3};
@@ -362,7 +399,9 @@ TEST(PawnTest, CanPromote_BlackPawnNotOnLastRow)
 
 TEST(PawnTest, generateAttacks_Center_Black)
 {
-	Pawn pawn(Color::Black, {3, 3});
+	Position currentPosition = {3, 3};
+	Pawn pawn(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x1400000000);
 	Bitboard actualAttacks = pawn.generateAttacks();
 
@@ -371,7 +410,9 @@ TEST(PawnTest, generateAttacks_Center_Black)
 
 TEST(PawnTest, generateAttacks_Center_White)
 {
-	Pawn pawn(Color::White, {4, 4});
+	Position currentPosition = {4, 4};
+	Pawn pawn(Color::White, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x28000000);
 	Bitboard actualAttacks = pawn.generateAttacks();
 
@@ -380,7 +421,9 @@ TEST(PawnTest, generateAttacks_Center_White)
 
 TEST(PawnTest, GenerateAttacks_Edge_Black)
 {
-	Pawn pawn(Color::Black, {3, 0});
+	Position currentPosition = {3, 0};
+	Pawn pawn(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x200000000);
 	Bitboard actualAttacks = pawn.generateAttacks();
 
@@ -389,7 +432,9 @@ TEST(PawnTest, GenerateAttacks_Edge_Black)
 
 TEST(PawnTest, GenerateAttacks_Edge_White)
 {
-	Pawn pawn(Color::White, {5, 7});
+	Position currentPosition = {5, 7};
+	Pawn pawn(Color::White, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x4000000000);
 	Bitboard actualAttacks = pawn.generateAttacks();
 
@@ -398,7 +443,9 @@ TEST(PawnTest, GenerateAttacks_Edge_White)
 
 TEST(PawnTest, GetPotentialMoves_WhitePawnHasNotMoved)
 {
-	Pawn pawn(Color::White, {1, 4});
+	Position currentPosition = {6, 4};
+	Pawn pawn(Color::White, currentPosition);
+
 	pawn.setHasMoved(false);
 
 	Bitboard expectedMoves = Bitboard(0x381000000000);
@@ -409,10 +456,12 @@ TEST(PawnTest, GetPotentialMoves_WhitePawnHasNotMoved)
 
 TEST(PawnTest, GetPotentialMoves_BlackPawnHasNotMoved)
 {
-	Pawn pawn(Color::Black, {1, 3});
+	Position currentPosition = {1, 3};
+	Pawn pawn(Color::Black, currentPosition);
+
 	pawn.setHasMoved(false);
 
-	Bitboard expectedMoves = Bitboard(0x10380000);
+	Bitboard expectedMoves = Bitboard(0x81c0000);
 	Bitboard actualMoves = pawn.getPotentialMoves();
 
 	ASSERT_EQ(actualMoves, expectedMoves);
@@ -420,7 +469,9 @@ TEST(PawnTest, GetPotentialMoves_BlackPawnHasNotMoved)
 
 TEST(PawnTest, GetPotentialMoves_WhitePawnMoved)
 {
-	Pawn pawn(Color::White, {4, 4});
+	Position currentPosition = {4, 4};
+	Pawn pawn(Color::White, currentPosition);
+
 	pawn.setHasMoved(true);
 
 	Bitboard expectedMoves = Bitboard(0x38000000);
@@ -431,21 +482,23 @@ TEST(PawnTest, GetPotentialMoves_WhitePawnMoved)
 
 TEST(PawnTest, GetPotentialMoves_BlackPawnMoved)
 {
-	Pawn pawn(Color::Black, {1, 3});
+	Position currentPosition = {4, 4};
+	Pawn pawn(Color::Black, currentPosition);
+
 	pawn.setHasMoved(true);
 
-	Bitboard expectedMoves = Bitboard(0x3800000000);
+	Bitboard expectedMoves = Bitboard(0x380000000000);
 	Bitboard actualMoves = pawn.getPotentialMoves();
 
 	ASSERT_EQ(actualMoves, expectedMoves);
 }
 
-/*
-! QUEEN TESTS
-*/
+// ! QUEEN TESTS
 TEST(QueenTest, generateAttacks_Center_Black)
 {
-	Queen queen(Color::Black, {3, 3});
+	Position currentPosition = {3, 3};
+	Queen queen(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x88492a1cf71c2a49);
 	Bitboard actualAttacks = queen.generateAttacks();
 
@@ -454,7 +507,9 @@ TEST(QueenTest, generateAttacks_Center_Black)
 
 TEST(QueenTest, generateAttacks_Center_White)
 {
-	Queen queen(Color::White, {4, 4});
+	Position currentPosition = {4, 4};
+	Queen queen(Color::White, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x925438ef38549211);
 	Bitboard actualAttacks = queen.generateAttacks();
 
@@ -463,7 +518,9 @@ TEST(QueenTest, generateAttacks_Center_White)
 
 TEST(QueenTest, generateAttacks_Corner_Black)
 {
-	Queen queen(Color::Black, {0, 0});
+	Position currentPosition = {0, 0};
+	Queen queen(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x81412111090503fe);
 	Bitboard actualAttacks = queen.generateAttacks();
 
@@ -472,7 +529,9 @@ TEST(QueenTest, generateAttacks_Corner_Black)
 
 TEST(QueenTest, generateAttacks_Corner_White)
 {
-	Queen queen(Color::Black, {7, 7});
+	Position currentPosition = {7, 7};
+	Queen queen(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x7fc0a09088848281);
 	Bitboard actualAttacks = queen.generateAttacks();
 
@@ -481,7 +540,9 @@ TEST(QueenTest, generateAttacks_Corner_White)
 
 TEST(QueenTest, generateAttacks_Edge_Black)
 {
-	Queen queen(Color::Black, {0, 3});
+	Position currentPosition = {0, 3};
+	Queen queen(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x8080888492a1cf7);
 	Bitboard actualAttacks = queen.generateAttacks();
 
@@ -490,19 +551,21 @@ TEST(QueenTest, generateAttacks_Edge_Black)
 
 TEST(QueenTest, generateAttacks_Edge_White)
 {
-	Queen queen(Color::White, {3, 0});
+	Position currentPosition = {3, 0};
+	Queen queen(Color::White, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x11090503fe030509);
 	Bitboard actualAttacks = queen.generateAttacks();
 
 	ASSERT_EQ(actualAttacks, expectedAttacks);
 }
 
-/*
-! ROOK TESTS
-*/
+// ! ROOK TESTS
 TEST(RookTest, generateAttacks_Center_Black)
 {
-	Rook rook(Color::Black, {3, 3});
+	Position currentPosition = {3, 3};
+	Rook rook(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x8080808f7080808);
 	Bitboard actualAttacks = rook.generateAttacks();
 
@@ -511,7 +574,9 @@ TEST(RookTest, generateAttacks_Center_Black)
 
 TEST(RookTest, generateAttacks_Center_White)
 {
-	Rook rook(Color::White, {4, 4});
+	Position currentPosition = {4, 4};
+	Rook rook(Color::White, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x101010ef10101010);
 	Bitboard actualAttacks = rook.generateAttacks();
 
@@ -520,7 +585,9 @@ TEST(RookTest, generateAttacks_Center_White)
 
 TEST(RookTest, generateAttacks_Corner_Black)
 {
-	Rook rook(Color::Black, {0, 0});
+	Position currentPosition = {0, 0};
+	Rook rook(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x1010101010101fe);
 	Bitboard actualAttacks = rook.generateAttacks();
 
@@ -529,7 +596,9 @@ TEST(RookTest, generateAttacks_Corner_Black)
 
 TEST(RookTest, generateAttacks_Corner_White)
 {
-	Rook rook(Color::Black, {7, 7});
+	Position currentPosition = {7, 7};
+	Rook rook(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x7f80808080808080);
 	Bitboard actualAttacks = rook.generateAttacks();
 
@@ -538,7 +607,9 @@ TEST(RookTest, generateAttacks_Corner_White)
 
 TEST(RookTest, generateAttacks_Edge_Black)
 {
-	Rook rook(Color::Black, {0, 3});
+	Position currentPosition = {0, 3};
+	Rook rook(Color::Black, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x8080808080808f7);
 	Bitboard actualAttacks = rook.generateAttacks();
 
@@ -547,7 +618,9 @@ TEST(RookTest, generateAttacks_Edge_Black)
 
 TEST(RookTest, generateAttacks_Edge_White)
 {
-	Rook rook(Color::White, {3, 0});
+	Position currentPosition = {3, 0};
+	Rook rook(Color::White, currentPosition);
+
 	Bitboard expectedAttacks = Bitboard(0x1010101fe010101);
 	Bitboard actualAttacks = rook.generateAttacks();
 
