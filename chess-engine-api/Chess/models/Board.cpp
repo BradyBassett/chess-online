@@ -445,6 +445,11 @@ std::shared_ptr<Rook> Board::getRook(Color color, Side side)
 	throw std::invalid_argument("No rook found");
 }
 
+std::vector<std::shared_ptr<Rook>> Board::getRooks()
+{
+	return rooks;
+}
+
 std::shared_ptr<King> Board::getKing(Color color)
 {
 	for (std::shared_ptr<King> king : kings)
@@ -456,6 +461,11 @@ std::shared_ptr<King> Board::getKing(Color color)
 	}
 
 	throw std::invalid_argument("No king found");
+}
+
+std::vector<std::shared_ptr<King>> Board::getKings()
+{
+	return kings;
 }
 
 Side Board::getRookSide(Square square)

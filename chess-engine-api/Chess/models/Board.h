@@ -74,7 +74,11 @@ public:
 
 	std::shared_ptr<Rook> getRook(Color color, Side side);
 
+	std::vector<std::shared_ptr<Rook>> getRooks();
+
 	std::shared_ptr<King> getKing(Color color);
+
+	std::vector<std::shared_ptr<King>> getKings();
 
 	Side getRookSide(Square square);
 
