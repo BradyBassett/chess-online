@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <chrono>
-#include "../../Chess/models/Game.h"
+#include "../../../Chess/models/Game.h"
 
 class GameInitialPositionTest : public ::testing::Test
 {
