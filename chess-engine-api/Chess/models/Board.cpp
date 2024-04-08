@@ -114,6 +114,7 @@ std::vector<Square> Board::parseFenPosition(std::string &fenPosition)
 			Square square = Square({rowIndex, colIndex});
 			std::shared_ptr<Piece> piece = pieceTypes[c](square);
 			Bitboard &pieceBitboard = getBitboard(piece->getPieceColor(), piece->getPieceType());
+			incrementPieceCount(piece->getPieceColor(), piece->getPieceType());
 			pieceBitboard.setBit(square.getPosition());
 			square.setPiece(piece);
 			squares.push_back(square);
