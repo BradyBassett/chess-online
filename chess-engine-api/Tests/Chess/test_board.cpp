@@ -1,13 +1,28 @@
 #include <gtest/gtest.h>
 #include "../../Chess/models/Board.h"
 
+std::map<PieceType, std::string> pieceTypeMap = {
+	{PieceType::Pawn, "Pawn"},
+	{PieceType::Knight, "Knight"},
+	{PieceType::Bishop, "Bishop"},
+	{PieceType::Rook, "Rook"},
+	{PieceType::Queen, "Queen"},
+	{PieceType::King, "King"}};
+
+std::map<Color, std::string> colorMap = {
+	{Color::White, "White"},
+	{Color::Black, "Black"}};
+
 void validatePieceCount(Board &board, std::array<int, 6> pieceCounts)
 {
 	for (int i = 0; i < 2; i++)
 	{
 		for (int j = 0; j < 6; j++)
 		{
-			ASSERT_EQ(board.getPieceCount(static_cast<Color>(i), static_cast<PieceType>(j)), pieceCounts[j]);
+			Color color = static_cast<Color>(i);
+			PieceType pieceType = static_cast<PieceType>(j);
+
+			ASSERT_EQ(board.getPieceCount(color, pieceType), pieceCounts[j]) << "Color: " << colorMap[color] << " PieceType: " << pieceTypeMap[pieceType];
 		}
 	}
 }
@@ -16,13 +31,13 @@ void validatePiecePositions(Board &board, std::array<std::optional<PieceType>, 6
 {
 	for (int i = 0; i < 64; i++)
 	{
-		if (!expectedPieceTypes[i])
+		if (!expectedPieceTypes[i].has_value())
 		{
-			ASSERT_EQ(board.getSquare(i).getPiece(), nullptr);
+			ASSERT_EQ(board.getSquare(i).getPiece(), nullptr) << "Square: " << i;
 		}
 		else
 		{
-			ASSERT_EQ(board.getSquare(i).getPiece()->getPieceType(), *expectedPieceTypes[i]);
+			ASSERT_EQ(board.getSquare(i).getPiece()->getPieceType(), *expectedPieceTypes[i]) << "Square: " << i;
 		}
 	}
 }
@@ -33,7 +48,11 @@ void validateBitboards(Board &board, std::array<std::array<Bitboard, 6>, 2> expe
 	{
 		for (int j = 0; j < 6; j++)
 		{
-			ASSERT_EQ(board.getBitboard(static_cast<Color>(i), static_cast<PieceType>(j)).getValue(), expectedBitboards[i][j].getValue());
+			Color color = static_cast<Color>(i);
+			PieceType pieceType = static_cast<PieceType>(j);
+			Bitboard bitboard = board.getBitboard(color, pieceType);
+
+			ASSERT_EQ(bitboard.getValue(), expectedBitboards[i][j].getValue()) << "Color: " << colorMap[color] << " PieceType: " << pieceTypeMap[pieceType];
 		}
 	}
 }
@@ -43,16 +62,16 @@ void validateWhitePawnAttackTable(Board &board)
 	for (int i = 0; i < 64; i++)
 	{
 		uint64_t expectedValue = 0;
-		if (i % 8 != 0)
-		{ // not on 'a' file
-			expectedValue |= 1ULL << (i - 7);
-		}
-		if (i % 8 != 7)
-		{ // not on 'h' file
+		if (i % 8 != 0 && i > 7) // not on 'a' file and not on the 1st rank
+		{
 			expectedValue |= 1ULL << (i - 9);
 		}
+		if (i % 8 != 7 && i > 7) // not on 'h' file and not on the 1st rank
+		{
+			expectedValue |= 1ULL << (i - 7);
+		}
 
-		ASSERT_EQ(board.getAttackTable(Color::Black, PieceType::Pawn)[i].getValue(), expectedValue);
+		ASSERT_EQ(board.getAttackTable(Color::White, PieceType::Pawn)[i].getValue(), expectedValue);
 	}
 }
 
@@ -61,16 +80,16 @@ void validateBlackPawnAttackTable(Board &board)
 	for (int i = 0; i < 64; i++)
 	{
 		uint64_t expectedValue = 0;
-		if (i % 8 != 7)
-		{ // not on 'h' file
-			expectedValue |= 1ULL << (i + 7);
-		}
-		if (i % 8 != 0)
-		{ // not on 'a' file
+		if (i % 8 != 7 && i < 55) // not on 'h' file and not on the 7th or 8th rank
+		{
 			expectedValue |= 1ULL << (i + 9);
 		}
+		if (i % 8 != 0 && i < 56) // not on 'a' file and not on the 8th rank
+		{
+			expectedValue |= 1ULL << (i + 7);
+		}
 
-		ASSERT_EQ(board.getAttackTable(Color::Black, PieceType::Pawn)[i].getValue(), expectedValue);
+		ASSERT_EQ(board.getAttackTable(Color::Black, PieceType::Pawn)[i].getValue(), expectedValue) << "Square: " << i;
 	}
 }
 
@@ -239,7 +258,6 @@ void validateKingAttackTable(Board &board)
 	}
 }
 
-// FIXME: This test is failing
 TEST(BoardConstructorTest, DefaultConstructor)
 {
 	Board board = Board();
@@ -260,19 +278,19 @@ TEST(BoardConstructorTest, DefaultConstructor)
 	// validate piece positions
 	std::array<std::optional<PieceType>, 64> expectedPieceTypes = {
 		PieceType::Rook, PieceType::Knight, PieceType::Bishop, PieceType::Queen, PieceType::King, PieceType::Bishop, PieceType::Knight, PieceType::Rook,
+		PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn,
 		std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
 		std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
 		std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
 		std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
-		std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
-		std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
+		PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn,
 		PieceType::Rook, PieceType::Knight, PieceType::Bishop, PieceType::Queen, PieceType::King, PieceType::Bishop, PieceType::Knight, PieceType::Rook};
 	validatePiecePositions(board, expectedPieceTypes);
 
 	// validate bitboards
 	std::array<std::array<Bitboard, 6>, 2> expectedBitboards = {
-		{{{Bitboard(0xff00), Bitboard(0x42), Bitboard(0x24), Bitboard(0x81), Bitboard(0x10), Bitboard(0x8)}},
-		 {{Bitboard(0xff000000000000), Bitboard(0x4200000000000000), Bitboard(0x2400000000000000), Bitboard(0x8100000000000000), Bitboard(0x1000000000000000), Bitboard(0x800000000000000)}}}};
+		{{{Bitboard(0xff000000000000), Bitboard(0x4200000000000000), Bitboard(0x2400000000000000), Bitboard(0x8100000000000000), Bitboard(0x800000000000000), Bitboard(0x1000000000000000)}},
+		 {{Bitboard(0xff00), Bitboard(0x42), Bitboard(0x24), Bitboard(0x81), Bitboard(0x8), Bitboard(0x10)}}}};
 	validateBitboards(board, expectedBitboards);
 
 	// Validate Attack Tables
