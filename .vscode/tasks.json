@@ -1,18 +1,31 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-			{
-					"label": "build",
-					"type": "shell",
-					"command": "find ${workspaceFolder}/chess-engine-api/Chess -name \"*.cpp\" | xargs g++ -g -o ${workspaceFolder}/chess-engine-api/Chess/main",
-					"group": {
-							"kind": "build",
-							"isDefault": true
-					},
-					"presentation": {
-							"reveal": "always"
-					},
-					"problemMatcher": "$gcc"
-			}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "find ${workspaceFolder}/chess-engine-api/Chess -name \"*.cpp\" | xargs g++ -g -o ${workspaceFolder}/chess-engine-api/Chess/main",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": "$gcc"
+    },
+    {
+      "label": "build tests",
+      "type": "shell",
+      "command": "cd chess-engine-api/Build && cmake --build .",
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    }
+  ]
 }
