@@ -1,4 +1,4 @@
-#include "KingGenerateAttacksTest.h"
+#include "KingGenerateAttacksTest.hpp"
 
 TEST_F(KingGenerateAttacksTest, generateAttacks_Center_Black)
 {

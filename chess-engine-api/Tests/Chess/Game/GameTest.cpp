@@ -1,6 +1,6 @@
 #include <gtest/gtest.h> // TODO - Remove this include once the file is reworked
 #include <chrono>
-#include "../../../Chess/models/Game.h"
+#include "../../../Chess/models/Game.hpp"
 
 class GameInitialPositionTest : public ::testing::Test
 {

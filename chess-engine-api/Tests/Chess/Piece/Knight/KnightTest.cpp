@@ -1,2 +1,2 @@
-#include "KnightTest.h"
+#include "KnightTest.hpp"
 

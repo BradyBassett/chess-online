@@ -1,4 +1,4 @@
-#include "PawnGenerateAttacksTest.h"
+#include "PawnGenerateAttacksTest.hpp"
 
 TEST_F(PawnGenerateAttacksTest, generateAttacks_Center_Black)
 {

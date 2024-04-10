@@ -1,11 +1,11 @@
-#ifndef ChessTest_H
-#define ChessTest_H
+#ifndef CHESSTEST_HPP
+#define CHESSTEST_HPP
 
 #include <map>
 #include <string>
-#include "../Tests.h"
-#include "../../Chess/enums/PieceType.h"
-#include "../../Chess/enums/Color.h"
+#include "../Tests.hpp"
+#include "../../Chess/enums/PieceType.hpp"
+#include "../../Chess/enums/Color.hpp"
 
 class ChessTest : public Tests
 {
@@ -29,4 +29,4 @@ public:
 	};
 };
 
-#endif // ChessTest_H
+#endif // CHESSTEST_HPP

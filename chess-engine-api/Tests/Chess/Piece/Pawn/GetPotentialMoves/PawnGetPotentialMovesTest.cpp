@@ -1,4 +1,4 @@
-#include "PawnGetPotentialMovesTest.h"
+#include "PawnGetPotentialMovesTest.hpp"
 
 TEST_F(PawnGetPotentialMovesTest, GetPotentialMoves_WhitePawnHasNotMoved)
 {

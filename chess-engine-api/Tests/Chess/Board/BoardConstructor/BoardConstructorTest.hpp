@@ -1,4 +1,7 @@
-#include "../BoardTest.h"
+#ifndef BOARDCONSTRUCTORTEST_HPP
+#define BOARDCONSTRUCTORTEST_HPP
+
+#include "../BoardTest.hpp"
 
 class BoardConstructorTest : public BoardTest, public ::testing::Test
 {
@@ -31,3 +34,5 @@ protected:
 
 public:
 };
+
+#endif // BOARDCONSTRUCTORTEST_HPP

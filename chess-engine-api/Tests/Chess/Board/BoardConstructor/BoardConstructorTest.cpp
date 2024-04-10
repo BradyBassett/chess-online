@@ -1,4 +1,4 @@
-#include "BoardConstructorTest.h"
+#include "BoardConstructorTest.hpp"
 
 void BoardConstructorTest::validatePieceCount(Board &board, std::array<int, 6> pieceCounts)
 {

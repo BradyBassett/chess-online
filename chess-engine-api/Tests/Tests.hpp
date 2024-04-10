@@ -1,5 +1,5 @@
-#ifndef Tests_H
-#define Tests_H
+#ifndef TESTS_HPP
+#define TESTS_HPP
 
 #include <gtest/gtest.h>
 
@@ -13,4 +13,4 @@ public:
 
 };
 
-#endif // Tests_H
+#endif // TESTS_HPP

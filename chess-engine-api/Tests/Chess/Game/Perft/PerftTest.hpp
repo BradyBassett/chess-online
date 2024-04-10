@@ -1,7 +1,7 @@
-#ifndef PerftTest_H
-#define PerftTest_H
+#ifndef PERFTEST_HPP
+#define PERFTEST_HPP
 
-#include "../GameTest.h"
+#include "../GameTest.hpp"
 
 class PerftTest : public GameTest, public ::testing::Test
 {
@@ -13,4 +13,4 @@ public:
 
 };
 
-#endif // PerftTest_H
+#endif // PERFTEST_HPP
