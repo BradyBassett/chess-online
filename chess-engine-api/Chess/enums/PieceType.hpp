@@ -1,5 +1,5 @@
-#ifndef PIECETYPE_H
-#define PIECETYPE_H
+#ifndef PIECETYPE_HPP
+#define PIECETYPE_HPP
 
 enum class PieceType
 {
@@ -12,4 +12,4 @@ enum class PieceType
 	Unknown = 6
 };
 
-#endif
+#endif // PIECETYPE_HPP

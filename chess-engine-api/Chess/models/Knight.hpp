@@ -1,7 +1,7 @@
-#ifndef KNIGHT_H
-#define KNIGHT_H
+#ifndef KNIGHT_HPP
+#define KNIGHT_HPP
 
-#include "Piece.h"
+#include "Piece.hpp"
 
 class Knight : virtual public Piece
 {
@@ -13,4 +13,4 @@ public:
 	Bitboard getPotentialMoves() const;
 };
 
-#endif
+#endif // KNIGHT_HPP

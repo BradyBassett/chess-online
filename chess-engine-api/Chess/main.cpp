@@ -2,7 +2,7 @@
 #include <string>
 #include <sstream>
 #include <cstdlib>
-#include "models/Game.h"
+#include "models/Game.hpp"
 
 int main();
 

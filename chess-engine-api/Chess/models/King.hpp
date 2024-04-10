@@ -1,7 +1,7 @@
-#ifndef KING_H
-#define KING_H
+#ifndef KING_HPP
+#define KING_HPP
 
-#include "Piece.h"
+#include "Piece.hpp"
 
 class King : virtual public Piece
 {
@@ -30,4 +30,4 @@ public:
 	Bitboard getPotentialMoves() const;
 };
 
-#endif
+#endif // KING_HPP

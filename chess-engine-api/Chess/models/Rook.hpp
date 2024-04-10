@@ -1,7 +1,8 @@
-#ifndef ROOK_H
-#define ROOK_H
+#ifndef ROOK_HPP
+#define ROOK_HPP
 
-#include "OrthagonalPiece.h"
+#include "OrthagonalPiece.hpp"
+#include "../enums/Side.hpp"
 
 class Rook : public OrthagonalPiece
 {
@@ -14,4 +15,4 @@ public:
 	Side getSide() const;
 };
 
-#endif
+#endif // ROOK_HPP

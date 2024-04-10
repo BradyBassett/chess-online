@@ -1,7 +1,7 @@
-#ifndef PAWN_H
-#define PAWN_H
+#ifndef PAWN_HPP
+#define PAWN_HPP
 
-#include "Piece.h"
+#include "Piece.hpp"
 
 class Pawn : virtual public Piece
 {
@@ -23,4 +23,4 @@ public:
 	Bitboard getPotentialMoves() const;
 };
 
-#endif
+#endif // PAWN_HPP

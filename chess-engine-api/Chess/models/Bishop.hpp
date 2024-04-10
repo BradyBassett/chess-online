@@ -1,7 +1,7 @@
-#ifndef BISHOP_H
-#define BISHOP_H
+#ifndef BISHOP_HPP
+#define BISHOP_HPP
 
-#include "DiagonalPiece.h"
+#include "DiagonalPiece.hpp"
 
 class Bishop : public DiagonalPiece
 {
@@ -9,4 +9,4 @@ public:
 	Bishop(Color pieceColor, Position currentPosition);
 };
 
-#endif
+#endif // BISHOP_HPP

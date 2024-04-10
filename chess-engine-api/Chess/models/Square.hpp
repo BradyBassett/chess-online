@@ -1,8 +1,8 @@
-#ifndef SQUARE_H
-#define SQUARE_H
+#ifndef SQUARE_HPP
+#define SQUARE_HPP
 
 #include <memory>
-#include "../structs/Position.h"
+#include "../structs/Position.hpp"
 
 class Piece;
 
@@ -22,6 +22,6 @@ public:
 	void setPiece(std::shared_ptr<Piece> piece);
 };
 
-#include "Piece.h"
+#include "Piece.hpp"
 
-#endif
+#endif // SQUARE_HPP

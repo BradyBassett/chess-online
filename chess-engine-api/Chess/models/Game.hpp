@@ -1,18 +1,18 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef GAME_HPP
+#define GAME_HPP
 
-#include "../enums/Color.h"
-#include "../enums/GameEndState.h"
-#include "../structs/Position.h"
-#include "../structs/Move.h"
-#include "Piece.h"
-#include "Board.h"
+#include "../enums/Color.hpp"
+#include "../enums/GameEndState.hpp"
+#include "../structs/Position.hpp"
+#include "../structs/Move.hpp"
+#include "Piece.hpp"
+#include "Board.hpp"
 #include <string>
 #include <optional>
 #include <vector>
 #include <unordered_map>
-#include "King.h"
-#include "Pawn.h"
+#include "King.hpp"
+#include "Pawn.hpp"
 
 class Board;
 
@@ -127,4 +127,4 @@ public:
 	uint64_t Perft(int depth);
 };
 
-#endif
+#endif // GAME_HPP

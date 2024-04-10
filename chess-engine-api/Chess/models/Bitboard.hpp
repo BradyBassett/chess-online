@@ -1,10 +1,10 @@
-#ifndef BITBOARD_H
-#define BITBOARD_H
+#ifndef BITBOARD_HPP
+#define BITBOARD_HPP
 
 #include <cstdint>
-#include "../structs/Position.h"
-#include "../enums/PieceType.h"
-#include "../enums/Color.h"
+#include "../structs/Position.hpp"
+#include "../enums/PieceType.hpp"
+#include "../enums/Color.hpp"
 
 class Bitboard
 {
@@ -63,4 +63,4 @@ public:
 	void clearBit(int row, int col);
 };
 
-#endif
+#endif // BITBOARD_HPP

@@ -1,14 +1,14 @@
-#ifndef BOARD_H
-#define BOARD_H
+#ifndef BOARD_HPP
+#define BOARD_HPP
 
 #include <string>
 #include <vector>
 #include <tuple>
 #include <map>
-#include "Square.h"
-#include "Bitboard.h"
-#include "../enums/Side.h"
-#include "../structs/Move.h"
+#include "Square.hpp"
+#include "Bitboard.hpp"
+#include "../enums/Side.hpp"
+#include "../structs/Move.hpp"
 
 class Rook;
 class King;
@@ -121,4 +121,4 @@ public:
 	void decrementPieceCount(Color color, PieceType pieceType);
 };
 
-#endif
+#endif // BOARD_HPP

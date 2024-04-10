@@ -1,8 +1,8 @@
-#ifndef QUEEN_H
-#define QUEEN_H
+#ifndef QUEEN_HPP
+#define QUEEN_HPP
 
-#include "DiagonalPiece.h"
-#include "OrthagonalPiece.h"
+#include "DiagonalPiece.hpp"
+#include "OrthagonalPiece.hpp"
 
 class Queen : virtual public DiagonalPiece, virtual public OrthagonalPiece
 {
@@ -14,4 +14,4 @@ public:
 	Bitboard getPotentialMoves() const;
 };
 
-#endif
+#endif // QUEEN_HPP

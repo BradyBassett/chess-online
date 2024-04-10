@@ -1,5 +1,5 @@
-#ifndef FLAGS_H
-#define FLAGS_H
+#ifndef MOVEFLAG_HPP
+#define MOVEFLAG_HPP
 
 enum MoveFlag
 {
@@ -12,4 +12,4 @@ enum MoveFlag
 	QueensideCastling = 6 // queenside castling
 };
 
-#endif
+#endif // MOVEFLAG_HPP

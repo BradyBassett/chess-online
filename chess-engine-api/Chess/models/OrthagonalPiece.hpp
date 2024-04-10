@@ -1,7 +1,7 @@
-#ifndef STRAIGHTPIECE_H
-#define STRAIGHTPIECE_H
+#ifndef ORTHAGONALPIECE_HPP
+#define ORTHAGONALPIECE_HPP
 
-#include "Piece.h"
+#include "Piece.hpp"
 
 class OrthagonalPiece : virtual public Piece
 {
@@ -13,4 +13,4 @@ public:
 	Bitboard getPotentialMoves() const;
 };
 
-#endif
+#endif // ORTHAGONALPIECE_HPP

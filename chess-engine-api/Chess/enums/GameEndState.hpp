@@ -1,3 +1,6 @@
+#ifndef GAMEENDSTATE_HPP
+#define GAMEENDSTATE_HPP
+
 enum class GameEndState
 {
 	CHECKMATE,
@@ -9,3 +12,5 @@ enum class GameEndState
 	INSUFFICIENT_MATERIAL,
 	IN_PROGRESS
 };
+
+#endif // GAMEENDSTATE_HPP

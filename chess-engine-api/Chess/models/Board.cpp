@@ -1,13 +1,13 @@
-#include "Board.h"
+#include "Board.hpp"
 #include <stdexcept>
 #include <map>
 #include <regex>
-#include "Rook.h"
-#include "Knight.h"
-#include "Bishop.h"
-#include "Queen.h"
-#include "King.h"
-#include "Pawn.h"
+#include "Rook.hpp"
+#include "Knight.hpp"
+#include "Bishop.hpp"
+#include "Queen.hpp"
+#include "King.hpp"
+#include "Pawn.hpp"
 
 bool Board::isDigitFrom1To8(char c)
 {

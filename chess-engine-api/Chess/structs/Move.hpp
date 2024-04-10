@@ -1,10 +1,10 @@
-#ifndef MOVE_H
-#define MOVE_H
+#ifndef MOVE_HPP
+#define MOVE_HPP
 
-#include "Position.h"
-#include "../enums/PieceType.h"
-#include "../enums/Color.h"
-#include "../enums/MoveFlag.h"
+#include "Position.hpp"
+#include "../enums/PieceType.hpp"
+#include "../enums/Color.hpp"
+#include "../enums/MoveFlag.hpp"
 #include <string>
 #include <bitset>
 #include <optional>
@@ -33,4 +33,4 @@ struct Move
 	uint8_t fullMoveNumber;
 };
 
-#endif
+#endif // MOVE_HPP

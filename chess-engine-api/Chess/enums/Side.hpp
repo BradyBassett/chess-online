@@ -1,5 +1,5 @@
-#ifndef SIDE_H
-#define SIDE_H
+#ifndef SIDE_HPP
+#define SIDE_HPP
 
 enum class Side
 {
@@ -8,4 +8,4 @@ enum class Side
 	None = 2
 };
 
-#endif
+#endif // SIDE_HPP

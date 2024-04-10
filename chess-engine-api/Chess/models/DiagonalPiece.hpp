@@ -1,7 +1,7 @@
-#ifndef DIAGONALPIECE_H
-#define DIAGONALPIECE_H
+#ifndef DIAGONALPIECE_HPP
+#define DIAGONALPIECE_HPP
 
-#include "Piece.h"
+#include "Piece.hpp"
 
 class DiagonalPiece : virtual public Piece
 {
@@ -13,4 +13,4 @@ public:
 	Bitboard getPotentialMoves() const;
 };
 
-#endif
+#endif // DIAGONALPIECE_HPP

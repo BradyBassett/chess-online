@@ -1,5 +1,5 @@
-#include "Pawn.h"
-#include "Square.h"
+#include "Pawn.hpp"
+#include "Square.hpp"
 
 bool Pawn::canMoveOneSquare(Position targetPosition) const
 {

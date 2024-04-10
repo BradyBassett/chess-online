@@ -1,4 +1,4 @@
-#include "Queen.h"
+#include "Queen.hpp"
 
 Queen::Queen(Color pieceColor, Position currentPosition)
 	: Piece(pieceColor, currentPosition), DiagonalPiece(pieceColor, currentPosition), OrthagonalPiece(pieceColor, currentPosition)

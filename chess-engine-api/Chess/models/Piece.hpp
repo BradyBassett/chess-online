@@ -1,11 +1,11 @@
-#ifndef PIECE_H
-#define PIECE_H
+#ifndef PIECE_HPP
+#define PIECE_HPP
 
 #include <memory>
-#include "../enums/PieceType.h"
-#include "../enums/Color.h"
-#include "../structs/Position.h"
-#include "Bitboard.h"
+#include "../enums/PieceType.hpp"
+#include "../enums/Color.hpp"
+#include "../structs/Position.hpp"
+#include "Bitboard.hpp"
 
 class Piece
 {
@@ -42,6 +42,4 @@ public:
 	virtual Bitboard getPotentialMoves() const;
 };
 
-#include "Board.h"
-
-#endif
+#endif // PIECE_HPP

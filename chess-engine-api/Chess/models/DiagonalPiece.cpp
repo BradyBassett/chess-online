@@ -1,4 +1,4 @@
-#include "DiagonalPiece.h"
+#include "DiagonalPiece.hpp"
 
 Bitboard DiagonalPiece::generateAttacks() const
 {
