@@ -1,0 +1,1 @@
+#include "BishopTest.h"

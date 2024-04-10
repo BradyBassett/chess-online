@@ -17,7 +17,7 @@
     {
       "label": "build tests",
       "type": "shell",
-      "command": "cd chess-engine-api/Build && cmake --build .",
+      "command": "cd chess-engine-api/Build && cmake -DCMAKE_BUILD_TYPE=Debug . && cmake --build .",
       "group": {
         "kind": "build",
         "isDefault": false
