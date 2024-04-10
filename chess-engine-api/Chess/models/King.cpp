@@ -1,6 +1,6 @@
-#include "King.h"
-#include "Rook.h"
-#include "../structs/Position.h"
+#include "King.hpp"
+#include "Rook.hpp"
+#include "../structs/Position.hpp"
 
 King::King(Color pieceColor, Position currentPosition) : Piece(pieceColor, currentPosition)
 {

@@ -1,4 +1,4 @@
-#include "OrthagonalPiece.h"
+#include "OrthagonalPiece.hpp"
 
 Bitboard OrthagonalPiece::generateAttacks() const
 {

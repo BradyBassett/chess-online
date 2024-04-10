@@ -1,4 +1,4 @@
-#include "PawnCanMoveTwoSquaresTest.h"
+#include "PawnCanMoveTwoSquaresTest.hpp"
 
 TEST_F(PawnCanMoveTwoSquaresTest, CanMoveTwoSquares_ValidMove_White)
 {

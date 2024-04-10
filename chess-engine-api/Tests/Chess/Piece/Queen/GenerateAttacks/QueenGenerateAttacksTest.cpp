@@ -1,4 +1,4 @@
-#include "QueenGenerateAttacksTest.h"
+#include "QueenGenerateAttacksTest.hpp"
 
 TEST_F(QueenGenerateAttacksTest, generateAttacks_Center_Black)
 {

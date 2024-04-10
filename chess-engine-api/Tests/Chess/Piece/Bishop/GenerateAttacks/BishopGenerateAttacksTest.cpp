@@ -1,4 +1,4 @@
-#include "BishopGenerateAttacksTest.h"
+#include "BishopGenerateAttacksTest.hpp"
 
 TEST_F(BishopGenerateAttacksTest, generateAttacks_Center_Black)
 {

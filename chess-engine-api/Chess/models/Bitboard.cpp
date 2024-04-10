@@ -1,4 +1,4 @@
-#include "Board.h"
+#include "Board.hpp"
 
 int Bitboard::getSquareNumber(Position position)
 {

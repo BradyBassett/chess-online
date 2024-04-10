@@ -1,4 +1,4 @@
-#include "KingGetPotentialMovesTest.h"
+#include "KingGetPotentialMovesTest.hpp"
 
 TEST_F(KingGetPotentialMovesTest, getPotentialMoves_Center_CanNotCastle)
 {

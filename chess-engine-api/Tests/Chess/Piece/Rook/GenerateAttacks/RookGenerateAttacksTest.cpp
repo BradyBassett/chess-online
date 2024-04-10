@@ -1,4 +1,4 @@
-#include "RookGenerateAttacksTest.h"
+#include "RookGenerateAttacksTest.hpp"
 
 TEST_F(RookGenerateAttacksTest, generateAttacks_Center_Black)
 {

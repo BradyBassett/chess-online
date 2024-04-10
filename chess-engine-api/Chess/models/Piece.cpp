@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <stdexcept>
-#include "Piece.h"
+#include "Piece.hpp"
 
 Piece::Piece(Color pieceColor, Position currentPosition, PieceType pieceType)
 	: pieceColor(pieceColor),

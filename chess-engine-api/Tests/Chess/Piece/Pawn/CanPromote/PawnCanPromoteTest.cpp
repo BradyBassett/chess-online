@@ -1,4 +1,4 @@
-#include "PawnCanPromoteTest.h"
+#include "PawnCanPromoteTest.hpp"
 
 TEST_F(PawnCanPromoteTest, CanPromote_WhitePawnOnLastRow)
 {

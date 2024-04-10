@@ -1,4 +1,4 @@
-#include "Rook.h"
+#include "Rook.hpp"
 
 Rook::Rook(Color pieceColor, Position currentPosition, Side side)
 	: Piece(pieceColor, currentPosition),

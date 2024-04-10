@@ -1,5 +1,5 @@
-#include "Knight.h"
-#include "../structs/Position.h"
+#include "Knight.hpp"
+#include "../structs/Position.hpp"
 
 Knight::Knight(Color pieceColor, Position currentPosition) : Piece(pieceColor, currentPosition)
 {

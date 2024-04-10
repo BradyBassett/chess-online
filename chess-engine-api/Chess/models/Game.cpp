@@ -1,13 +1,13 @@
 #include <stdexcept>
 #include <sstream>
-#include "Game.h"
-#include "../enums/PieceType.h"
-#include "Queen.h"
-#include "Rook.h"
-#include "Bishop.h"
-#include "Knight.h"
-#include "King.h"
-#include "Pawn.h"
+#include "Game.hpp"
+#include "../enums/PieceType.hpp"
+#include "Queen.hpp"
+#include "Rook.hpp"
+#include "Bishop.hpp"
+#include "Knight.hpp"
+#include "King.hpp"
+#include "Pawn.hpp"
 
 Game::Game(std::string fenString)
 {
