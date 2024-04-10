@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+#include <gtest/gtest.h> // TODO - Remove this include once the file is reworked
 #include <chrono>
 #include "../../../Chess/models/Game.h"
 

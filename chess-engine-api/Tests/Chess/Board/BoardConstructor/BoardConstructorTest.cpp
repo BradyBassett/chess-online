@@ -1,21 +1,6 @@
-#include <gtest/gtest.h>
-#include "../../../Chess/models/Board.h"
+#include "BoardConstructorTest.h"
 
-std::map<PieceType, std::string>
-	pieceTypeMap =
-		{
-			{PieceType::Pawn, "Pawn"},
-			{PieceType::Knight, "Knight"},
-			{PieceType::Bishop, "Bishop"},
-			{PieceType::Rook, "Rook"},
-			{PieceType::Queen, "Queen"},
-			{PieceType::King, "King"}};
-
-std::map<Color, std::string> colorMap = {
-	{Color::White, "White"},
-	{Color::Black, "Black"}};
-
-void validatePieceCount(Board &board, std::array<int, 6> pieceCounts)
+void BoardConstructorTest::validatePieceCount(Board &board, std::array<int, 6> pieceCounts)
 {
 	for (int i = 0; i < 2; i++)
 	{
@@ -29,7 +14,7 @@ void validatePieceCount(Board &board, std::array<int, 6> pieceCounts)
 	}
 }
 
-void validatePiecePositions(Board &board, std::array<std::optional<PieceType>, 64> expectedPieceTypes)
+void BoardConstructorTest::validatePiecePositions(Board &board, std::array<std::optional<PieceType>, 64> expectedPieceTypes)
 {
 	for (int i = 0; i < 64; i++)
 	{
@@ -44,7 +29,7 @@ void validatePiecePositions(Board &board, std::array<std::optional<PieceType>, 6
 	}
 }
 
-void validateBitboards(Board &board, std::array<std::array<Bitboard, 6>, 2> expectedBitboards)
+void BoardConstructorTest::validateBitboards(Board &board, std::array<std::array<Bitboard, 6>, 2> expectedBitboards)
 {
 	for (int i = 0; i < 2; i++)
 	{
@@ -59,7 +44,7 @@ void validateBitboards(Board &board, std::array<std::array<Bitboard, 6>, 2> expe
 	}
 }
 
-void validateWhitePawnAttackTable(Board &board)
+void BoardConstructorTest::validateWhitePawnAttackTable(Board &board)
 {
 	for (int i = 0; i < 64; i++)
 	{
@@ -77,7 +62,7 @@ void validateWhitePawnAttackTable(Board &board)
 	}
 }
 
-void validateBlackPawnAttackTable(Board &board)
+void BoardConstructorTest::validateBlackPawnAttackTable(Board &board)
 {
 	for (int i = 0; i < 64; i++)
 	{
@@ -95,7 +80,7 @@ void validateBlackPawnAttackTable(Board &board)
 	}
 }
 
-void validateKnightAttackTable(Board &board)
+void BoardConstructorTest::validateKnightAttackTable(Board &board)
 {
 	for (int i = 0; i < 64; i++)
 	{
@@ -138,7 +123,7 @@ void validateKnightAttackTable(Board &board)
 	}
 }
 
-uint64_t calculateBishopExpectedValue(int i)
+uint64_t BoardConstructorTest::calculateBishopExpectedValue(int i)
 {
 	uint64_t expectedValue = 0;
 	for (int j = 1; i % 8 + j < 8 && i / 8 + j < 8; j++)
@@ -160,7 +145,7 @@ uint64_t calculateBishopExpectedValue(int i)
 	return expectedValue;
 }
 
-void validateBishopAttackTable(Board &board)
+void BoardConstructorTest::validateBishopAttackTable(Board &board)
 {
 	for (int i = 0; i < 64; i++)
 	{
@@ -171,7 +156,7 @@ void validateBishopAttackTable(Board &board)
 	}
 }
 
-uint64_t calculateRookExpectedValue(int i)
+uint64_t BoardConstructorTest::calculateRookExpectedValue(int i)
 {
 	uint64_t expectedValue = 0;
 	for (int j = 1; i % 8 + j < 8; j++)
@@ -193,7 +178,7 @@ uint64_t calculateRookExpectedValue(int i)
 	return expectedValue;
 }
 
-void validateRookAttackTable(Board &board)
+void BoardConstructorTest::validateRookAttackTable(Board &board)
 {
 	for (int i = 0; i < 64; i++)
 	{
@@ -204,7 +189,7 @@ void validateRookAttackTable(Board &board)
 	}
 }
 
-void validateQueenAttackTable(Board &board)
+void BoardConstructorTest::validateQueenAttackTable(Board &board)
 {
 	for (int i = 0; i < 64; i++)
 	{
@@ -217,7 +202,7 @@ void validateQueenAttackTable(Board &board)
 	}
 }
 
-void validateKingAttackTable(Board &board)
+void BoardConstructorTest::validateKingAttackTable(Board &board)
 {
 	for (int i = 0; i < 64; i++)
 	{
@@ -260,60 +245,7 @@ void validateKingAttackTable(Board &board)
 	}
 }
 
-TEST(BoardConstructorTest, DefaultConstructor)
-{
-	Board board = Board();
-
-	// validate squares
-	ASSERT_EQ(board.getSquares().size() * board.getSquares()[0].size(), 64);
-
-	// validate rooks
-	ASSERT_EQ(board.getRooks().size(), 4);
-
-	// validate kings
-	ASSERT_EQ(board.getKings().size(), 2);
-
-	// validate piece counts
-	std::array<int, 6> pieceCounts = {8, 2, 2, 2, 1, 1}; // pawns, knights, bishops, rooks, queens, king
-	validatePieceCount(board, pieceCounts);
-
-	// validate piece positions
-	std::array<std::optional<PieceType>, 64> expectedPieceTypes = {
-		PieceType::Rook, PieceType::Knight, PieceType::Bishop, PieceType::Queen, PieceType::King, PieceType::Bishop, PieceType::Knight, PieceType::Rook,
-		PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn,
-		std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
-		std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
-		std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
-		std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
-		PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn,
-		PieceType::Rook, PieceType::Knight, PieceType::Bishop, PieceType::Queen, PieceType::King, PieceType::Bishop, PieceType::Knight, PieceType::Rook};
-	validatePiecePositions(board, expectedPieceTypes);
-
-	// validate bitboards
-	std::array<std::array<Bitboard, 6>, 2> expectedBitboards = {
-		{{{Bitboard(0xff000000000000), Bitboard(0x4200000000000000), Bitboard(0x2400000000000000), Bitboard(0x8100000000000000), Bitboard(0x800000000000000), Bitboard(0x1000000000000000)}},
-		 {{Bitboard(0xff00), Bitboard(0x42), Bitboard(0x24), Bitboard(0x81), Bitboard(0x8), Bitboard(0x10)}}}};
-	validateBitboards(board, expectedBitboards);
-
-	// Validate Attack Tables
-	validateWhitePawnAttackTable(board);
-	validateBlackPawnAttackTable(board);
-	validateKnightAttackTable(board);
-	validateBishopAttackTable(board);
-	validateRookAttackTable(board);
-	validateQueenAttackTable(board);
-	validateKingAttackTable(board);
-
-	ASSERT_TRUE(board.getCanCastleKingside(Color::White));
-	ASSERT_TRUE(board.getCanCastleKingside(Color::Black));
-	ASSERT_TRUE(board.getCanCastleQueenside(Color::White));
-	ASSERT_TRUE(board.getCanCastleQueenside(Color::Black));
-
-	// validate en passant target square
-	ASSERT_EQ(board.getEnPassantTargetSquare(), nullptr);
-}
-
-TEST(BoardConstructorTest, DefaultConstructor)
+TEST_F(BoardConstructorTest, DefaultConstructor)
 {
 	Board board = Board();
 
