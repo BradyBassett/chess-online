@@ -6,9 +6,16 @@ bool Pawn::canMoveOneSquare(Position targetPosition) const
 	return currentPosition.row == targetPosition.row + singleStepDirection && currentPosition.col == targetPosition.col;
 }
 
-bool Pawn::canMoveTwoSquares(Position targetPosition) const
+bool Pawn::canMoveOneOrTwoSquares(Position targetPosition) const
 {
-	return currentPosition.row == targetPosition.row + doubleStepDirection && currentPosition.col == targetPosition.col;
+	if (hasMoved)
+	{
+		return false;
+	}
+
+	bool canMoveTwoSquares = currentPosition.row == targetPosition.row + doubleStepDirection && currentPosition.col == targetPosition.col;
+
+	return canMoveTwoSquares || canMoveOneSquare(targetPosition);
 }
 
 Pawn::Pawn(Color pieceColor, Position currentPosition) : Piece(pieceColor, currentPosition)

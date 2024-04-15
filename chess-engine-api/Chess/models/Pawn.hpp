@@ -14,7 +14,7 @@ public:
 
 	bool canMoveOneSquare(Position targetPosition) const;
 
-	bool canMoveTwoSquares(Position targetPosition) const;
+	bool canMoveOneOrTwoSquares(Position targetPosition) const;
 
 	bool canPromote(Position targetPosition) const override;
 

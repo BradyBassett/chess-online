@@ -263,7 +263,7 @@ void Game::validatePawnMove(Position from, Position to, Piece &fromPiece, Square
 			}
 			else
 			{
-				if (!pawn.canMoveOneSquare(to) && !pawn.canMoveTwoSquares(to))
+				if (!pawn.canMoveOneOrTwoSquares(to))
 				{
 					throw std::invalid_argument("Invalid move - Pawn can only move two squares forward if the square in front of it is empty and it is its first move");
 				}
