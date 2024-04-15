@@ -3,14 +3,24 @@
 
 #include "../PawnTest.hpp"
 
-class PawnCanMoveOneSquareTest : public PawnTest, public testing::Test
+struct PawnCanMoveOneSquareTestParam
+{
+	Color color;
+	Position currentPosition;
+	Position targetPosition;
+	bool expectedResult;
+};
+
+class PawnCanMoveOneSquareTest : public PawnTest, public ::testing::TestWithParam<std::pair<std::string, PawnCanMoveOneSquareTestParam>>
 {
 private:
 
 protected:
+	PawnCanMoveOneSquareTestParam param;
 
 public:
-
+	PawnCanMoveOneSquareTest();
+	static std::vector<std::pair<std::string, PawnCanMoveOneSquareTestParam>> testCases;
 };
 
 #endif // PAWNCANMOVEONESQUARETEST_HPP
