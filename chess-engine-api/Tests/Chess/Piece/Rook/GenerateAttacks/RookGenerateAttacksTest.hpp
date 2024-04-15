@@ -3,14 +3,16 @@
 
 #include "../RookTest.hpp"
 
-class RookGenerateAttacksTest : public RookTest, public ::testing::Test
+class RookGenerateAttacksTest : public RookTest, public ::testing::TestWithParam<std::pair<std::string, PieceGenerateAttacksTestParam>>
 {
 private:
 
 protected:
+	PieceGenerateAttacksTestParam param;
 
 public:
-
+	RookGenerateAttacksTest();
+	static std::vector<std::pair<std::string, PieceGenerateAttacksTestParam>> testCases;
 };
 
 #endif // ROOKGENERATEATTACKSTEST_HPP
