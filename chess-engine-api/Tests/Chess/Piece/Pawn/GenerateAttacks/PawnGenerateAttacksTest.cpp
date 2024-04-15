@@ -1,45 +1,27 @@
 #include "PawnGenerateAttacksTest.hpp"
 
-TEST_F(PawnGenerateAttacksTest, generateAttacks_Center_Black)
-{
-	Position currentPosition = {3, 3};
-	Pawn pawn(Color::Black, currentPosition);
+PawnGenerateAttacksTest::PawnGenerateAttacksTest() : param(GetParam().second) {}
 
-	Bitboard expectedAttacks = Bitboard(0x1400000000);
-	Bitboard actualAttacks = pawn.generateAttacks();
+TEST_P(PawnGenerateAttacksTest, generateAttacks) {
+    Pawn pawn(param.color, param.currentPosition);
+    Bitboard actualAttacks = pawn.generateAttacks();
+    Bitboard expectedAttacks = Bitboard(param.expectedAttacks);
 
-	ASSERT_EQ(actualAttacks, expectedAttacks);
+    ASSERT_EQ(actualAttacks, expectedAttacks);
 }
 
-TEST_F(PawnGenerateAttacksTest, generateAttacks_Center_White)
-{
-	Position currentPosition = {4, 4};
-	Pawn pawn(Color::White, currentPosition);
+std::vector<std::pair<std::string, PieceGenerateAttacksTestParam>> PawnGenerateAttacksTest::testCases = {
+    {"Center_Black", PieceGenerateAttacksTestParam{{3, 3}, Color::Black, 0x1400000000}},
+    {"Center_White", PieceGenerateAttacksTestParam{{4, 4}, Color::White, 0x28000000}},
+    {"Edge_Black", PieceGenerateAttacksTestParam{{3, 0}, Color::Black, 0x200000000}},
+    {"Edge_White", PieceGenerateAttacksTestParam{{5, 7}, Color::White, 0x4000000000}}
+};
 
-	Bitboard expectedAttacks = Bitboard(0x28000000);
-	Bitboard actualAttacks = pawn.generateAttacks();
-
-	ASSERT_EQ(actualAttacks, expectedAttacks);
-}
-
-TEST_F(PawnGenerateAttacksTest, GenerateAttacks_Edge_Black)
-{
-	Position currentPosition = {3, 0};
-	Pawn pawn(Color::Black, currentPosition);
-
-	Bitboard expectedAttacks = Bitboard(0x200000000);
-	Bitboard actualAttacks = pawn.generateAttacks();
-
-	ASSERT_EQ(actualAttacks, expectedAttacks);
-}
-
-TEST_F(PawnGenerateAttacksTest, GenerateAttacks_Edge_White)
-{
-	Position currentPosition = {5, 7};
-	Pawn pawn(Color::White, currentPosition);
-
-	Bitboard expectedAttacks = Bitboard(0x4000000000);
-	Bitboard actualAttacks = pawn.generateAttacks();
-
-	ASSERT_EQ(actualAttacks, expectedAttacks);
-}
+INSTANTIATE_TEST_SUITE_P(
+    PawnGenerateAttacks,
+    PawnGenerateAttacksTest,
+    ::testing::ValuesIn(PawnGenerateAttacksTest::testCases),
+	[](const testing::TestParamInfo<PawnGenerateAttacksTest::ParamType>& info) {
+		return info.param.first;
+	}
+);
