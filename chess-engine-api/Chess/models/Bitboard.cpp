@@ -1,9 +1,18 @@
 #include "Board.hpp"
+#include <stdexcept>
 
 int Bitboard::getSquareNumber(Position position)
 {
     int squareNumber = (position.row * 8) + position.col;
     return squareNumber;
+}
+
+void Bitboard::checkPositionBounds(Position position)
+{
+	if (position.row < 0 || position.row > 7 || position.col < 0 || position.col > 7)
+	{
+		throw std::invalid_argument("Position out of bounds");
+	}
 }
 
 Bitboard::Bitboard(uint64_t value) : value(value)
@@ -12,6 +21,8 @@ Bitboard::Bitboard(uint64_t value) : value(value)
 
 Bitboard::Bitboard(Position position)
 {
+	checkPositionBounds(position);
+
 	setBit(position);
 }
 
@@ -106,12 +117,16 @@ uint64_t Bitboard::getValue()
 
 bool Bitboard::getBit(int squareNumber)
 {
+	checkPositionBounds({squareNumber / 8, squareNumber % 8});
+
 	uint64_t bit = (value & (1ULL << squareNumber));
 	return bit != 0;
 }
 
 bool Bitboard::getBit(Position position)
 {
+	checkPositionBounds(position);
+
 	return getBit(getSquareNumber(position));
 }
 
@@ -122,22 +137,15 @@ void Bitboard::setValue(uint64_t bitboard)
 
 void Bitboard::setBit(Position position)
 {
-	uint64_t bit = 1ULL << getSquareNumber(position);
-	value |= bit;
-}
+	checkPositionBounds(position);
 
-void Bitboard::setBit(int row, int col)
-{
-	uint64_t bit = 1ULL << getSquareNumber({row, col});
+	uint64_t bit = 1ULL << getSquareNumber(position);
 	value |= bit;
 }
 
 void Bitboard::clearBit(Position position)
 {
-	value ^= getBit(position);
-}
+	checkPositionBounds(position);
 
-void Bitboard::clearBit(int row, int col)
-{
-	value ^= getBit({row, col});
+	value &= ~(1ULL << getSquareNumber(position));
 }
