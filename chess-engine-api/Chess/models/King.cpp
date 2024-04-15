@@ -57,16 +57,23 @@ Bitboard King::generateAttacks() const
 
 Bitboard King::getPotentialMoves() const
 {
-	Bitboard moves = generateAttacks();
+    Bitboard moves = generateAttacks();
 
-	if (canCastleKingside)
-	{
-		moves.setBit({currentPosition.row, currentPosition.col + 2});
-	}
-	if (canCastleQueenside)
-	{
-		moves.setBit({currentPosition.row, currentPosition.col - 2});
-	}
+    // If the king has moved, or if both castling flags are false, or if the king is not in its starting position, return the moves
+    if (hasMoved || (!canCastleKingside && !canCastleQueenside) || !((pieceColor == Color::White && currentPosition.row == 7 && currentPosition.col == 4) || (pieceColor == Color::Black && currentPosition.row == 0 && currentPosition.col == 4)))
+    {
+        return moves;
+    }
 
-	return moves;
+    // If the code reaches this point, the king has not moved yet and is in its starting position
+    if (canCastleKingside)
+    {
+        moves.setBit({currentPosition.row, currentPosition.col + 2});
+    }
+    if (canCastleQueenside)
+    {
+        moves.setBit({currentPosition.row, currentPosition.col - 2});
+    }
+
+    return moves;
 }
