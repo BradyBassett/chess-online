@@ -6,6 +6,7 @@
 #include "../Tests.hpp"
 #include "../../Chess/enums/PieceType.hpp"
 #include "../../Chess/enums/Color.hpp"
+#include "../../Chess/structs/Position.hpp"
 
 class ChessTest : public Tests
 {
