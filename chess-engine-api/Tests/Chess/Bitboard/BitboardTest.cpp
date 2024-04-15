@@ -1,0 +1,2 @@
+#include "BitboardTest.hpp"
+

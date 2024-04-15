@@ -3,7 +3,7 @@
 
 #include "../PawnTest.hpp"
 
-class PawnCanPromoteTest : public PawnTest, public ::testing::Test
+class PawnCanPromoteTest : public PawnTest, public testing::Test
 {
 private:
 

@@ -3,7 +3,7 @@
 
 #include "../GameTest.hpp"
 
-class PerftTest : public GameTest, public ::testing::Test
+class PerftTest : public GameTest
 {
 private:
 

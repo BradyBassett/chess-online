@@ -1,66 +1,29 @@
 #include "KnightGenerateAttacksTest.hpp"
 
-TEST_F(KnightGenerateAttacksTest, generateAttacks_Center_Black)
-{
-	Position currentPosition = {3, 3};
-	Knight knight(Color::Black, currentPosition);
+KnightGenerateAttacksTest::KnightGenerateAttacksTest() : param(GetParam().second) {}
 
-	Bitboard expectedAttacks = Bitboard(0x142200221400);
-	Bitboard actualAttacks = knight.generateAttacks();
+TEST_P(KnightGenerateAttacksTest, generateAttacks) {
+    Knight knight(param.color, param.currentPosition);
+    Bitboard actualAttacks = knight.generateAttacks();
+    Bitboard expectedAttacks = Bitboard(param.expectedAttacks);
 
-	ASSERT_EQ(actualAttacks, expectedAttacks);
+    ASSERT_EQ(actualAttacks, expectedAttacks);
 }
 
-TEST_F(KnightGenerateAttacksTest, generateAttacks_Center_White)
-{
-	Position currentPosition = {4, 4};
-	Knight knight(Color::White, currentPosition);
-	Bitboard expectedAttacks = Bitboard(0x28440044280000);
-	Bitboard actualAttacks = knight.generateAttacks();
+std::vector<std::pair<std::string, PieceGenerateAttacksTestParam>> KnightGenerateAttacksTest::testCases = {
+    {"Center_Black", PieceGenerateAttacksTestParam{{3, 3}, Color::Black, 0x142200221400}},
+    {"Center_White", PieceGenerateAttacksTestParam{{4, 4}, Color::White, 0x28440044280000}},
+    {"Corner_Black", PieceGenerateAttacksTestParam{{0, 0}, Color::Black, 0x20400}},
+    {"Corner_White", PieceGenerateAttacksTestParam{{7, 7}, Color::White, 0x20400000000000}},
+    {"Edge_Black", PieceGenerateAttacksTestParam{{0, 3}, Color::White, 0x142200}},
+    {"Edge_White", PieceGenerateAttacksTestParam{{3, 0}, Color::White, 0x20400040200}}
+};
 
-	ASSERT_EQ(actualAttacks, expectedAttacks);
-}
-
-TEST_F(KnightGenerateAttacksTest, generateAttacks_Corner_Black)
-{
-	Position currentPosition = {0, 0};
-	Knight knight(Color::Black, currentPosition);
-
-	Bitboard expectedAttacks = Bitboard(0x20400);
-	Bitboard actualAttacks = knight.generateAttacks();
-
-	ASSERT_EQ(actualAttacks, expectedAttacks);
-}
-
-TEST_F(KnightGenerateAttacksTest, generateAttacks_Corner_White)
-{
-	Position currentPosition = {7, 7};
-	Knight knight(Color::White, currentPosition);
-
-	Bitboard expectedAttacks = Bitboard(0x20400000000000);
-	Bitboard actualAttacks = knight.generateAttacks();
-
-	ASSERT_EQ(actualAttacks, expectedAttacks);
-}
-
-TEST_F(KnightGenerateAttacksTest, generateAttacks_Edge_Black)
-{
-	Position currentPosition = {0, 3};
-	Knight knight(Color::Black, currentPosition);
-
-	Bitboard expectedAttacks = Bitboard(0x142200);
-	Bitboard actualAttacks = knight.generateAttacks();
-
-	ASSERT_EQ(actualAttacks, expectedAttacks);
-}
-
-TEST_F(KnightGenerateAttacksTest, generateAttacks_Edge_White)
-{
-	Position currentPosition = {3, 0};
-	Knight knight(Color::White, currentPosition);
-
-	Bitboard expectedAttacks = Bitboard(0x20400040200);
-	Bitboard actualAttacks = knight.generateAttacks();
-
-	ASSERT_EQ(actualAttacks, expectedAttacks);
-}
+INSTANTIATE_TEST_SUITE_P(
+    KnightGenerateAttacks,
+    KnightGenerateAttacksTest,
+    ::testing::ValuesIn(KnightGenerateAttacksTest::testCases),
+	[](const testing::TestParamInfo<KnightGenerateAttacksTest::ParamType>& info) {
+		return info.param.first;
+	}
+);

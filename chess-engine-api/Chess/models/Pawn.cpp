@@ -53,10 +53,14 @@ Bitboard Pawn::getPotentialMoves() const
 	if (singleStep.row >= 0 && singleStep.row < 8 && singleStep.col >= 0 && singleStep.col < 8)
 	{
 		moves.setBit(singleStep);
-		if (!hasMoved && doubleStep.row >= 0 && doubleStep.row < 8 && doubleStep.col >= 0 && doubleStep.col < 8)
+
+	if (!hasMoved && doubleStep.row >= 0 && doubleStep.row < 8 && doubleStep.col >= 0 && doubleStep.col < 8)
+	{
+		if ((pieceColor == Color::White && currentPosition.row == 6) || (pieceColor == Color::Black && currentPosition.row == 1))
 		{
 			moves.setBit(doubleStep);
 		}
+	}
 	}
 
 	return moves;

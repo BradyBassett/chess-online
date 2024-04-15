@@ -3,7 +3,7 @@
 
 #include "../BoardTest.hpp"
 
-class BoardConstructorTest : public BoardTest, public ::testing::Test
+class BoardConstructorTest : public BoardTest
 {
 private:
 
