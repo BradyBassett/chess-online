@@ -247,7 +247,7 @@ Bitboard Board::calculatePath(Position from, Position to, std::shared_ptr<Piece>
 		int direction = (piece->getPieceColor() == Color::White) ? -1 : 1;
 		if (from.row + (direction * 2) == to.row && from.col == to.col)
 		{
-			path.setBit(from.row + direction, from.col);
+			path.setBit({from.row + direction, from.col});
 		}
 		break;
 	}
@@ -304,7 +304,7 @@ Bitboard Board::calculateDiagonalPath(Position from, Position to)
 	while ((rowStep > 0 ? i < to.row : i > to.row) &&
 		   (colStep > 0 ? j < to.col : j > to.col))
 	{
-		path.setBit(i, j);
+		path.setBit({i, j});
 		i += rowStep;
 		j += colStep;
 	}
@@ -327,7 +327,7 @@ Bitboard Board::calculateOrthagonalPath(Position from, Position to)
 
 		for (int i = rowStart + 1; i < rowEnd - 1; i++)
 		{
-			path.setBit(from.row, i);
+			path.setBit({from.row, i});
 		}
 	}
 	else if (to.col == from.col)
@@ -337,7 +337,7 @@ Bitboard Board::calculateOrthagonalPath(Position from, Position to)
 
 		for (int i = colStart + 1; i < colEnd - 1; i++)
 		{
-			path.setBit(i, from.col);
+			path.setBit({i, from.col});
 		}
 	}
 
