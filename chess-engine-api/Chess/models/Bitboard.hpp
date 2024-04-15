@@ -13,6 +13,8 @@ private:
 
 	int getSquareNumber(Position position);
 
+	void checkPositionBounds(Position position);
+
 public:
 	Bitboard(uint64_t value = 0x0ULL);
 
@@ -56,11 +58,7 @@ public:
 
 	void setBit(Position position);
 
-	void setBit(int row, int col);
-
 	void clearBit(Position position);
-
-	void clearBit(int row, int col);
 };
 
 #endif // BITBOARD_HPP
