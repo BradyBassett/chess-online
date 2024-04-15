@@ -3,6 +3,7 @@
 
 #include "../BitboardTest.hpp"
 
+
 class BitboardConstructorTest : public BitboardTest, public ::testing::Test
 {
 private:
