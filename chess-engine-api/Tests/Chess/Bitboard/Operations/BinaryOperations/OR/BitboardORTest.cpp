@@ -13,10 +13,16 @@ TEST_P(BitboardORTest, BitwiseOr)
 }
 
 std::vector<std::pair<std::string, BitboardBinaryOperationsTestParam>> BitboardORTest::testCases = {
-	{"Empty_bitboards", {Bitboard(0x0ULL), Bitboard(0x0ULL), Bitboard(0x0ULL)}},
-	{"Empty_and_full_bitboards", {Bitboard(0x0ULL), Bitboard(~0x0ULL), Bitboard(~0x0ULL)}},
-	{"Full_bitboards", {Bitboard(~0x0ULL), Bitboard(~0x0ULL), Bitboard(~0x0ULL)}},
-	{"Single_bit_and_inverse", {Bitboard(0x1ULL), Bitboard(~0x1ULL), Bitboard(~0x0ULL)}},
+	{"AllBitsSet_OR_NoBitsSet", {Bitboard(0xffffffffffffffff), Bitboard(0x0), Bitboard(0xffffffffffffffff)}},
+	{"AllBitsSet_OR_AllBitsSet", {Bitboard(0xffffffffffffffff), Bitboard(0xffffffffffffffff), Bitboard(0xffffffffffffffff)}},
+	{"AlternatingBits_OR_OppositeAlternatingBits", {Bitboard(0xaa55aa55aa55aa55), Bitboard(0x55aa55aa55aa55aa), Bitboard(0xffffffffffffffff)}},
+	{"AlternatingBits_OR_SameAlternatingBits", {Bitboard(0xaa55aa55aa55aa55), Bitboard(0xaa55aa55aa55aa55), Bitboard(0xaa55aa55aa55aa55)}},
+	{"RandomBits_OR_RandomBits", generateRandomTestParam(std::bit_or<uint64_t>{})},
+	{"SingleBitSet_OR_NoBitsSet", {Bitboard(0x800000), Bitboard(0x0), Bitboard(0x800000)}},
+	{"SingleBitSet_OR_SameSingleBitSet", {Bitboard(0x8000000), Bitboard(0x8000000), Bitboard(0x8000000)}},
+	{"SingleBitSet_OR_DifferentSingleBitSet", {Bitboard(0x800), Bitboard(0x80000000000), Bitboard(0x80000000800)}},
+	{"SingleBitSet_OR_AllBitsSet", {Bitboard(0x400000000), Bitboard(0xffffffffffffffff), Bitboard(0xffffffffffffffff)}},
+	{"SingleBitSet_OR_RandomBits", generateRandomTestParam(std::bit_or<uint64_t>{}, 0x20000000000000, false)},
 };
 
 INSTANTIATE_TEST_SUITE_P(

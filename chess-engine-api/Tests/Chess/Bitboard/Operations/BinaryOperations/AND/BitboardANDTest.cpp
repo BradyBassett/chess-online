@@ -20,7 +20,8 @@ std::vector<std::pair<std::string, BitboardBinaryOperationsTestParam>> BitboardA
 	{"AlternatingBits_AND_SameAlternatingBits", {Bitboard(0xaa55aa55aa55aa55), Bitboard(0xaa55aa55aa55aa55), Bitboard(0xaa55aa55aa55aa55)}},
 	{"RandomBits_AND_RandomBits", generateRandomTestParam(std::bit_and<uint64_t>{})},
 	{"SingleBitSet_AND_NoBitsSet", {Bitboard(0x8000000), Bitboard(0x0), Bitboard(0x0)}},
-	{"SingleBitSet_AND_SingleBitSet", {Bitboard(0x8000000), Bitboard(0x8000000), Bitboard(0x8000000)}},
+	{"SingleBitSet_AND_SameSingleBitSet", {Bitboard(0x8000000), Bitboard(0x8000000), Bitboard(0x8000000)}},
+	{"SingleBitSet_AND_DifferentSingleBitSet", {Bitboard(0x8000000), Bitboard(0x1000000000), Bitboard(0x0)}},
 	{"SingleBitSet_AND_AllBitsSet", {Bitboard(0x20000000000000), Bitboard(0xffffffffffffffff), Bitboard(0x20000000000000)}},
 	{"SingleBitSet_AND_RandomBits", generateRandomTestParam(std::bit_and<uint64_t>{}, 0x20000000000000, false)},
 };
