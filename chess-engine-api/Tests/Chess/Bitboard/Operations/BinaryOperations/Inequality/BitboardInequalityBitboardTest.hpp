@@ -1,18 +1,18 @@
-// #ifndef BITBOARDINEQUALITYBITBOARDTEST_HPP
-// #define BITBOARDINEQUALITYBITBOARDTEST_HPP
+#ifndef BITBOARDINEQUALITYBITBOARDTEST_HPP
+#define BITBOARDINEQUALITYBITBOARDTEST_HPP
 
-// #include "../BitboardBinaryOperationsTest.hpp"
+#include "../BitboardBinaryOperationsTest.hpp"
 
-// class BitboardInequalityBitboardTest : public BitboardBinaryOperationsTest
-// {
-// private:
+class BitboardInequalityBitboardTest : public BitboardBinaryOperationsTest
+{
+private:
 
-// protected:
-// 	BitboardBinaryOperationsTestParam param;
+protected:
+	BitboardBinaryOperationsTestParam param;
 
-// public:
-// 	BitboardInequalityBitboardTest();
-// 	static std::vector<std::pair<std::string, BitboardBinaryOperationsTestParam>> testCases;
-// };
+public:
+	BitboardInequalityBitboardTest();
+	static std::vector<std::pair<std::string, BitboardBinaryOperationsTestParam>> testCases;
+};
 
-// #endif // BITBOARDINEQUALITYBITBOARDTEST_HPP
+#endif // BITBOARDINEQUALITYBITBOARDTEST_HPP
