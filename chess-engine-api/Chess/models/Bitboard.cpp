@@ -70,24 +70,42 @@ Bitboard Bitboard::operator~() const
 
 Bitboard Bitboard::operator<<(uint64_t shift) const
 {
+	if (shift >= 64) {
+		return Bitboard(0);
+	}
+
 	Bitboard bitboard = Bitboard(value << shift);
 	return bitboard;
 }
 
 Bitboard &Bitboard::operator<<=(uint64_t shift)
 {
+	if (shift >= 64) {
+		value = 0;
+		return *this;
+	}
+
 	value <<= shift;
 	return *this;
 }
 
 Bitboard Bitboard::operator>>(uint64_t shift) const
 {
+	if (shift >= 64) {
+		return Bitboard(0);
+	}
+
 	Bitboard bitboard = Bitboard(value >> shift);
 	return bitboard;
 }
 
 Bitboard &Bitboard::operator>>=(uint64_t shift)
 {
+	if (shift >= 64) {
+		value = 0;
+		return *this;
+	}
+
 	value >>= shift;
 	return *this;
 }
@@ -101,12 +119,6 @@ bool Bitboard::operator==(const Bitboard &other) const
 bool Bitboard::operator!=(const Bitboard &other) const
 {
 	bool notEqual = value != other.value;
-	return notEqual;
-}
-
-bool Bitboard::operator!=(uint64_t other) const
-{
-	bool notEqual = value != other;
 	return notEqual;
 }
 
