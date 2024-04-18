@@ -17,7 +17,9 @@ private:
 protected:
 
 public:
-	static BitboardBinaryOperationsTestParam generateRandomTestParam(std::function<uint64_t(uint64_t, uint64_t)> operation, uint64_t value1 = 0ULL, bool useRandomValue1 = true);
+	static BitboardBinaryOperationsTestParam generateRandomBitwiseTestParam(std::function<uint64_t(uint64_t, uint64_t)> operation, uint64_t value1 = 0ULL, bool useRandomValue1 = true);
+
+	static BitboardBinaryOperationsTestParam generateRandomBitShiftTestParam(std::function<uint64_t(uint64_t, uint64_t)> operation, uint64_t value1 = 0ULL, bool useRandomValue1 = true);
 };
 
-#endif // BITBOARBINARYDOPERATIONSTEST_HPP
+#endif // BITBOARBINARYDOPERATIONSTEST_HPPs
