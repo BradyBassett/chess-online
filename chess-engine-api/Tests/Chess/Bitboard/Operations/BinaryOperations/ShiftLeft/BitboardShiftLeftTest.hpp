@@ -1,18 +1,18 @@
-// #ifndef BITBOARDSHIFTLEFTTEST_HPP
-// #define BITBOARDSHIFTLEFTTEST_HPP
+#ifndef BITBOARDSHIFTLEFTTEST_HPP
+#define BITBOARDSHIFTLEFTTEST_HPP
 
-// #include "../BitboardBinaryOperationsTest.hpp"
+#include "../BitboardBinaryOperationsTest.hpp"
 
-// class BitboardShiftLeftTest : public BitboardBinaryOperationsTest
-// {
-// private:
+class BitboardShiftLeftTest : public BitboardBinaryOperationsTest
+{
+private:
 
-// protected:
-// 	BitboardBinaryOperationsTestParam param;
+protected:
+	BitboardBinaryOperationsTestParam param;
 
-// public:
-// 	BitboardShiftLeftTest();
-// 	static std::vector<std::pair<std::string, BitboardBinaryOperationsTestParam>> testCases;
-// };
+public:
+	BitboardShiftLeftTest();
+	static std::vector<std::pair<std::string, BitboardBinaryOperationsTestParam>> testCases;
+};
 
-// #endif // BITBOARDSHIFTLEFTTEST_HPP
+#endif // BITBOARDSHIFTLEFTTEST_HPP
