@@ -10,6 +10,20 @@ struct BitboardBinaryOperationsTestParam
 	Bitboard expectedResult;
 };
 
+enum ShiftDirection
+{
+	Left,
+	Right
+};
+
+enum ComparisonOperation
+{
+	Equal,
+	NotEqual
+};
+
+
+
 class BitboardBinaryOperationsTest : public BitboardTest, public ::testing::TestWithParam<std::pair<std::string, BitboardBinaryOperationsTestParam>>
 {
 private:
@@ -19,7 +33,9 @@ protected:
 public:
 	static BitboardBinaryOperationsTestParam generateRandomBitwiseTestParam(std::function<uint64_t(uint64_t, uint64_t)> operation, uint64_t value1 = 0ULL, bool useRandomValue1 = true);
 
-	static BitboardBinaryOperationsTestParam generateRandomBitShiftTestParam(std::function<uint64_t(uint64_t, uint64_t)> operation, uint64_t value1 = 0ULL, bool useRandomValue1 = true);
+	static BitboardBinaryOperationsTestParam generateRandomBitShiftTestParam(ShiftDirection shiftDirection, uint64_t value1 = 0ULL, bool useRandomValue1 = true);
+
+	static BitboardBinaryOperationsTestParam generateRandomBitComparisonTestParam(ComparisonOperation, uint64_t value1 = 0ULL, bool useRandomValue1 = true);
 };
 
 #endif // BITBOARBINARYDOPERATIONSTEST_HPPs
