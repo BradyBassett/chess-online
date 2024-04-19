@@ -3,7 +3,7 @@
 
 #include "../BitboardTest.hpp"
 
-class BitboardValueAccessModificationTest : public BitboardTest
+class BitboardValueAccessModificationTest : public BitboardTest, public ::testing::Test
 {
 private:
 
