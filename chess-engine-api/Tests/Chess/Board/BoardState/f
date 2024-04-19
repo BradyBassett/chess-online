@@ -1,0 +1,4 @@
+getSquares(), 
+getWhitePiecesBitboard(), 
+getBlackPiecesBitboard(), 
+getAllPiecesBitboard()

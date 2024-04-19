@@ -1,0 +1,3 @@
+getEnPassantTargetSquare(), 
+setEnPassantTargetSquare(Square *square), 
+updateEnPassantTargetSquare(Piece &fromPiece, Position from, Position to)

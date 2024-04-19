@@ -1,0 +1,3 @@
+getSquare(int rowIndex, int colIndex), 
+getSquare(Position position), 
+ getSquare(int squareNumber)

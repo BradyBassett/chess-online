@@ -1,0 +1,4 @@
+getRook(Color color, Side side), 
+getRooks(), 
+getKing(Color color), 
+ getKings()

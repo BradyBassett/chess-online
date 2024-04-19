@@ -1,0 +1,2 @@
+convertStringToPosition(std::string position) 
+ convertPositionToString(Position position)

@@ -1,0 +1,3 @@
+getPieceCount(Color color, PieceType pieceType), 
+incrementPieceCount(Color color, PieceType pieceType),
+ decrementPieceCount(Color color, PieceType pieceType)

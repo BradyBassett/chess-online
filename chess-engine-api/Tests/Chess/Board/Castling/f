@@ -1,0 +1,5 @@
+getCanCastleKingside(Color color), 
+getCanCastleQueenside(Color color), 
+setCanCastleKingside(bool value, Color color), 
+setCanCastleQueenside(bool value, Color color), 
+updateCastlingAvailability(Piece &fromPiece)
