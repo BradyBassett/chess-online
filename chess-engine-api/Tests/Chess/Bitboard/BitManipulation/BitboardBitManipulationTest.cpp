@@ -1,6 +1,6 @@
 #include "BitboardBitManipulationTest.hpp"
 
-TEST_F(BitboardBitManipulationTest, setAndClearBit_getBitIndex)
+TEST(BitboardBitManipulationTest, setAndClearBit_getBitIndex)
 {
 	Bitboard bitboard;
 
@@ -18,7 +18,7 @@ TEST_F(BitboardBitManipulationTest, setAndClearBit_getBitIndex)
 	}
 }
 
-TEST_F(BitboardBitManipulationTest, setAndClearBit_getBitPosition)
+TEST(BitboardBitManipulationTest, setAndClearBit_getBitPosition)
 {
 	Bitboard bitboard;
 
@@ -39,7 +39,7 @@ TEST_F(BitboardBitManipulationTest, setAndClearBit_getBitPosition)
 	}
 }
 
-TEST_F(BitboardBitManipulationTest, allBitsSet)
+TEST(BitboardBitManipulationTest, allBitsSet)
 {
 	Bitboard bitboard;
 
@@ -66,7 +66,7 @@ TEST_F(BitboardBitManipulationTest, allBitsSet)
 	}
 }
 
-TEST_F(BitboardBitManipulationTest, noBitsSet)
+TEST(BitboardBitManipulationTest, noBitsSet)
 {
 	Bitboard bitboard;
 
@@ -76,7 +76,7 @@ TEST_F(BitboardBitManipulationTest, noBitsSet)
 	}
 }
 
-TEST_F(BitboardBitManipulationTest, invalidPositions)
+TEST(BitboardBitManipulationTest, invalidPositions)
 {
 	Bitboard bitboard;
 
