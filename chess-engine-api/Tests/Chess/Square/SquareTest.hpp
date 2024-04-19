@@ -1,7 +1,17 @@
-#ifndef SQUARE_HPP
-#define SquareTest_HPP
+#ifndef SQUARETEST_HPP
+#define SQUARETEST_HPP
 
-class SquareTest
+#include "../ChessTest.hpp"
+#include "../../../Chess/models/Piece.hpp"
+#include "../../../Chess/models/Pawn.hpp"
+#include "../../../Chess/models/Knight.hpp"
+#include "../../../Chess/models/Bishop.hpp"
+#include "../../../Chess/models/Rook.hpp"
+#include "../../../Chess/models/Queen.hpp"
+#include "../../../Chess/models/King.hpp"
+#include "../../../Chess/models/Square.hpp"
+
+class SquareTest : public ChessTest
 {
 private:
 
@@ -11,4 +21,4 @@ public:
 
 };
 
-#endif // SquareTest_HPP
+#endif // SQUARETEST_HPP
