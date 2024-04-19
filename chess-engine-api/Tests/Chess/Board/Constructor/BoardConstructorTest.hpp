@@ -3,6 +3,13 @@
 
 #include "../BoardTest.hpp"
 
+struct BoardConstructorTestParams
+{
+	std::string fenPosition;
+	std::string castlingAvaliability;
+	std::string enPassantTarget;
+};
+
 class BoardConstructorTest : public BoardTest
 {
 private:
