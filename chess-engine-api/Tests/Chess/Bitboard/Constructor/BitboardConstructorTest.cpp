@@ -1,6 +1,6 @@
 #include "BitboardConstructorTest.hpp"
 
-TEST_F(BitboardConstructorTest, constructorPosition)
+TEST(BitboardConstructorTest, constructorPosition)
 {
 	for (int i = 0; i < 8; i++)
 	{
@@ -15,7 +15,7 @@ TEST_F(BitboardConstructorTest, constructorPosition)
 	}
 }
 
-TEST_F(BitboardConstructorTest, constructorValue)
+TEST(BitboardConstructorTest, constructorValue)
 {
 	for (int i = 0; i < 64; i++)
 	{
