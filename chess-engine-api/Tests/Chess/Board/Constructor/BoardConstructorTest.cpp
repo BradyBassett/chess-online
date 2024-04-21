@@ -1,6 +1,8 @@
 #include "BoardConstructorTest.hpp"
 
-void BoardConstructorTest::validatePieceCount(Board &board, std::array<int, 6> pieceCounts)
+BoardConstructorTest::BoardConstructorTest() : param(GetParam().second) {}
+
+void BoardConstructorTest::validatePieceCount(Board &board, std::array<std::array<int, 6>, 2> pieceCounts)
 {
 	for (int i = 0; i < 2; i++)
 	{
@@ -9,7 +11,7 @@ void BoardConstructorTest::validatePieceCount(Board &board, std::array<int, 6> p
 			Color color = static_cast<Color>(i);
 			PieceType pieceType = static_cast<PieceType>(j);
 
-			ASSERT_EQ(board.getPieceCount(color, pieceType), pieceCounts[j]) << "Color: " << colorMap[color] << " PieceType: " << pieceTypeMap[pieceType];
+			ASSERT_EQ(board.getPieceCount(color, pieceType), pieceCounts[i][j]) << "Color: " << colorMap[color] << " PieceType: " << pieceTypeMap[pieceType];
 		}
 	}
 }
@@ -245,39 +247,41 @@ void BoardConstructorTest::validateKingAttackTable(Board &board)
 	}
 }
 
-TEST_F(BoardConstructorTest, DefaultConstructor)
+TEST_P(BoardConstructorTest, constructor)
 {
-	Board board = Board();
+	std::string fenPosition = param.fenPosition;
+	std::string castlingAvailability = param.castlingAvaliability;
+	std::string enPassantTarget = param.enPassantTarget;
+
+	Board board;
+
+	if (!fenPosition.empty() || !castlingAvailability.empty() || !enPassantTarget.empty())
+	{
+		board = Board(fenPosition, castlingAvailability, enPassantTarget);
+	}
 
 	// validate squares
-	ASSERT_EQ(board.getSquares().size() * board.getSquares()[0].size(), 64);
+	int expectedSquareCount = 64;
+	ASSERT_EQ(board.getSquares().size() * board.getSquares()[0].size(), expectedSquareCount);
 
 	// validate rooks
-	ASSERT_EQ(board.getRooks().size(), 4);
+	int expectedRookCount = param.expectedRookCount;
+	ASSERT_EQ(board.getRooks().size(), expectedRookCount);
 
 	// validate kings
-	ASSERT_EQ(board.getKings().size(), 2);
+	int expectedKingCount = param.expectedKingCount;
+	ASSERT_EQ(board.getKings().size(), expectedKingCount);
 
-	// validate piece counts
-	std::array<int, 6> pieceCounts = {8, 2, 2, 2, 1, 1}; // pawns, knights, bishops, rooks, queens, king
-	validatePieceCount(board, pieceCounts);
+	// validate piece counts														   // White, Black
+	std::array<std::array<int, 6>, 2> expectedPieceCounts = param.expectedPieceCounts; // pawns, knights, bishops, rooks, queens, king
+	validatePieceCount(board, expectedPieceCounts);
 
 	// validate piece positions
-	std::array<std::optional<PieceType>, 64> expectedPieceTypes = {
-		PieceType::Rook, PieceType::Knight, PieceType::Bishop, PieceType::Queen, PieceType::King, PieceType::Bishop, PieceType::Knight, PieceType::Rook,
-		PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn,
-		std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
-		std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
-		std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
-		std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
-		PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn,
-		PieceType::Rook, PieceType::Knight, PieceType::Bishop, PieceType::Queen, PieceType::King, PieceType::Bishop, PieceType::Knight, PieceType::Rook};
+	std::array<std::optional<PieceType>, 64> expectedPieceTypes = param.expectedPieceTypes;
 	validatePiecePositions(board, expectedPieceTypes);
 
 	// validate bitboards
-	std::array<std::array<Bitboard, 6>, 2> expectedBitboards = {
-		{{{Bitboard(0xff000000000000), Bitboard(0x4200000000000000), Bitboard(0x2400000000000000), Bitboard(0x8100000000000000), Bitboard(0x800000000000000), Bitboard(0x1000000000000000)}},
-		 {{Bitboard(0xff00), Bitboard(0x42), Bitboard(0x24), Bitboard(0x81), Bitboard(0x8), Bitboard(0x10)}}}};
+	std::array<std::array<Bitboard, 6>, 2> expectedBitboards = param.expectedBitboards;
 	validateBitboards(board, expectedBitboards);
 
 	// Validate Attack Tables
@@ -295,5 +299,80 @@ TEST_F(BoardConstructorTest, DefaultConstructor)
 	ASSERT_TRUE(board.getCanCastleQueenside(Color::Black));
 
 	// validate en passant target square
-	ASSERT_EQ(board.getEnPassantTargetSquare(), nullptr);
+	Square *expectedEnPassantTargetSquare = param.expectedEnPassantTargetSquare;
+	ASSERT_EQ(board.getEnPassantTargetSquare(), expectedEnPassantTargetSquare);
 }
+
+std::vector<std::pair<std::string, BoardConstructorTestParams>> BoardConstructorTest::testCases = {
+    {
+		"DefaultConstructor",
+        {
+            "",
+			"",
+			"",
+			4,
+			2,
+            {
+				{{8, 2, 2, 2, 1, 1},
+				 {8, 2, 2, 2, 1, 1}}
+			},
+            {
+                PieceType::Rook, PieceType::Knight, PieceType::Bishop, PieceType::Queen, PieceType::King, PieceType::Bishop, PieceType::Knight, PieceType::Rook,
+                PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn,
+                std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
+                std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
+                std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
+                std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
+                PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn, PieceType::Pawn,
+                PieceType::Rook, PieceType::Knight, PieceType::Bishop, PieceType::Queen, PieceType::King, PieceType::Bishop, PieceType::Knight, PieceType::Rook
+            },
+            {
+				{{{Bitboard(0xff000000000000), Bitboard(0x4200000000000000), Bitboard(0x2400000000000000), Bitboard(0x8100000000000000), Bitboard(0x800000000000000), Bitboard(0x1000000000000000)}},
+				 {{Bitboard(0xff00), Bitboard(0x42), Bitboard(0x24), Bitboard(0x81), Bitboard(0x8), Bitboard(0x10)}}}
+			},
+            nullptr
+        }
+    }, // Todo: Add more test cases
+	// {
+	// 	"WhiteCanCastleKingside",
+	// 	{
+	// 		"rnbq1bnr/2p1k1pp/p2p4/1P2pp2/5PP1/5N2/RPPPP1BP/1NBQK2R"
+	// 	}
+	// }
+};
+
+INSTANTIATE_TEST_SUITE_P(
+	BoardConstructor,
+	BoardConstructorTest,
+	::testing::ValuesIn(BoardConstructorTest::testCases),
+	[](const testing::TestParamInfo<BoardConstructorTest::ParamType> &info)
+	{
+		return info.param.first;
+	});
+
+
+
+
+	// {,
+	// 	{"rnbq1bnr/2p1k1pp/p2p4/1P2pp2/5PP1/5N2/RPPPP1BP/1NBQK2R", "K", "-", 4, 2,
+	// 	{}
+	// 	}
+	// },
+	// {"WhiteCanCastleQueenside",
+
+	// },
+	// {"WhiteCanCastleQueenside",
+
+	// },
+	// {"BlackCanCastleKingside",
+
+	// },
+	// {"BlackCanCastleQueenside",
+
+	// },
+	// {"BlackCanEnPassant",
+
+	// },
+	// {"WhiteCanEnPassant",
+
+	// }
