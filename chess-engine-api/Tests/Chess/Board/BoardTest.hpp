@@ -4,7 +4,7 @@
 #include "../ChessTest.hpp"
 #include "../../../Chess/models/Board.hpp"
 
-class BoardTest : public ChessTest, public ::testing::Test
+class BoardTest : public ChessTest
 {
 private:
 
