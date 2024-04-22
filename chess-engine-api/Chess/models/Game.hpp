@@ -49,6 +49,16 @@ private:
 
 	void postMoveChecks();
 
+	void undoPromotion(Move lastMove);
+
+	void restoreMovedPiece(Move lastMove, std::shared_ptr<Piece> piece, Color color);
+
+	void restoreCapturedPiece(Move lastMove, Color color);
+
+	void undoCastle(Move lastMove, Color color);
+
+	void undoDoublePawnPush(Move lastMove, std::shared_ptr<Piece> piece);
+
 public:
 	Game(std::string fenString);
 

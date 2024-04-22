@@ -388,6 +388,10 @@ void Game::postMoveChecks()
 	// Determine the color of the other player
 	Color otherColor = (getActiveColor() == Color::Black) ? Color::White : Color::Black;
 
+	// Set full move number and half move clock on the move struct
+	getLastMove().fullMoveNumber = getFullMoveNumber();
+	getLastMove().halfMoveClock = getHalfMoveClock();
+
 	// Increment full move number if the move was made by black
 	if (getActiveColor() == Color::Black)
 	{
@@ -400,9 +404,6 @@ void Game::postMoveChecks()
 	// Add the new position to the game state history, incrementing the count if it already exists
 	gameStateHistory[getFen()]++;
 
-	// Set full move number and half move clock on the move struct
-	getLastMove().fullMoveNumber = getFullMoveNumber();
-	getLastMove().halfMoveClock = getHalfMoveClock();
 
 	// change turn
 	switchActiveColor();
@@ -492,17 +493,8 @@ void Game::addMove(Move move)
 	moves.push_back(move);
 }
 
-void Game::undoPreviousMove()
+void Game::undoPromotion(Move lastMove)
 {
-	if (moves.empty())
-	{
-		throw std::invalid_argument("No moves found");
-	}
-
-	Move lastMove = moves.back();
-	moves.pop_back();
-
-	// if the move was a promotion, replace the promoted piece with a pawn
 	if (lastMove.hasFlag(MoveFlag::Promotion))
 	{
 		// update the bitboard to remove the promoted piece and add a pawn
@@ -517,11 +509,10 @@ void Game::undoPreviousMove()
 		board.decrementPieceCount(lastMove.color, lastMove.promotion.value());
 		board.incrementPieceCount(lastMove.color, PieceType::Pawn);
 	}
+}
 
-	// get the piece that was moved
-	std::shared_ptr<Piece> piece = board.getSquare(lastMove.to).getPiece();
-	Color color = piece->getPieceColor();
-
+void Game::restoreMovedPiece(Move lastMove, std::shared_ptr<Piece> piece, Color color)
+{
 	// Restore piece to its original position
 	board.getSquare(lastMove.from).setPiece(piece);
 	board.getSquare(lastMove.to).setPiece(nullptr);
@@ -530,10 +521,19 @@ void Game::undoPreviousMove()
 	// Update the bitboard to show the piece in its original position
 	board.getBitboard(color, piece->getPieceType()).clearBit(lastMove.to);
 	board.getBitboard(color, piece->getPieceType()).setBit(lastMove.from);
+}
 
-	// if the move was a capture, restore the captured piece
-	PieceType capturedPieceType = lastMove.capturedPiece.value();
-	Color capturedPieceColor = color == Color::White ? Color::Black : Color::White;
+void Game::restoreCapturedPiece(Move lastMove, Color color)
+{
+	PieceType capturedPieceType;
+	Color capturedPieceColor;
+
+	if (lastMove.capturedPiece.has_value())
+	{
+		capturedPieceType = lastMove.capturedPiece.value();
+		capturedPieceColor = color == Color::White ? Color::Black : Color::White;
+	}
+
 	// Depending on the type of capture, place the captured piece back on the board
 	if (lastMove.hasFlag(MoveFlag::StandardCapture))
 	{
@@ -558,8 +558,10 @@ void Game::undoPreviousMove()
 		// update the bitboard to show the captured piece
 		board.getBitboard(capturedPieceColor, capturedPieceType).setBit(capturePosition);
 	}
+}
 
-	// check if the move was a castle and restore the rook and reset any castling rights
+void Game::undoCastle(Move lastMove, Color color)
+{
 	if (lastMove.hasFlag(MoveFlag::KingsideCastling))
 	{
 		board.getSquare(lastMove.to.row, 7).setPiece(board.getSquare(lastMove.to.row, 5).getPiece());
@@ -588,8 +590,10 @@ void Game::undoPreviousMove()
 		board.getKing(color)->setHasMoved(false);
 		board.getRook(color, Side::QueenSide)->setHasMoved(false);
 	}
+}
 
-	// if the move was a double pawn push, update the en passant target square, and reset pawn has moved
+void Game::undoDoublePawnPush(Move lastMove, std::shared_ptr<Piece> piece)
+{
 	if (lastMove.hasFlag(MoveFlag::PawnPush))
 	{
 		// Check if the move prior to the last move was a pawn double push
@@ -607,6 +611,36 @@ void Game::undoPreviousMove()
 		// reset the has moved flag of the pawn
 		piece->setHasMoved(false);
 	}
+}
+
+void Game::undoPreviousMove()
+{
+	if (moves.empty())
+	{
+		throw std::invalid_argument("No moves found");
+	}
+
+	Move lastMove = moves.back();
+	moves.pop_back();
+
+	// if the move was a promotion, replace the promoted piece with a pawn
+	undoPromotion(lastMove);
+
+	// get the piece that was moved
+	std::shared_ptr<Piece> piece = board.getSquare(lastMove.to).getPiece();
+	Color color = piece->getPieceColor();
+
+	// restore the piece to its original position
+	restoreMovedPiece(lastMove, piece, color);
+
+	// if the move was a capturedPiece has a value, restore the captured piece
+	restoreCapturedPiece(lastMove, color);
+
+	// check if the move was a castle and restore the rook and reset any castling rights
+	undoCastle(lastMove, color);
+
+	// if the move was a double pawn push, update the en passant target square, and reset pawn has moved
+	undoDoublePawnPush(lastMove, piece);
 
 	// Restore half move clock to its previous value if the move was a pawn move or a capture
 	if (lastMove.hasFlag(MoveFlag::NonCapture) || lastMove.hasFlag(MoveFlag::PawnPush))
@@ -1058,16 +1092,18 @@ std::vector<Move> Game::generateLegalMoves()
 
 uint64_t Game::Perft(int depth)
 {
-	if (depth == 0)
+	uint64_t nodes = 0;
+	std::vector<Move> moveList = generateLegalMoves();
+	int numMoves, i;
+
+	if (depth == 1)
 	{
-		return 1;
+		return numMoves;
 	}
 
-	uint64_t nodes = 0;
-	std::vector<Move> moves = generateLegalMoves();
-	for (Move move : moves)
+	for (i = 0; i < numMoves; i++)
 	{
-		executeMove(move);
+		executeMove(moveList[i]);
 		nodes += Perft(depth - 1);
 		undoPreviousMove();
 	}
