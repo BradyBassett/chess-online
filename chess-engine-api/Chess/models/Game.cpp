@@ -142,13 +142,15 @@ PieceType Game::charToPieceType(char piece)
 	}
 }
 
-Move Game::composeMoveStruct(Position from, Position to, char promotion, std::optional<std::shared_ptr<Piece>> capturedPiece)
+Move Game::composeMoveStruct(Position from, Position to, char promotion, Piece &fromPiece, std::optional<std::shared_ptr<Piece>> capturedPiece)
 {
 	Move move;
 	move.color = activeColor;
 	move.from = from;
 	move.to = to;
-	move.piece = board.getSquare(from).getPiece()->getPieceType();
+	move.piece = fromPiece.getPieceType();
+	move.halfMoveClock = getHalfMoveClock();
+	move.fullMoveNumber = getFullMoveNumber();
 
 	if (move.piece == PieceType::Pawn)
 	{
@@ -195,6 +197,11 @@ Move Game::composeMoveStruct(Position from, Position to, char promotion, std::op
 		move.setFlag(MoveFlag::QueensideCastling);
 	}
 
+	if (board.getEnPassantTargetSquare())
+	{
+		move.enPassantTarget = board.convertPositionToString(board.getEnPassantTargetSquare()->getPosition());
+	}
+
 	return move;
 }
 
@@ -225,7 +232,7 @@ void Game::validateGenericMove(Position from, Position to, Piece &fromPiece, Squ
 	}
 }
 
-void Game::validatePawnMove(Position from, Position to, Piece &fromPiece, Square &toSquare, char promotion)
+void Game::validatePawnMove(Position from, Position to, Piece &fromPiece, Square &toSquare)
 {
 	if (fromPiece.getPieceType() == PieceType::Pawn)
 	{
@@ -269,9 +276,6 @@ void Game::validatePawnMove(Position from, Position to, Piece &fromPiece, Square
 				}
 			}
 		}
-
-		// check if move is a promotion
-		handlePawnPromotion(pawn, to, from, promotion);
 	}
 }
 
@@ -304,12 +308,12 @@ void Game::validateKingMove(Position from, Position to, Piece &fromPiece)
 	}
 }
 
-void Game::validateMove(Position from, Position to, Piece &fromPiece, Square &toSquare, char promotion)
+void Game::validateMove(Position from, Position to, Piece &fromPiece, Square &toSquare)
 {
 	// Generic move checks
 	validateGenericMove(from, to, fromPiece, toSquare);
 	// Pawn specific checks
-	validatePawnMove(from, to, fromPiece, toSquare, promotion);
+	validatePawnMove(from, to, fromPiece, toSquare);
 	// King specific checks
 	validateKingMove(from, to, fromPiece);
 }
@@ -327,7 +331,7 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 	Piece &fromPiece = *fromSquare.getPiece();
 
 	// Move validation
-	validateMove(from, to, fromPiece, toSquare, promotion);
+	validateMove(from, to, fromPiece, toSquare);
 
 	// If the move is a capture, store the captured piece
 	std::optional<std::shared_ptr<Piece>> capturedPiece = getCapturedPiece(toSquare, from, to, fromPiece);
@@ -339,7 +343,7 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 	}
 
 	// compose the move struct
-	Move move = composeMoveStruct(from, to, promotion, capturedPiece);
+	Move move = composeMoveStruct(from, to, promotion, fromPiece, capturedPiece);
 
 	if (getInCheck(getActiveColor()))
 	{
@@ -356,12 +360,18 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 	return move;
 }
 
-void Game::executeMove(Move move)
+void Game::executeMove(Move move, char promotion)
 {
 	Piece &fromPiece = *board.getSquare(move.from).getPiece();
 
 	// add the move to the list of moves
 	addMove(move);
+
+	// check if move is a promotion
+	if (fromPiece.getPieceType() == PieceType::Pawn && move.hasFlag(MoveFlag::Promotion))
+	{
+		handlePawnPromotion(fromPiece, move.to, move.from, promotion);
+	}
 
 	// update castling availability if the move was the first move of a rook or the king
 	board.updateCastlingAvailability(fromPiece);
@@ -388,10 +398,6 @@ void Game::postMoveChecks()
 	// Determine the color of the other player
 	Color otherColor = (getActiveColor() == Color::Black) ? Color::White : Color::Black;
 
-	// Set full move number and half move clock on the move struct
-	getLastMove().fullMoveNumber = getFullMoveNumber();
-	getLastMove().halfMoveClock = getHalfMoveClock();
-
 	// Increment full move number if the move was made by black
 	if (getActiveColor() == Color::Black)
 	{
@@ -412,43 +418,42 @@ void Game::postMoveChecks()
 void Game::attemptMove(Position from, Position to, char promotion)
 {
 	Move move = prepareMove(from, to, promotion);
-	executeMove(move);
+	executeMove(move, promotion);
 	postMoveChecks();
 }
 
-void Game::handlePawnPromotion(Pawn &pawn, Position to, Position from, char promotion)
+void Game::handlePawnPromotion(Piece &pawn, Position to, Position from, char promotion)
 {
-	Square &toSquare = board.getSquare(to);
+	Square &fromSquare = board.getSquare(from);
 	Bitboard &pawnBitboard = board.getBitboard(getActiveColor(), PieceType::Pawn);
 	Bitboard *pieceBitboard;
 
 	if (pawn.canPromote(to))
 	{
-		board.getSquare(from).setPiece(nullptr);
 		pawnBitboard.clearBit(from);
 
 		switch (promotion)
 		{
 		case 'q':
-			toSquare.setPiece(std::make_shared<Queen>(getActiveColor(), to));
+			fromSquare.setPiece(std::make_shared<Queen>(getActiveColor(), to));
 			pieceBitboard = &board.getBitboard(getActiveColor(), PieceType::Queen);
 			pieceBitboard->setBit(to);
 			board.incrementPieceCount(getActiveColor(), PieceType::Queen);
 			break;
 		case 'r':
-			toSquare.setPiece(std::make_shared<Rook>(getActiveColor(), to));
+			fromSquare.setPiece(std::make_shared<Rook>(getActiveColor(), to));
 			pieceBitboard = &board.getBitboard(getActiveColor(), PieceType::Rook);
 			pieceBitboard->setBit(to);
 			board.incrementPieceCount(getActiveColor(), PieceType::Rook);
 			break;
 		case 'b':
-			toSquare.setPiece(std::make_shared<Bishop>(getActiveColor(), to));
+			fromSquare.setPiece(std::make_shared<Bishop>(getActiveColor(), to));
 			pieceBitboard = &board.getBitboard(getActiveColor(), PieceType::Bishop);
 			pieceBitboard->setBit(to);
 			board.incrementPieceCount(getActiveColor(), PieceType::Bishop);
 			break;
 		case 'n':
-			toSquare.setPiece(std::make_shared<Knight>(getActiveColor(), to));
+			fromSquare.setPiece(std::make_shared<Knight>(getActiveColor(), to));
 			pieceBitboard = &board.getBitboard(getActiveColor(), PieceType::Knight);
 			pieceBitboard->setBit(to);
 			board.incrementPieceCount(getActiveColor(), PieceType::Knight);
@@ -642,8 +647,16 @@ void Game::undoPreviousMove()
 	// if the move was a double pawn push, update the en passant target square, and reset pawn has moved
 	undoDoublePawnPush(lastMove, piece);
 
+	// Restore en passant target square if the previous move had one
+	if (lastMove.enPassantTarget.has_value())
+	{
+		Position enPassantTarget = board.convertStringToPosition(lastMove.enPassantTarget.value());
+		Square enPassantTargetSquare = board.getSquare(enPassantTarget);
+		board.setEnPassantTargetSquare(&enPassantTargetSquare);
+	}
+
 	// Restore half move clock to its previous value if the move was a pawn move or a capture
-	if (lastMove.hasFlag(MoveFlag::NonCapture) || lastMove.hasFlag(MoveFlag::PawnPush))
+	if (lastMove.hasFlag(MoveFlag::StandardCapture) || lastMove.piece == PieceType::Pawn)
 	{
 		setHalfMoveClock(lastMove.halfMoveClock);
 	}
@@ -661,12 +674,12 @@ void Game::undoPreviousMove()
 	switchActiveColor();
 }
 
-uint8_t Game::getHalfMoveClock()
+int Game::getHalfMoveClock()
 {
 	return halfMoveClock;
 }
 
-uint8_t Game::getFullMoveNumber()
+int Game::getFullMoveNumber()
 {
 	return fullMoveNumber;
 }
@@ -686,12 +699,12 @@ void Game::incrementFullMoveNumber()
 	fullMoveNumber++;
 }
 
-void Game::setHalfMoveClock(uint8_t value)
+void Game::setHalfMoveClock(int value)
 {
 	halfMoveClock = value;
 }
 
-void Game::setFullMoveNumber(uint8_t value)
+void Game::setFullMoveNumber(int value)
 {
 	fullMoveNumber = value;
 }
@@ -746,7 +759,7 @@ bool Game::isCheckmate(Color color)
 		if (kingMoves.getBit(square))
 		{
 			Position to = {square / 8, square % 8};
-			Move move = composeMoveStruct(king->getCurrentPosition(), to, '\0', std::nullopt);
+			Move move = composeMoveStruct(king->getCurrentPosition(), to, '\0', *king, std::nullopt);
 			Board tempBoard = board;
 			tempBoard.setupMove(move);
 			if (!isInCheck(color, to))
@@ -773,7 +786,7 @@ bool Game::isCheckmate(Color color)
 				{
 					Position from = piece->getCurrentPosition();
 					Position to = {i / 8, i % 8};
-					Move move = composeMoveStruct(from, to, '\0', std::nullopt);
+					Move move = composeMoveStruct(from, to, '\0', *piece, std::nullopt);
 					Board tempBoard = board;
 					tempBoard.setupMove(move);
 					if (!isInCheck(color, king->getCurrentPosition()))
@@ -819,7 +832,7 @@ bool Game::isStalemate(Color color)
 					// If the move is valid then the player is not in stalemate
 					try
 					{
-						validateMove(from, to, *piece, board.getSquare(to), '\0');
+						validateMove(from, to, *piece, board.getSquare(to));
 						return false;
 					}
 					// If the move is invalid then continue to the next move
@@ -1053,6 +1066,7 @@ std::vector<Move> Game::generateLegalMoves()
 	for (int i = 0; i < 64; i++)
 	{
 		Square &square = board.getSquare(i);
+		Piece &piece = *square.getPiece();
 
 		// If the square is empty or the piece is not the active color then continue
 		if (!square.getPiece() || square.getPiece()->getPieceColor() != activeColor)
@@ -1061,7 +1075,7 @@ std::vector<Move> Game::generateLegalMoves()
 		}
 
 		// Get the potential moves of the piece
-		Bitboard potentialMoves = square.getPiece()->getPotentialMoves();
+		Bitboard potentialMoves = piece.getPotentialMoves();
 
 		// convert the bitboard into a vector of moves
 		for (int j = 0; j < 64; j++)
@@ -1070,12 +1084,12 @@ std::vector<Move> Game::generateLegalMoves()
 			{
 				Position from = square.getPosition();
 				Position to = {j / 8, j % 8};
-				Move move = composeMoveStruct(from, to, '\0', std::nullopt);
+				Move move = composeMoveStruct(from, to, '\0', piece, std::nullopt);
 
 				// If the move is valid then add it to the list of legal moves
 				try
 				{
-					validateMove(from, to, *square.getPiece(), board.getSquare(to), '\0');
+					validateMove(from, to, *square.getPiece(), board.getSquare(to));
 					legalMoves.push_back(move);
 				}
 				// If the move is invalid then continue to the next move
@@ -1103,7 +1117,7 @@ uint64_t Game::Perft(int depth)
 
 	for (i = 0; i < numMoves; i++)
 	{
-		executeMove(moveList[i]);
+		executeMove(moveList[i], '\0');
 		nodes += Perft(depth - 1);
 		undoPreviousMove();
 	}

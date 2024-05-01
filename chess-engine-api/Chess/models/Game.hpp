@@ -24,8 +24,8 @@ private:
 	std::vector<Move> moves;
 	// ? If performance becomes an issue, consider hashing the board state using Zobrist hashing
 	std::unordered_map<std::string, int> gameStateHistory;
-	uint8_t halfMoveClock;
-	uint8_t fullMoveNumber;
+	int halfMoveClock;
+	int fullMoveNumber;
 	bool whiteInCheck = false;
 	bool blackInCheck = false;
 
@@ -41,11 +41,11 @@ private:
 
 	PieceType charToPieceType(char piece);
 
-	Move composeMoveStruct(Position from, Position to, char promotion, std::optional<std::shared_ptr<Piece>> capturedPiece);
+	Move composeMoveStruct(Position from, Position to, char promotion, Piece &fromPiece, std::optional<std::shared_ptr<Piece>> capturedPiece);
 
 	Move prepareMove(Position from, Position to, char promotion);
 
-	void executeMove(Move move);
+	void executeMove(Move move, char promotion);
 
 	void postMoveChecks();
 
@@ -72,7 +72,7 @@ public:
 
 	void attemptMove(Position from, Position to, char promotion = '\0');
 
-	void handlePawnPromotion(Pawn &pawn, Position to, Position from, char promotion);
+	void handlePawnPromotion(Piece &pawn, Position to, Position from, char promotion);
 
 	std::optional<std::shared_ptr<Piece>> getCapturedPiece(Square &toSquare, Position from, Position to, Piece &fromPiece);
 
@@ -84,9 +84,9 @@ public:
 
 	void undoPreviousMove();
 
-	uint8_t getHalfMoveClock();
+	int getHalfMoveClock();
 
-	uint8_t getFullMoveNumber();
+	int getFullMoveNumber();
 
 	void incrementHalfMoveClock();
 
@@ -94,9 +94,9 @@ public:
 
 	void incrementFullMoveNumber();
 
-	void setHalfMoveClock(uint8_t value);
+	void setHalfMoveClock(int value);
 
-	void setFullMoveNumber(uint8_t value);
+	void setFullMoveNumber(int value);
 
 	bool getInCheck(Color color);
 
@@ -124,11 +124,11 @@ public:
 
 	void validateGenericMove(Position from, Position to, Piece &fromPiece, Square &toSquare);
 
-	void validatePawnMove(Position from, Position to, Piece &fromPiece, Square &toSquare, char promotion);
+	void validatePawnMove(Position from, Position to, Piece &fromPiece, Square &toSquare);
 
 	void validateKingMove(Position from, Position to, Piece &fromPiece);
 
-	void validateMove(Position from, Position to, Piece &fromPiece, Square &toSquare, char promotion);
+	void validateMove(Position from, Position to, Piece &fromPiece, Square &toSquare);
 
 	std::string getFen();
 
