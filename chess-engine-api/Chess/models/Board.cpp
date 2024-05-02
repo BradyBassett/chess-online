@@ -322,20 +322,20 @@ Bitboard Board::calculateOrthagonalPath(Position from, Position to)
 	Bitboard path;
 	if (to.row == from.row)
 	{
-		uint8_t rowStart = std::min(to.col, from.col);
-		uint8_t rowEnd = std::max(to.col, from.col);
+		uint8_t colStart = std::min(to.col, from.col);
+		uint8_t colEnd = std::max(to.col, from.col);
 
-		for (int i = rowStart + 1; i < rowEnd - 1; i++)
+		for (int i = colStart + 1; i < colEnd; i++)
 		{
 			path.setBit({from.row, i});
 		}
 	}
 	else if (to.col == from.col)
 	{
-		uint8_t colStart = std::min(to.row, from.row);
-		uint8_t colEnd = std::max(to.row, from.row);
+		uint8_t rowStart = std::min(to.row, from.row);
+		uint8_t rowEnd = std::max(to.row, from.row);
 
-		for (int i = colStart + 1; i < colEnd - 1; i++)
+		for (int i = rowStart + 1; i < rowEnd; i++)
 		{
 			path.setBit({i, from.col});
 		}
