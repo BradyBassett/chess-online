@@ -9,6 +9,8 @@ struct GameAttemptMoveTestParam
 	Position from;
 	Position to;
 	char promotion;
+	bool isValid;
+	std::string expectedFen;
 };
 
 class GameAttemptMoveTest : public GameTest, public ::testing::TestWithParam<std::pair<std::string, GameAttemptMoveTestParam>>
