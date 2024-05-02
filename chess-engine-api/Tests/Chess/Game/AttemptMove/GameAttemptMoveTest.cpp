@@ -138,6 +138,54 @@ std::vector<std::pair<std::string, GameAttemptMoveTestParam>> GameAttemptMoveTes
 			""
 		}
 	},
+	{
+		"InvalidKnightMove_6_1_1_6",
+		{
+			"r7/N3P3/6KP/1pk1p2P/1p5p/8/1n3nPq/6R1 b - - 0 1",
+			{6, 1}, {1, 6}, '\0', false,
+			""
+		}
+	},
+	{
+		"InvalidKnightMove_7_0_0_7",
+		{
+			"8/1PKb1p1N/4p1p1/R7/5Pk1/3p4/3npb2/n3R3 w - - 0 1",
+			{7, 0}, {0, 7}, '\0', false,
+			""
+		}
+	},
+	{
+		"InvalidKnightMove_5_0_6_2",
+		{
+			"6q1/6p1/8/R5Pp/1P1P1p2/nBRP3K/2p5/2k2n2 b - - 0 1",
+			{5, 0}, {6, 2}, '\0', false,
+			""
+		}
+	},
+	{
+		"ValidRookMove_7_0_2_0",
+		{
+			"rnbqkbnr/p1p1pppp/3p4/1P6/8/8/1PPPPPPP/RNBQKBNR w KQkq - 0 3",
+			{7, 0}, {2, 0}, '\0', true,
+			"rnbqkbnr/p1p1pppp/R2p4/1P6/8/8/1PPPPPPP/1NBQKBNR b Kkq - 1 3"
+		}
+	},
+	{
+		"ValidRookMove_0_0_0_3",
+		{
+			"r3kbnr/pbpqpppp/n2p4/1P6/3P4/2N2P2/1PP1P1PP/2BQKBNR b Kkq - 0 6",
+			{0, 0}, {0, 3}, '\0', true,
+			"3rkbnr/pbpqpppp/n2p4/1P6/3P4/2N2P2/1PP1P1PP/2BQKBNR w Kk - 1 7"
+		}
+	},
+	{
+		"InvalidRookMove_7_0_4_0",
+		{
+			"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+			{7, 0}, {4, 0}, '\0', false,
+			""
+		}
+	},
 };
 
 // Valid moves for each piece type: Test that each type of piece (pawn, rook, knight, bishop, queen, king) can make a valid move.
