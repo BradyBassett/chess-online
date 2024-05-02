@@ -230,6 +230,12 @@ void Game::validateGenericMove(Position from, Position to, Piece &fromPiece, Squ
 	{
 		throw std::invalid_argument("Invalid move - Path is not clear");
 	}
+
+	// Check if the move is in the piece's potential moves
+	if (!fromPiece.getPotentialMoves().getBit(to.row * 8 + to.col))
+	{
+		throw std::invalid_argument("Invalid move - Piece cannot move to that square");
+	}
 }
 
 void Game::validatePawnMove(Position from, Position to, Piece &fromPiece, Square &toSquare)
@@ -409,7 +415,6 @@ void Game::postMoveChecks()
 
 	// Add the new position to the game state history, incrementing the count if it already exists
 	gameStateHistory[getFen()]++;
-
 
 	// change turn
 	switchActiveColor();
@@ -804,6 +809,7 @@ bool Game::isCheckmate(Color color)
 
 bool Game::isStalemate(Color color)
 {
+	// FIXME - When validating the move, the current player color is not correct - need to investigate
 	// check if the king is in check
 	if ((color == Color::White && whiteInCheck) || (color == Color::Black && blackInCheck))
 	{
@@ -909,18 +915,18 @@ GameEndState Game::isGameOver()
 	{
 		return GameEndState::CHECKMATE;
 	}
-	else if (isStalemate(Color::White) || isStalemate(Color::Black))
-	{
-		return GameEndState::STALEMATE;
-	}
-	else if (isResignation())
-	{
-		return GameEndState::RESIGNATION;
-	}
-	else if (isTimeout())
-	{
-		return GameEndState::TIMEOUT;
-	}
+	// else if (isStalemate(Color::White) || isStalemate(Color::Black)) // TODO - Stalemate detection is not working
+	// {
+	// 	return GameEndState::STALEMATE;
+	// }
+	// else if (isResignation()) // TODO - implement resignation detection
+	// {
+	// 	return GameEndState::RESIGNATION;
+	// }
+	// else if (isTimeout()) // TODO - implement timeout detection
+	// {
+	// 	return GameEndState::TIMEOUT;
+	// }
 	else if (isThreefoldRepetition())
 	{
 		return GameEndState::THREEFOLD_REPETITION;
