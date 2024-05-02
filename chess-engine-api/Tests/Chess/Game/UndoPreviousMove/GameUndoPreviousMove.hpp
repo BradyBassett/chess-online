@@ -2,7 +2,6 @@
 #define GAMEUNDOPREVIOUSMOVE_HPP
 
 #include "../GameTest.hpp"
-#include "../../../../Chess/models/Game.hpp"
 #include "../../../../Chess/structs/Move.hpp"
 
 struct GameUndoPreviousMoveParams
