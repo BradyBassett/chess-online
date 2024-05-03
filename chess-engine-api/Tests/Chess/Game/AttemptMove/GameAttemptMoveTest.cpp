@@ -186,6 +186,102 @@ std::vector<std::pair<std::string, GameAttemptMoveTestParam>> GameAttemptMoveTes
 			""
 		}
 	},
+	{
+		"InvalidRookMove_0_0_0_5",
+		{
+			"r2qk1nr/ppp1bppp/2npp3/5b2/3P3P/4PPP1/PPP5/RNBQKBNR b KQkq - 0 6",
+			{0, 0}, {0, 5}, '\0', false,
+			""
+		}
+	},
+	{
+		"InvalidRookMove_7_7_3_3",
+		{
+			"r2qk1nr/ppp1bppp/2np2b1/4p3/3P1P1P/4P1P1/PPP5/RNBQKBNR w KQkq - 0 8",
+			{7, 7}, {3, 3}, '\0', false,
+			""
+		}
+	},
+	{
+		"InvalidRookMove_0_0_2_1",
+		{
+			"r2qk1nr/ppp1bppp/2np2b1/4p3/3P1P1P/4P1PR/PPP5/RNBQKBN1 b Qkq - 1 8",
+			{0, 0}, {2, 1}, '\0', false,
+			""
+		}
+	},
+	{
+		"ValidQueenMove_3_2_0_2",
+		{
+			"1b2n2r/3P1pp1/P5p1/2q1k3/8/3P4/p2P4/1N1K4 b - - 1 2",
+			{3, 2}, {0, 2}, '\0', true,
+			"1bq1n2r/3P1pp1/P5p1/4k3/8/3P4/p2P4/1N1K4 w - - 2 3"
+		}
+	},
+	{
+		"ValidQueenMove_7_0_7_7",
+		{
+			"B7/k5nN/6p1/6Kb/P1Pp1r1R/8/P4qP1/Q7 w - - 0 1",
+			{7, 0}, {7, 7}, '\0', true,
+			"B7/k5nN/6p1/6Kb/P1Pp1r1R/8/P4qP1/7Q b - - 1 1"
+		}
+	},
+	{
+		"ValidQueenMove_7_0_5_2",
+		{
+			"B7/k5nN/6p1/6Kb/P1Pp1r1R/8/P4qP1/Q7 w - - 0 1",
+			{7, 0}, {5, 2}, '\0', true,
+			"B7/k5nN/6p1/6Kb/P1Pp1r1R/2Q5/P4qP1/8 b - - 1 1"
+		}
+	},
+	{
+		"InvalidQueenMove_6_5_6_7",
+		{
+			"B7/k5nN/6p1/6Kb/P1Pp1r1R/2Q5/P4qP1/8 b - - 1 1",
+			{6, 5}, {6, 7}, '\0', false,
+			""
+		}
+	},
+	{
+		"InvalidQueenMove_5_2_0_2",
+		{
+			"B7/k5nN/6p1/6Kb/P1Pp1r1R/2Q5/P4qP1/8 b - - 1 1",
+			{5, 2}, {0, 2}, '\0', false,
+			""
+		}
+	},
+	{
+		"InvalidQueenMove_7_7_6_5",
+		{
+			"1R6/3p3n/2p5/K5B1/1p1p1P2/Npqk4/6pb/7Q w - - 0 1",
+			{7, 7}, {6, 5}, '\0', false,
+			""
+		}
+	},
+	{
+		"InvalidQueenMove_5_2_5_0",
+		{
+			"B7/k5nN/6p1/6Kb/P1Pp1r1R/2Q5/P4qP1/8 b - - 1 1",
+			{5, 2}, {5, 0}, '\0', false,
+			""
+		}
+	},
+	{
+		"ValidKingMove_7_4_6_4",
+		{
+			"rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+			{7, 4}, {6, 4}, '\0', true,
+			"rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPPKPPP/RNBQ1BNR b kq - 1 2"
+		}
+	},
+	{
+		"ValidKingMove_0_4_1_3",
+		{
+			"rnbqkbnr/ppp1pppp/3p4/8/3P4/4P3/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+			{0, 4}, {1, 3}, '\0', true,
+			"rnbq1bnr/pppkpppp/3p4/8/3P4/4P3/PPP2PPP/RNBQKBNR w KQ - 1 3"
+		}
+	},
 };
 
 // Valid moves for each piece type: Test that each type of piece (pawn, rook, knight, bishop, queen, king) can make a valid move.
@@ -208,9 +304,6 @@ std::vector<std::pair<std::string, GameAttemptMoveTestParam>> GameAttemptMoveTes
 
 // Checkmate and stalemate situations: Test that the game recognizes checkmate and stalemate situations correctly.
 
-// Edge of the board: Test moves that involve pieces at the edge of the board.
-
-// Empty input or invalid FEN strings: Test that the game handles invalid input correctly.
 
 INSTANTIATE_TEST_SUITE_P(
 	GameAttemptMove,
