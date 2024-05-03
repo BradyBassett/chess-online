@@ -57,6 +57,8 @@ private:
 
 	bool isOrthagonal(Position from, Position to) const;
 
+	bool isCastleMove(Position from, Position to) const;
+
 public:
 	Board();
 

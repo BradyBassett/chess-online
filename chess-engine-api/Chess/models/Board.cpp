@@ -349,6 +349,16 @@ bool Board::isOrthagonal(Position from, Position to) const
 	return to.row == from.row || to.col == from.col;
 }
 
+bool Board::isCastleMove(Position from, Position to) const
+{
+	if (from.col == 4 && (to.col == 6 || to.col == 2))
+	{
+		return true;
+	}
+
+	return false;
+}
+
 Board::Board() : Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "KQkq", "-") {}
 
 Board::Board(std::string fenPosition, std::string castlingAvailability, std::string enPassantTarget)
@@ -402,7 +412,7 @@ void Board::setupMove(Move move)
 	std::shared_ptr<Piece> piece = fromSquare.getPiece();
 
 	// If the move is a castling move, move the rook as well
-	if (piece->getPieceType() == PieceType::King && piece->getHasMoved() == false)
+	if (piece->getPieceType() == PieceType::King && piece->getHasMoved() == false && isCastleMove(move.from, move.to))
 	{
 		if (move.flags.test(static_cast<int>(MoveFlag::KingsideCastling)))
 		{
