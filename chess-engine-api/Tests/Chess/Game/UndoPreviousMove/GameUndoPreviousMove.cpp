@@ -226,26 +226,26 @@ std::vector<std::pair<std::string, GameUndoPreviousMoveParams>> GameUndoPrevious
 	// },
 
 	// FIXME - These tests are failing for some reason
-	// {
-	// 	"WhiteDoublePawnPush",
-	// 	{
-	// 		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-	// 		{
-	// 			{{6, 4}, {4, 4}, '\0'}
-	// 		},
-	// 		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-	// 	}
-	// },
-	// {
-	// 	"BlackDoublePawnPush",
-	// 	{
-	// 		"rnbqkbnr/pppppppp/8/8/8/4P3/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
-	// 		{
-	// 			{{1, 4}, {3, 4}, '\0'}
-	// 		},
-	// 		"rnbqkbnr/pppppppp/8/8/8/4P3/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
-	// 	}
-	// },
+	{
+		"WhiteDoublePawnPush",
+		{
+			"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+			{
+				{{6, 4}, {4, 4}, '\0'}
+			},
+			"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+		}
+	},
+	{
+		"BlackDoublePawnPush",
+		{
+			"rnbqkbnr/pppppppp/8/8/8/4P3/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+			{
+				{{1, 4}, {3, 4}, '\0'}
+			},
+			"rnbqkbnr/pppppppp/8/8/8/4P3/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+		}
+	},
 };
 
 INSTANTIATE_TEST_SUITE_P(
