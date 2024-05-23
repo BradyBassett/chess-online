@@ -293,8 +293,7 @@ void Game::validateKingMove(Position from, Position to, Piece &fromPiece)
 		King &king = dynamic_cast<King &>(fromPiece);
 
 		// If the target position is two squares away from the king then it is a castle
-		if ((to.col == 2 && to.row == from.row) ||
-			(to.col == 6 && to.row == from.row))
+		if ((to.row == 7 || to.row == 0) && (to.col == 2 || to.col == 6))
 		{
 			std::string errorMessage;
 
@@ -351,16 +350,13 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 	// compose the move struct
 	Move move = composeMoveStruct(from, to, promotion, fromPiece, capturedPiece);
 
-	if (getInCheck(getActiveColor()))
-	{
-		// TODO - EVENTUALLY USE THE UNDO MOVE FUNCTION INSTEAD OF SIMULATING THE MOVE
-		Board tempBoard = board;
-		tempBoard.setupMove(move);
+	// TODO - EVENTUALLY USE THE UNDO MOVE FUNCTION INSTEAD OF SIMULATING THE MOVE
+	Board tempBoard = board;
+	tempBoard.setupMove(move);
 
-		if (isInCheck(getActiveColor(), tempBoard.getKing(getActiveColor())->getCurrentPosition()))
-		{
-			throw std::invalid_argument("Invalid move - King is still in check");
-		}
+	if (isInCheck(getActiveColor(), tempBoard.getKing(getActiveColor())->getCurrentPosition()))
+	{
+		throw std::invalid_argument("Invalid move - King is in check");
 	}
 
 	return move;
