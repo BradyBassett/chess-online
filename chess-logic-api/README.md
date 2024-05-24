@@ -1,1 +1,0 @@
-This will be used to validate player and engine moves on the backend to validate that a legal move has been made
