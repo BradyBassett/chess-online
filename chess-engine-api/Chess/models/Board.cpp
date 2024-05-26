@@ -528,26 +528,29 @@ void Board::updateCastlingAvailability(Piece &fromPiece)
 {
 	if (!fromPiece.getHasMoved())
 	{
-		if (fromPiece.getPieceType() == PieceType::King)
+		PieceType pieceType = fromPiece.getPieceType();
+		Color color = fromPiece.getPieceColor();
+
+		if (pieceType == PieceType::King)
 		{
 			King king = dynamic_cast<King &>(fromPiece);
-			setCanCastleKingside(false, fromPiece.getPieceColor());
-			setCanCastleQueenside(false, fromPiece.getPieceColor());
+			setCanCastleKingside(false, color);
+			setCanCastleQueenside(false, color);
 			king.setCanCastleKingside(false);
 			king.setCanCastleQueenside(false);
 		}
-		else if (fromPiece.getPieceType() == PieceType::Rook)
+		else if (pieceType == PieceType::Rook)
 		{
 			Rook &rook = dynamic_cast<Rook &>(fromPiece);
 			if (rook.getSide() == Side::KingSide)
 			{
-				setCanCastleKingside(false, fromPiece.getPieceColor());
-				getKing(fromPiece.getPieceColor())->setCanCastleKingside(false);
+				setCanCastleKingside(false, color);
+				getKing(color)->setCanCastleKingside(false);
 			}
 			else
 			{
-				setCanCastleQueenside(false, fromPiece.getPieceColor());
-				getKing(fromPiece.getPieceColor())->setCanCastleQueenside(false);
+				setCanCastleQueenside(false, color);
+				getKing(color)->setCanCastleQueenside(false);
 			}
 		}
 	}
