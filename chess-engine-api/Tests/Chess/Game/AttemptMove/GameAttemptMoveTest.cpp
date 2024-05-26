@@ -487,7 +487,7 @@ std::vector<std::pair<std::string, GameAttemptMoveTestParam>> GameAttemptMoveTes
 		{
 			"r3k2r/p2p2pp/b1nbpp1n/1pp1P3/3qQPP1/2PBB2N/PP1NP2P/R3K2R b KQkq - 0 1",
 			{0, 4}, {0, 2}, '\0', true,
-			""
+			"2kr3r/p2p2pp/b1nbpp1n/1pp1P3/3qQPP1/2PBB2N/PP1NP2P/R3K2R w KQ - 1 2"
 		}
 	},
 };
