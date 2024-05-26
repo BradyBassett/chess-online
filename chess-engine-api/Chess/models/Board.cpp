@@ -526,7 +526,7 @@ Bitboard Board::getAllPiecesBitboard()
 
 void Board::updateCastlingAvailability(Piece &fromPiece)
 {
-	if (!fromPiece.getHasMoved())
+	if (fromPiece.getHasMoved())
 	{
 		PieceType pieceType = fromPiece.getPieceType();
 		Color color = fromPiece.getPieceColor();
