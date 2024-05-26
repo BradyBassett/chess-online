@@ -351,10 +351,11 @@ Move Game::prepareMove(Position from, Position to, char promotion)
 	Move move = composeMoveStruct(from, to, promotion, fromPiece, capturedPiece);
 
 	// TODO - EVENTUALLY USE THE UNDO MOVE FUNCTION INSTEAD OF SIMULATING THE MOVE
+	// Simulate the move to check if the king is in check
 	Board tempBoard = board;
 	tempBoard.setupMove(move);
 
-	if (isInCheck(getActiveColor(), tempBoard.getKing(getActiveColor())->getCurrentPosition()))
+	if (isInCheck(getActiveColor(), tempBoard.getKing(getActiveColor())->getCurrentPosition(), tempBoard))
 	{
 		throw std::invalid_argument("Invalid move - King is in check");
 	}
@@ -407,7 +408,7 @@ void Game::postMoveChecks()
 	}
 
 	// Check if the move put the other king in check
-	setInCheck(otherColor, isInCheck(otherColor, board.getKing(otherColor)->getCurrentPosition()));
+	setInCheck(otherColor, isInCheck(otherColor, board.getKing(otherColor)->getCurrentPosition(), board));
 
 	// Add the new position to the game state history, incrementing the count if it already exists
 	gameStateHistory[getFen()]++;
@@ -727,7 +728,7 @@ void Game::setInCheck(Color color, bool value)
 	}
 }
 
-bool Game::isInCheck(Color color, Position position)
+bool Game::isInCheck(Color color, Position position, Board &board)
 {
 	Bitboard opposingPieces = color == Color::White ? board.getBlackPiecesBitboard() : board.getWhitePiecesBitboard();
 
@@ -739,7 +740,11 @@ bool Game::isInCheck(Color color, Position position)
 			Bitboard attackTable = board.getAttackTable(piece->getPieceColor(), piece->getPieceType())[square];
 			if (attackTable.getBit(position))
 			{
-				return true;
+				// Check that the path is clear between the attacking piece and the king unless the attacking piece is a knight
+				if (piece->getPieceType() == PieceType::Knight || board.isPathClear(piece->getCurrentPosition(), position, piece))
+				{
+					return true;
+				}
 			}
 		}
 	}
@@ -763,7 +768,7 @@ bool Game::isCheckmate(Color color)
 			Move move = composeMoveStruct(king->getCurrentPosition(), to, '\0', *king, std::nullopt);
 			Board tempBoard = board;
 			tempBoard.setupMove(move);
-			if (!isInCheck(color, to))
+			if (!isInCheck(color, to, tempBoard))
 			{
 				// If there is any move that the king can make that would not result in check, return false
 				return false;
@@ -790,7 +795,7 @@ bool Game::isCheckmate(Color color)
 					Move move = composeMoveStruct(from, to, '\0', *piece, std::nullopt);
 					Board tempBoard = board;
 					tempBoard.setupMove(move);
-					if (!isInCheck(color, king->getCurrentPosition()))
+					if (!isInCheck(color, king->getCurrentPosition(), tempBoard))
 					{
 						// If there is any move that the piece can make that would not result in check, return false
 						return false;
@@ -962,6 +967,7 @@ bool Game::isValidCastle(Position from, Position to, King &king, std::string &er
 		errorMessage = "Invalid move - " + rookSide + "Rook has already moved";
 		return false;
 	}
+	// TODO - might need to remove getInCheck() as a check since the position could have been loaded from a FEN string
 	else if (king.getIsInCheck())
 	{
 		errorMessage = "Invalid move - King is in check";
@@ -969,7 +975,7 @@ bool Game::isValidCastle(Position from, Position to, King &king, std::string &er
 	}
 
 	int direction = side == Side::QueenSide ? -1 : 1;
-	for (int i = from.col + direction; i != rook->getCurrentPosition().col; i + direction)
+	for (int i = from.col + direction; i != rook->getCurrentPosition().col; i += direction)
 	{
 		Square &square = board.getSquare(from.row, i);
 		// If there is a piece between the king and the rook then the king cannot castle
@@ -979,7 +985,7 @@ bool Game::isValidCastle(Position from, Position to, King &king, std::string &er
 			return false;
 		}
 
-		if (isInCheck(king.getPieceColor(), {from.row, i}))
+		if (isInCheck(king.getPieceColor(), {from.row, i}, board))
 		{
 			errorMessage = "Invalid move - King cannot castle through check";
 			return false;

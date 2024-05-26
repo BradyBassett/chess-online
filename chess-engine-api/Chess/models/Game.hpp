@@ -102,7 +102,7 @@ public:
 
 	void setInCheck(Color color, bool value);
 
-	bool isInCheck(Color color, Position position);
+	bool isInCheck(Color color, Position position, Board &board);
 
 	bool isCheckmate(Color color);
 
