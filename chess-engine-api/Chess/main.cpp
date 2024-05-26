@@ -53,6 +53,18 @@ int main()
 			break;
 		}
 
+		if (from == "undo")
+		{
+			game.undoPreviousMove();
+			continue;
+		}
+
+		if (from == "fen")
+		{
+			std::cout << game.getFen() << std::endl;
+			continue;
+		}
+
 		Position fromPosition = game.getBoard().convertStringToPosition(from);
 		Position toPosition = game.getBoard().convertStringToPosition(to);
 
