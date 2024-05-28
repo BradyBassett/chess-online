@@ -159,6 +159,13 @@ void Board::movePiece(Square &fromSquare, Square &toSquare, std::shared_ptr<Piec
 	Bitboard &pieceBitboard = getBitboard(piece->getPieceColor(), piece->getPieceType());
 	pieceBitboard.clearBit(fromSquare.getPosition());
 	pieceBitboard.setBit(toSquare.getPosition());
+
+	if (toSquare.getPiece() != nullptr)
+	{
+		Bitboard &capturedPieceBitboard = getBitboard(toSquare.getPiece()->getPieceColor(), toSquare.getPiece()->getPieceType());
+		capturedPieceBitboard.clearBit(toSquare.getPosition());
+	}
+
 	toSquare.setPiece(piece);
 	fromSquare.setPiece(nullptr);
 	piece->setHasMoved();
