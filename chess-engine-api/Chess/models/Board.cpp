@@ -419,7 +419,7 @@ void Board::setupMove(Move move)
 	std::shared_ptr<Piece> piece = fromSquare.getPiece();
 
 	// If the move is a castling move, move the rook as well
-	if (piece->getPieceType() == PieceType::King && piece->getHasMoved() == false && isCastleMove(move.from, move.to))
+	if (piece->getPieceType() == PieceType::King && !piece->getHasMoved() && isCastleMove(move.from, move.to))
 	{
 		if (move.flags.test(static_cast<int>(MoveFlag::KingsideCastling)))
 		{
@@ -595,7 +595,7 @@ std::string Board::convertPositionToString(Position position)
 	return std::string(1, position.col + 'a') + std::to_string(8 - position.row);
 }
 
-Bitboard (&Board::getAttackTable(Color color, PieceType pieceType))[64]
+std::array<Bitboard, 64>& Board::getAttackTable(Color color, PieceType pieceType)
 {
 	switch (pieceType)
 	{
