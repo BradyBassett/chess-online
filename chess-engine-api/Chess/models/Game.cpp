@@ -288,7 +288,6 @@ void Game::validatePawnMove(Position from, Position to, Piece &fromPiece, Square
 
 void Game::validateKingMove(Position from, Position to, Piece &fromPiece)
 {
-	// TODO - check for the following, moving into check, is in check, if in check can only move out of check or be protected
 	if (fromPiece.getPieceType() == PieceType::King)
 	{
 		King &king = dynamic_cast<King &>(fromPiece);
