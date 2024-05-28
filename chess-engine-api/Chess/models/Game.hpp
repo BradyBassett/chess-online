@@ -62,6 +62,8 @@ private:
 public:
 	Game(std::string fenString);
 
+	Game(std::vector<std::string> fenParts);
+
 	Color getActiveColor();
 
 	void switchActiveColor();

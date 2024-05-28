@@ -10,11 +10,12 @@
 #include "Pawn.hpp"
 
 Game::Game(std::string fenString)
+    : Game(splitFenString(fenString))
 {
-	std::vector<std::string> fenParts = splitFenString(fenString);
+}
 
-	board = Board(fenParts[0], fenParts[2], fenParts[3]);
-
+Game::Game(std::vector<std::string> fenParts) : board(fenParts[0], fenParts[2], fenParts[3])
+{
 	parseActiveColor(fenParts[1]);
 	parseHalfmoveClock(fenParts[4]);
 	parseFullmoveNumber(fenParts[5]);
