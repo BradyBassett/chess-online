@@ -6,6 +6,15 @@ Square::Square(Position position, std::shared_ptr<Piece> piece)
 {
 }
 
+Square::Square(const Square &other)
+	: position(other.position)
+{
+	if (other.piece)
+	{
+		piece = std::make_shared<Piece>(*other.piece);
+	}
+}
+
 Position Square::getPosition() const
 {
 	return position;
