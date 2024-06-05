@@ -15,8 +15,6 @@ private:
 public:
 	Square(Position position, std::shared_ptr<Piece> piece = nullptr);
 
-	Square(const Square &other);
-
 	Position getPosition() const;
 
 	std::shared_ptr<Piece> getPiece() const;
