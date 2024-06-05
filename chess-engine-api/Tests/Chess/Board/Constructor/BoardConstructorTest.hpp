@@ -13,6 +13,12 @@ struct BoardConstructorTestParams
 	std::array<std::array<int, 6>, 2> expectedPieceCounts;
 	std::array<std::optional<PieceType>, 64> expectedPieceTypes;
 	std::array<std::array<Bitboard, 6>, 2> expectedBitboards;
+	Bitboard expectedWhitePiecesBitboard;
+	Bitboard expectedBlackPiecesBitboard;
+	bool expectedWhiteCanCastleKingside;
+	bool expectedWhiteCanCastleQueenside;
+	bool expectedBlackCanCastleKingside;
+	bool expectedBlackCanCastleQueenside;
 	Square *expectedEnPassantTargetSquare;
 };
 

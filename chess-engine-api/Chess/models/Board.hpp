@@ -22,14 +22,14 @@ private:
 	bool canCastleKingside[2];
 	bool canCastleQueenside[2];
 	Square *enPassantTargetSquare;
-	std::array<std::array<int, 6>, 2> pieceCount{}; // [color][pieceType] = [white, black][pawns, knights, bishops, rooks, queens, king]
-	Bitboard bitboards[2][6];						// [color][pieceType] = [white, black][pawns, knights, bishops, rooks, queens, king]
-	Bitboard pawnAttackTable[2][64];				// [white, black]
-	Bitboard knightAttackTable[64];
-	Bitboard bishopAttackTable[64];
-	Bitboard rookAttackTable[64];
-	Bitboard queenAttackTable[64];
-	Bitboard kingAttackTable[64];
+	std::array<std::array<int, 6>, 2> pieceCount{};			 // [color][pieceType] = [white, black][pawns, knights, bishops, rooks, queens, king]
+	std::array<std::array<Bitboard, 6>, 2> bitboards;		 // [color][pieceType] = [white, black][pawns, knights, bishops, rooks, queens, king]
+	std::array<std::array<Bitboard, 64>, 2> pawnAttackTable; // [white, black]
+	std::array<Bitboard, 64> knightAttackTable;
+	std::array<Bitboard, 64> bishopAttackTable;
+	std::array<Bitboard, 64> rookAttackTable;
+	std::array<Bitboard, 64> queenAttackTable;
+	std::array<Bitboard, 64> kingAttackTable;
 
 	bool isDigitFrom1To8(char c);
 
@@ -56,6 +56,8 @@ private:
 	Bitboard calculateOrthagonalPath(Position from, Position to);
 
 	bool isOrthagonal(Position from, Position to) const;
+
+	bool isCastleMove(Position from, Position to) const;
 
 public:
 	Board();
@@ -110,7 +112,7 @@ public:
 
 	std::string convertPositionToString(Position position);
 
-	Bitboard (&getAttackTable(Color color, PieceType pieceType))[64];
+	std::array<Bitboard, 64>& getAttackTable(Color color, PieceType pieceType);
 
 	bool isPathClear(Position from, Position to, std::shared_ptr<Piece> piece);
 

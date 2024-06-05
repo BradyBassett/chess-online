@@ -2,6 +2,7 @@
 #define GAMETEST_HPP
 
 #include "../ChessTest.hpp"
+#include "../../../../Chess/models/Game.hpp"
 
 class GameTest : public ChessTest
 {
