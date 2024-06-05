@@ -159,6 +159,13 @@ void Board::movePiece(Square &fromSquare, Square &toSquare, std::shared_ptr<Piec
 	Bitboard &pieceBitboard = getBitboard(piece->getPieceColor(), piece->getPieceType());
 	pieceBitboard.clearBit(fromSquare.getPosition());
 	pieceBitboard.setBit(toSquare.getPosition());
+
+	if (toSquare.getPiece() != nullptr)
+	{
+		Bitboard &capturedPieceBitboard = getBitboard(toSquare.getPiece()->getPieceColor(), toSquare.getPiece()->getPieceType());
+		capturedPieceBitboard.clearBit(toSquare.getPosition());
+	}
+
 	toSquare.setPiece(piece);
 	fromSquare.setPiece(nullptr);
 	piece->setHasMoved();
@@ -322,20 +329,20 @@ Bitboard Board::calculateOrthagonalPath(Position from, Position to)
 	Bitboard path;
 	if (to.row == from.row)
 	{
-		uint8_t rowStart = std::min(to.col, from.col);
-		uint8_t rowEnd = std::max(to.col, from.col);
+		uint8_t colStart = std::min(to.col, from.col);
+		uint8_t colEnd = std::max(to.col, from.col);
 
-		for (int i = rowStart + 1; i < rowEnd - 1; i++)
+		for (int i = colStart + 1; i < colEnd; i++)
 		{
 			path.setBit({from.row, i});
 		}
 	}
 	else if (to.col == from.col)
 	{
-		uint8_t colStart = std::min(to.row, from.row);
-		uint8_t colEnd = std::max(to.row, from.row);
+		uint8_t rowStart = std::min(to.row, from.row);
+		uint8_t rowEnd = std::max(to.row, from.row);
 
-		for (int i = colStart + 1; i < colEnd - 1; i++)
+		for (int i = rowStart + 1; i < rowEnd; i++)
 		{
 			path.setBit({i, from.col});
 		}
@@ -347,6 +354,16 @@ Bitboard Board::calculateOrthagonalPath(Position from, Position to)
 bool Board::isOrthagonal(Position from, Position to) const
 {
 	return to.row == from.row || to.col == from.col;
+}
+
+bool Board::isCastleMove(Position from, Position to) const
+{
+	if (from.col == 4 && (to.col == 6 || to.col == 2))
+	{
+		return true;
+	}
+
+	return false;
 }
 
 Board::Board() : Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "KQkq", "-") {}
@@ -402,7 +419,7 @@ void Board::setupMove(Move move)
 	std::shared_ptr<Piece> piece = fromSquare.getPiece();
 
 	// If the move is a castling move, move the rook as well
-	if (piece->getPieceType() == PieceType::King && piece->getHasMoved() == false)
+	if (piece->getPieceType() == PieceType::King && !piece->getHasMoved() && isCastleMove(move.from, move.to))
 	{
 		if (move.flags.test(static_cast<int>(MoveFlag::KingsideCastling)))
 		{
@@ -516,28 +533,31 @@ Bitboard Board::getAllPiecesBitboard()
 
 void Board::updateCastlingAvailability(Piece &fromPiece)
 {
-	if (!fromPiece.getHasMoved())
+	if (fromPiece.getHasMoved())
 	{
-		if (fromPiece.getPieceType() == PieceType::King)
+		PieceType pieceType = fromPiece.getPieceType();
+		Color color = fromPiece.getPieceColor();
+
+		if (pieceType == PieceType::King)
 		{
 			King king = dynamic_cast<King &>(fromPiece);
-			setCanCastleKingside(false, fromPiece.getPieceColor());
-			setCanCastleQueenside(false, fromPiece.getPieceColor());
+			setCanCastleKingside(false, color);
+			setCanCastleQueenside(false, color);
 			king.setCanCastleKingside(false);
 			king.setCanCastleQueenside(false);
 		}
-		else if (fromPiece.getPieceType() == PieceType::Rook)
+		else if (pieceType == PieceType::Rook)
 		{
 			Rook &rook = dynamic_cast<Rook &>(fromPiece);
 			if (rook.getSide() == Side::KingSide)
 			{
-				setCanCastleKingside(false, fromPiece.getPieceColor());
-				getKing(fromPiece.getPieceColor())->setCanCastleKingside(false);
+				setCanCastleKingside(false, color);
+				getKing(color)->setCanCastleKingside(false);
 			}
 			else
 			{
-				setCanCastleQueenside(false, fromPiece.getPieceColor());
-				getKing(fromPiece.getPieceColor())->setCanCastleQueenside(false);
+				setCanCastleQueenside(false, color);
+				getKing(color)->setCanCastleQueenside(false);
 			}
 		}
 	}
@@ -575,7 +595,7 @@ std::string Board::convertPositionToString(Position position)
 	return std::string(1, position.col + 'a') + std::to_string(8 - position.row);
 }
 
-Bitboard (&Board::getAttackTable(Color color, PieceType pieceType))[64]
+std::array<Bitboard, 64>& Board::getAttackTable(Color color, PieceType pieceType)
 {
 	switch (pieceType)
 	{

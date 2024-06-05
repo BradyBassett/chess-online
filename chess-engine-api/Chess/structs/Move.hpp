@@ -29,8 +29,9 @@ struct Move
 	PieceType piece;
 	std::optional<PieceType> capturedPiece;
 	std::optional<PieceType> promotion;
-	uint8_t halfMoveClock;
-	uint8_t fullMoveNumber;
+	std::optional<std::string> enPassantTarget;
+	int halfMoveClock;
+	int fullMoveNumber;
 };
 
 #endif // MOVE_HPP

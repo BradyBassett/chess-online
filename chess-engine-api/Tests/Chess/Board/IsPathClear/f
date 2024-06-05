@@ -1,1 +1,0 @@
-isPathClear(Position from, Position to, std::shared_ptr<Piece> piece)

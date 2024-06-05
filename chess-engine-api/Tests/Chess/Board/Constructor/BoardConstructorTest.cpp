@@ -284,6 +284,12 @@ TEST_P(BoardConstructorTest, constructor)
 	std::array<std::array<Bitboard, 6>, 2> expectedBitboards = param.expectedBitboards;
 	validateBitboards(board, expectedBitboards);
 
+	ASSERT_EQ(board.getWhitePiecesBitboard().getValue(), param.expectedWhitePiecesBitboard.getValue());
+	ASSERT_EQ(board.getBlackPiecesBitboard().getValue(), param.expectedBlackPiecesBitboard.getValue());
+
+	Bitboard expectedAllPiecesBitboard = param.expectedWhitePiecesBitboard | param.expectedBlackPiecesBitboard;
+	ASSERT_EQ(board.getAllPiecesBitboard().getValue(), expectedAllPiecesBitboard.getValue());
+
 	// Validate Attack Tables
 	validateWhitePawnAttackTable(board);
 	validateBlackPawnAttackTable(board);
@@ -293,10 +299,10 @@ TEST_P(BoardConstructorTest, constructor)
 	validateQueenAttackTable(board);
 	validateKingAttackTable(board);
 
-	ASSERT_TRUE(board.getCanCastleKingside(Color::White));
-	ASSERT_TRUE(board.getCanCastleKingside(Color::Black));
-	ASSERT_TRUE(board.getCanCastleQueenside(Color::White));
-	ASSERT_TRUE(board.getCanCastleQueenside(Color::Black));
+	ASSERT_EQ(board.getCanCastleKingside(Color::White), param.expectedWhiteCanCastleKingside);
+	ASSERT_EQ(board.getCanCastleQueenside(Color::White), param.expectedWhiteCanCastleQueenside);
+	ASSERT_EQ(board.getCanCastleKingside(Color::Black), param.expectedBlackCanCastleKingside);
+	ASSERT_EQ(board.getCanCastleQueenside(Color::Black), param.expectedBlackCanCastleQueenside);
 
 	// validate en passant target square
 	Square *expectedEnPassantTargetSquare = param.expectedEnPassantTargetSquare;
@@ -330,15 +336,50 @@ std::vector<std::pair<std::string, BoardConstructorTestParams>> BoardConstructor
 				{{{Bitboard(0xff000000000000), Bitboard(0x4200000000000000), Bitboard(0x2400000000000000), Bitboard(0x8100000000000000), Bitboard(0x800000000000000), Bitboard(0x1000000000000000)}},
 				 {{Bitboard(0xff00), Bitboard(0x42), Bitboard(0x24), Bitboard(0x81), Bitboard(0x8), Bitboard(0x10)}}}
 			},
+			Bitboard(0xffff000000000000),
+			Bitboard(0xffff),
+			true,
+			true,
+			true,
+			true,
             nullptr
         }
     }, // Todo: Add more test cases
-	// {
-	// 	"WhiteCanCastleKingside",
-	// 	{
-	// 		"rnbq1bnr/2p1k1pp/p2p4/1P2pp2/5PP1/5N2/RPPPP1BP/1NBQK2R"
-	// 	}
-	// }
+	{
+		"KnightInRookTableForSomeReason",
+		{
+			"8/pB1p4/1P2k3/2pb2pR/K2R4/2P2n2/2p3r1/8",
+			"-",
+			"-",
+			3,
+			2,
+			{
+				{{2, 0, 1, 2, 0, 1},
+				 {5, 1, 1, 1, 0, 1}}
+			},
+			{
+				std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
+				PieceType::Pawn, PieceType::Bishop, std::nullopt, PieceType::Pawn, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
+				std::nullopt, PieceType::Pawn, std::nullopt, std::nullopt, PieceType::King, std::nullopt, std::nullopt, std::nullopt,
+				std::nullopt, std::nullopt, PieceType::Pawn, PieceType::Bishop, std::nullopt, std::nullopt, PieceType::Pawn, PieceType::Rook,
+				PieceType::King, std::nullopt, std::nullopt, PieceType::Rook, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
+				std::nullopt, std::nullopt, PieceType::Pawn, std::nullopt, std::nullopt, PieceType::Knight, std::nullopt, std::nullopt,
+				std::nullopt, std::nullopt, PieceType::Pawn, std::nullopt, std::nullopt, std::nullopt, PieceType::Rook, std::nullopt,
+				std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt,
+			},
+			{
+				{{{Bitboard(0x40000020000), Bitboard(0x0), Bitboard(0x200), Bitboard(0x880000000), Bitboard(0x0), Bitboard(0x100000000)}},
+				 {{Bitboard(0x4000044000900), Bitboard(0x200000000000), Bitboard(0x8000000), Bitboard(0x40000000000000), Bitboard(0x0), Bitboard(0x100000)}}}
+			},
+			Bitboard(0x40980020200),
+			Bitboard(0x4420004c100900),
+			false,
+			false,
+			false,
+			false,
+			nullptr
+		}
+	}
 };
 
 INSTANTIATE_TEST_SUITE_P(
